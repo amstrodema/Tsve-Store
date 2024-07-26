@@ -1,0 +1,75 @@
+﻿@model Store.Model.ViewModel.MainVM
+@{
+    ViewData["Title"] = "Group Manager";
+    var count = 0;
+}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="home">Home</a>
+                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="manager">Manager</a>
+                <span class="breadcrumb-item active">Group Manager</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<!-- Contact Start -->
+<div class="container-fluid">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Group Manager</span></h2>
+    <div class="row px-xl-5">
+        <div class="col-lg-7 mb-5 order-1 order-md-0">
+            <div class="table-responsive contact-form bg-light p-30">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>S/N</th>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var group in Model.Groups)
+                        {
+                            count++;
+                            <tr>
+                                <td>@count</td>
+                                <td><a class="text-dark">@group.Name</a></td>
+                                <td>@group.DateCreated.ToString("d")</td>
+                                <td><a asp-action="group" asp-controller="manager" asp-route-s="modify" asp-route-t="@group.Tag"><i class="fa fa-pen text-warning"></i></a></td>
+                                <td><a asp-action="delete" onclick="return(confirm('WARNING!!!\nDelete this group but preserve listed items.\nDo you want to proceed?'))"><i class="fa fa-times text-danger"></i></a></td>
+                                <td><a asp-action="delete" onclick="return(confirm('WARNING!!!\nDelete this group and all items listed under it.\nDo you want to proceed?'))"><i class="fa fa-trash text-danger"></i></a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-lg-5 mb-5 order-0 order-md-1">
+
+            <div class="bg-light p-30 mb-30">
+                <h6 class="bold uppercase">Add A New Group</h6>
+                <p>
+                    Each category must be part of a group.<br />
+                    <hr />
+                </p>
+                <a asp-action="group" asp-controller="manager" asp-route-s="add" class="btn btn-primary">Add New Group <i class="fa fa-plus"></i></a>
+            </div>
+          
+            <partial name="_commonSideNav" />
+            @*   <div class="bg-light p-30 mb-3">
+            <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
+            <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
+            <p class="mb-2"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
+            </div>*@
+        </div>
+    </div>
+    <partial name="_commonNav" />
+</div>
+<!-- Contact End -->

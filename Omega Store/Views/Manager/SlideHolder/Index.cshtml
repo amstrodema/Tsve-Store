@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Store.Model.Slide>
+@{
+    ViewData["Title"] = "Slide Manager";
+    int count = 0;
+}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="home">Home</a>
+                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="manager">Manager</a>
+                <span class="breadcrumb-item active">Slide
+                    Manager</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<!-- Contact Start -->
+<div class="container-fluid">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Slide Manager</span></h2>
+   
+    <div class="col-12 px-xl-5">
+        <div class="bg-light p-30 mb-3">
+            <a asp-action="slides" asp-controller="manager" asp-route-s="add" class="btn btn-primary">Add New Slide <i class="fa fa-plus"></i></a><hr />
+            <p>
+                Slides will appear in a slideshow on your homepage
+              
+            </p>
+        </div>
+       
+        <div class="bg-light p-30 mb-30 table-responsive">
+            <table class="table">
+                <tr>
+                    <th>Slide Image</th>
+                    <th class="nowrap">Caption / Description</th>
+                    <th class="nowrap">Button Action</th>
+                </tr>
+                @foreach (var slide in Model)
+                {
+                    <tr>
+                        <td>
+                            <img src="@slide.Image" style="max-width: 150px" />
+                        </td>
+                        <td>
+                            <span class="bold">@slide.Caption</span> <br />
+                            @slide.Desc<hr />
+                            Link: @slide.Link<hr />
+                            <a asp-action="slides" asp-controller="manager" asp-route-s="delete" asp-route-id="@slide.ID" class="text-danger"><i class="fa fa-trash"></i> Delete Slide</a>
+                        </td>
+                        <td>
+                            <a href="@slide.Link" class="btn btn-primary">@slide.Action</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+    <partial name="_commonNav" />
+</div>
+<!-- Contact End -->

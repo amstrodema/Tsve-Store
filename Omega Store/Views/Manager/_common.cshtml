@@ -1,0 +1,18 @@
+﻿@model Store.Model.Hybrid.LoggerHybrid
+@using Omega_Store.Services
+@inject LoginValidator loginValidator
+@{
+    var thisShop =  await loginValidator.GetShop();
+}
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<!-- Breadcrumb Start -->
+<section class="my__account--section section--padding">
+    <div class="container">
+        <p class="account__welcome--text">Customer Dashboard!</p>
+        <div class="row">
+
+        </div>
+    </div>
+</section>

@@ -1,0 +1,27 @@
+﻿<ul class="d-flex">
+
+    <li class="header__menu--items">
+        <a class="header__menu--link" asp-action="index" asp-controller="home">Home </a>
+    </li>
+    <li class="header__menu--items">
+        <a class="header__menu--link" asp-action="index" asp-controller="shop">Shop </a>
+    </li>
+    <li class="header__menu--items">
+        <a class="header__menu--link" asp-action="wishlist" asp-controller="shop">Wishlist </a>
+    </li>
+    <li class="header__menu--items">
+        <a class="header__menu--link" asp-action="track" asp-controller="shop">Track </a>
+    </li>
+    <li class="header__menu--items">
+        <a class="header__menu--link" asp-action="information-center" asp-controller="home">Information Center </a>
+    </li>
+    <li class="header__menu--items">
+        <a class="header__menu--link" asp-action="about" asp-controller="home">
+            About Us
+        </a>
+        <ul class="header__sub--menu">
+            <li class="header__sub--menu__items"><a asp-action="contact" asp-controller="home" class="header__sub--menu__link">Contact Us</a></li>
+            <li class="header__sub--menu__items"><a asp-action="gallery" asp-controller="shop" class="header__sub--menu__link">Gallery</a></li>
+        </ul>
+    </li>
+</ul>

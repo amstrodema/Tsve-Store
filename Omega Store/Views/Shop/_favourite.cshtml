@@ -1,0 +1,26 @@
+﻿@model Store.Model.ViewModel.MainVM
+
+@if (Model.Favourite.Count() > 0)
+{
+    <div class="container-fluid pt-5 pb-3">
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Watchlist</span></h2>
+        <div class="row px-xl-5">
+            <partial name="_items" model="@Model.Favourite" />
+
+        </div>
+      <div class="row px-xl-5">
+            <div class="col-12">
+                <button class="btn btn-danger" onclick="ClearFave()">Clear Watchlist <i class="fa fa-trash"></i></button>
+            </div>
+      </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid pt-5 pb-3">
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Watchlist</span></h2>
+        <div class="row">
+            <partial name="_nocontent" />
+        </div>
+    </div>
+}

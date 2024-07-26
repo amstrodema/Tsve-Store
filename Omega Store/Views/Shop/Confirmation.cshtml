@@ -1,0 +1,26 @@
+﻿@using Omega_Store.Services;
+@inject LoginValidator loginValidator
+
+@{
+    ViewData["Title"] = "Order Completed";
+    var store = await loginValidator.GetShop();
+    var message = $"You have a new order. Click to view: {store.Url}/manager/orders?ref={TempData["OrderRef"]}";
+}
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12 text-center p-30 bg-light">
+            <img class="mb-3" src="../img/completed.jpg" style="width:70px" />
+            <h4 class="uppercase">Order Completed</h4>
+            <h6>Order ID: @TempData["OrderRef"] (<a class="text-info" id="whatsApp" onclick="GenerateLink('@message','@store.Tel')">Click to alert seller on WhatsApp</a>)</h6>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+        ClearCart();
+        // GenerateLink('@message', '@store.Tel');
+        var whatsApp = document.getElementById("whatsApp");
+        whatsApp.click();
+    </script>
+}

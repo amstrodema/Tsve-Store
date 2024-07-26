@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Store.Model.Offer>
+@{
+    ViewData["Title"] = "Offer Manager";
+    int count = 0;
+}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="home">Home</a>
+                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="manager">Manager</a>
+                <span class="breadcrumb-item active">Offer Manager</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<!-- Contact Start -->
+<div class="container-fluid">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Offer Manager</span></h2>
+
+    <div class="col-12 px-xl-5">
+        <div class="bg-light p-30 mb-3">
+            <a asp-action="offers" asp-controller="manager" asp-route-s="add" class="btn btn-primary">Add New Offer <i class="fa fa-plus"></i></a><hr />
+            <p>
+                Offers will either appear on your homepage or be used during checkout. Offers that do not have discount value (such as gift items) will be attached to order invoice.
+
+            </p>
+        </div>
+
+        <div class="bg-light p-30 mb-30 table-responsive">
+            <table class="table">
+                <tr>
+                    <th>Offer Image</th>
+                    <th class="nowrap">Caption / Description</th>
+                    <th class="nowrap">Button Action</th>
+                </tr>
+                @foreach (var offer in Model)
+                {
+                    <tr>
+                        <td>
+                            <img src="@offer.Image" />
+                        </td>
+                        <td>
+                            <span class="bold">@offer.Caption</span> <br />
+                            @offer.Description<hr />
+                            Link: @offer.Link<hr />
+                            @if (offer.IsHomepage)
+                            {
+                                <a asp-action="offers" asp-controller="manager" asp-route-s="home" asp-route-id="@offer.ID" class="text-danger"><i class="fa fa-home"></i> Deactivate</a>
+                            }else{
+                                <a asp-action="offers" asp-controller="manager" asp-route-s="home" asp-route-id="@offer.ID" class="text-success"><i class="fa fa-home"></i> Activate</a>
+                            }
+                            <a asp-action="offers" asp-controller="manager" asp-route-s="delete" asp-route-id="@offer.ID" class="text-danger"><i class="fa fa-trash"></i> Delete Offer</a>
+                        </td>
+                        <td>
+                            <a href="@offer.Link" class="btn btn-primary">@offer.Action</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+    <partial name="_commonNav" />
+</div>
+<!-- Contact End -->

@@ -1,0 +1,89 @@
+﻿@model Store.Model.Hybrid.LoggerHybrid
+@using Omega_Store.Services
+@inject LoginValidator loginValidator
+@{
+    var thisShop =  await loginValidator.GetShop();
+}
+<section class="my__account--section section--padding">
+    <div class="container">
+        <h2>Business Dashboard</h2>
+        <div class="row">
+            <div class="col-md-3 col-6 box">
+                <a asp-action="stocks" asp-controller="manager">
+                    <div class="trem">
+                        <div><i class="ti ti-shopping-cart"></i></div>                        
+                    </div>
+                    <div class="clan">
+                        <h4 class="mb-0">Shop Items</h4>
+                        <small>Manage items in the shop</small>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-6 box">
+                <a asp-action="categories" asp-controller="manager">
+                    <div class="trem">
+                        <div><i class="ti ti-folder"></i></div>
+                    </div>
+                    <div class="clan">
+                        <h4 class="mb-0">Item Categories</h4>
+                        <small>Manage item categories</small>
+                    </div>
+                </a>               
+            </div>
+            <div class="col-md-3 col-6 box">
+                <a asp-action="orders" asp-controller="manager">
+                    <div>
+                        <div class="trem">
+                            <i class="ti ti-server"></i>
+                       </div>
+                        <div class="clan">
+                            <h4>Customer Orders</h4>
+                            <small>Manage and Update Orders</small>
+                        </div>
+                    </div>
+                </a>              
+            </div>         
+            <div class="col-md-3 col-6 box">
+                <a asp-action="transaction" asp-controller="manager">
+                    <div>
+                        <div class="trem">
+                            <i class="ti ti-money"></i>
+                        </div>
+                        <div class="clan">
+                            <h4>Transactions</h4>
+                            <small>Manage customer transactions</small>
+                        </div>
+                    </div>
+                </a>
+             
+            </div>        
+            <div class="col-md-3 col-6 box">
+                <a asp-action="subscribers" asp-controller="manager">
+                    <div>
+                        <div class="trem">
+                            <i class="ti ti-envelope"></i>
+                        </div>
+                        <div class="clan">
+                            <h4>Subscribers</h4>
+                            <small>Manage newsletter subscribers</small>
+                        </div>
+                    </div>
+                </a>              
+            </div>
+            <div class="col-md-3 col-6 box">
+                <a asp-action="information-center" asp-controller="manager">
+                    <div>
+                        <div class="trem">
+                            <i class="ti ti-comment"></i>
+                        </div>
+                        <div class="clan">
+                            <h4>Information Center</h4>
+                            <small>Manage customers questions</small>
+                        </div>
+                    </div>
+                </a>
+             
+            </div>
+        </div>
+    </div>
+</section>

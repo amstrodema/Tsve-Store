@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Most Viewed";
+}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="home">Home</a>
+                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="manager">Manager</a>
+                <span class="breadcrumb-item active">@ViewData["Title"]</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<div class="container-fluid">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">@ViewData["Title"]</span></h2>
+    <div class="row px-xl-5">
+        <partial name="_nocontent" />
+    </div>
+</div>

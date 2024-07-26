@@ -1,0 +1,60 @@
+﻿@model Store.Model.Offer
+@{
+    ViewData["Title"] = "Add New Offer";
+}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="manager">Manager</a>
+                <a class="breadcrumb-item text-dark" asp-action="offers" asp-controller="manager">Offer</a>
+                <span class="breadcrumb-item active">New</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<div class="container-fluid">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">New Offer</span></h2>
+
+
+    <div class="row px-xl-5">
+        <div class="col-md-8 bg-light p-30">
+            <h6 class="bold uppercase">Add A New Offer</h6>
+            <p class="mb-4">
+                Create an offer for some pr all products in your store. This could be a discount, promo, gifting or other specifics that would apply to item(s) linked to this offer.<br />
+                e.g. Buy 4 get 1 free, 15% Discount, Bonus for Orders and lots more.
+                <hr />
+            </p>
+            <form asp-action="newOffer" asp-controller="manager" method="post" enctype="multipart/form-data">
+                <label>
+                    <input type="checkbox" name="IsCoupon" /> Tick the box if this offer a coupon
+                </label>
+                <hr />
+                <input type="text" class="form-control mb-2" name="Caption" maxlength="16" placeholder="Offer Caption (e.g: Special Offer)" />
+                <input type="text" class="form-control mb-2" name="Description" maxlength="100" placeholder="Offer Description" />
+                <input type="text" class="form-control mb-2" name="DiscountCaption" maxlength="100" placeholder="Discount Caption (e.g: SAVE 20%)" />
+                <input type="number" class="form-control mb-2" name="Discount" placeholder="Discount Percentage" />
+                <input type="text" class="form-control mb-2" name="Action" maxlength="10" placeholder="Button Action" />
+                <input type="text" class="form-control mb-2" name="Link" placeholder="Button Link" />
+                <input type="file" class="btn btn-dark mb-2" name="image" required /><hr />
+                <button class="btn btn-primary py-2 px-4" type="submit">
+                    Save New Offer
+                </button>
+            </form>
+        </div>
+        <div class="col-lg-4 p-30">
+            <div class="bg-light p-30 mb-30 text-center">
+                <span>Ads</span>
+            </div>
+            @*   <div class="bg-light p-30 mb-3">
+            <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
+            <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
+            <p class="mb-2"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
+            </div>*@
+        </div>
+    </div>
+    <partial name="_commonNav" />
+</div>

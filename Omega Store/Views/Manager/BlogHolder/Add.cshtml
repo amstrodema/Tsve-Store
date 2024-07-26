@@ -1,0 +1,337 @@
+﻿@model Store.Model.ViewModel.MainVM
+@{
+    ViewData["Title"] = "Add New Item";
+}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="manager">Manager</a>
+                <a class="breadcrumb-item text-dark" asp-action="category" asp-controller="manager">Category</a>
+                <span class="breadcrumb-item active">New</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<!-- Contact Start -->
+<div class="container-fluid">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Add New Item</span></h2>
+
+    <partial name="_commonNav" />
+    <div class="row px-xl-5">
+        <div class="col-lg-7 bg-light p-30">
+            <h6 class="bold uppercase">Add A New Stock Item</h6>
+            <p class="mb-4">
+                Every store item must be assigned to a specific category, and each category must be part of a group.<br />
+                <hr />
+            </p>
+            <form >
+                <section id="sec1">
+                    <div class="control-group mb-4 miniTopSpace">
+                        <input type="text" class="form-control mb-2" id="title" placeholder="Item Name" required />
+                        <input type="text" class="form-control mb-2" id="brief" maxlength="120" placeholder="Brief Description" required />
+                       
+                        <select class="form-control mb-2" id="category">
+                            <option value="">- Select A Category -</option>
+                            @foreach (var cat in Model.Categories)
+                            {
+                                <option value="@cat.ID">@cat.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary py-2 px-4" type="button" onclick="MoveSection('sec2')" id="sendMessageButton">
+                            Next >>
+                        </button>
+                    </div>
+                </section>
+
+                <section id="sec2" class="hidden">
+                    <div class="control-group mb-4 miniTopSpace">
+                        <textarea class="form-control mb-2" id="desc" placeholder="Detailed Item Description" rows="5"></textarea>
+
+                        <div class="input-group mb-2">
+                            <select class="btn btn-dark" id="currency">
+                                <option value="NGN">NGN</option>
+                                <option value="USD">USD</option>
+                            </select>
+                            <input type="number" class="form-control" id="price" placeholder="Current Item Price" required>
+                        </div>
+
+                        <input type="number" class="form-control" id="oldprice" placeholder="Old Item Price" required>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary py-2 px-4" type="button" onclick="MoveSection('sec1')">
+                            &lt;&lt; Prev
+                        </button>
+                        <button class="btn btn-primary py-2 px-4" type="button" onclick="MoveSection('sec3')">
+                            Next >>
+                        </button>
+                    </div>
+                </section>
+
+                <section id="sec3" class="hidden">
+                    <div class="control-group mb-4 miniTopSpace">
+                        <p>
+                            Add features and options of this item to allow your customers easily order variants that suit their taste.
+                            <small>e.g. Color: Black, Red, Blue</small>
+                        </p>
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" id="feature" placeholder="Item Feature (e.g Color)" aria-describedby="basic-addon2">
+                            <span class="input-group-text pointer" id="basic-addon2" onclick="Add()"><small>ADD</small></span>
+                        </div>
+                        <input type="text" class="form-control mb-2" id="option" placeholder="Feature Option (e.g. Red,Blue,Pink)" required />
+                    </div>
+                    <div id="featureHolder">
+                    </div>
+                    <div>
+                        <button class="btn btn-primary py-2 px-4" type="button" onclick="MoveSection('sec2')">
+                            &lt;&lt; Prev
+                        </button>
+                        <button class="btn btn-primary py-2 px-4" type="button" onclick="MoveSection('sec4')">
+                            Next >>
+                        </button>
+                    </div>
+                </section>
+
+                <section id="sec4" class="hidden">
+                    <div class="control-group mb-4 miniTopSpace">
+                        <p>
+                            Uploading various sides and variants of this item will give your customers clearer understanding.
+                        </p>
+                        <input type="file" class="btn btn-dark full" id="CatImage" name="image" required />
+                        <div class=" mb-3">
+                            <small>Default Image of Item</small>
+                        </div>
+
+                        <input type="file" class="btn btn-dark full mb-2" id="CatImage1" name="image" required />
+                        <input type="file" class="btn btn-dark full mb-2" id="CatImage2" name="image" required />
+                        <input type="file" class="btn btn-dark full mb-2" id="CatImage3" name="image" required />
+                        <input type="file" class="btn btn-dark full mb-2" id="CatImage4" name="image" required />
+                    </div>
+                    <div>
+                        <button class="btn btn-primary py-2 px-4" type="button" id="lastPrevBtn" onclick="MoveSection('sec3')">
+                            &lt;&lt; Prev
+                        </button>
+                        <button class="btn btn-primary py-2 px-4" id="finish" type="button" onclick="Finish()">
+                            Finish
+                        </button>
+                    </div>
+                   
+                </section>
+                <section id="sec5" class="hidden pb-30">
+                    <div class="text-center">
+                        <img src="../gif/loader.gif" id="loader" style="width:50px; height:50px; margin-left:0.5em" />
+                    </div>
+                </section>
+            </form>
+        </div>
+        <div class="col-lg-5">
+            <div class="bg-light p-30 mb-30 text-center">
+                <span>Ads</span>
+            </div>
+            @*   <div class="bg-light p-30 mb-3">
+            <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
+            <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
+            <p class="mb-2"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
+            </div>*@
+        </div>
+    </div>
+</div>
+<!-- Contact End -->
+<script>
+
+
+    function MoveSection(val) {
+
+        if (!CheckFeatures()) {
+            alertDanger("Add New Feature");
+            return 
+        }
+        var sec1 = document.getElementById("sec1");
+        var sec2 = document.getElementById("sec2");
+        var sec3 = document.getElementById("sec3");
+        var sec4 = document.getElementById("sec4");
+
+        if (val == "sec2" && !CheckSecOne()) {
+            alertDanger("Complete all fields");
+            return;
+        } else if (val == "sec3" && !CheckSecTwo()) {
+            alertDanger("Complete important fields");
+            return;
+        } else if (val == "sec4") {
+
+        }
+
+        if (!sec1.classList.contains("hidden")) {
+            sec1.classList.add("hidden");
+        }
+
+        if (!sec2.classList.contains("hidden")) {
+            sec2.classList.add("hidden");
+        }
+
+        if (!sec3.classList.contains("hidden")) {
+            sec3.classList.add("hidden");
+        }
+
+        if (!sec4.classList.contains("hidden")) {
+            sec4.classList.add("hidden");
+        }
+        if (!sec5.classList.contains("hidden")) {
+            sec5.classList.add("hidden");
+        }
+
+        var thisSection = document.getElementById(val);
+        if (thisSection.classList.contains("hidden")) {
+            thisSection.classList.remove("hidden");
+        }
+    }
+
+    function CheckSecOne(){
+        if (document.getElementById("title").value == "" || document.getElementById("brief").value == "" || document.getElementById("category").value == "") {
+            return false;
+        }
+        return true;
+    }
+
+    function CheckSecTwo(){
+        if (document.getElementById("desc").value == "" || document.getElementById("price").value == "") {
+            return false;
+        }
+        return true;
+    }
+
+    let dataObj = {
+        Title: "",
+        Brief : "",
+        Desc : "",
+        Category : "",
+        Currency : "",
+        Price : 0,
+        OldPrice : 0,
+        Features: [],
+        Img1: "",
+        Img2: "",
+        Img3: "",
+        Img4: "",
+        Img5: ""
+    }
+
+    function CheckFeatures(){
+        var v = document.getElementById("feature").value;
+        var o = document.getElementById("option").value;
+
+        if(v != "" || o != ""){
+            return false;
+        }
+        return true;
+    }
+   
+    function Add() {
+        let feature = {
+            Name: "",
+            Option: ""
+        }
+
+        var featureHolder = document.getElementById("featureHolder");
+        feature.Name = document.getElementById("feature").value;
+        feature.Option = document.getElementById("option").value;
+
+        if (feature.Name == "" || feature.Option=="") {
+            alertDanger("Complete Feature Details");
+            return
+        }
+        dataObj.Features.push(feature);
+
+        var str = "";
+        for (i = 0; i < dataObj.Features.length; i++) {
+            str += '<p><b>' + dataObj.Features[i].Name + ':</b> ' + dataObj.Features[i].Option + ' <span class="float-right text-danger btn" onclick="Remove('+ i +')">x</span></p>'
+        }
+        featureHolder.innerHTML = str;
+        document.getElementById("feature").value = "";
+        document.getElementById("option").value = "";
+    }
+
+    function Remove(val) {
+        dataObj.Features.splice(val, 1);
+
+        var str = "";
+        for (i = 0; i < dataObj.Features.length; i++) {
+            str += '<p><b>' + dataObj.Features[i].Name + ':</b> ' + dataObj.Features[i].Option + ' <span class="float-right text-danger btn" onclick="Remove(' + i + ')">x</span></p>'
+        }
+        featureHolder.innerHTML = str;
+    }
+    //$("#fileInput")[0].files[0]
+    // alert(dataObj.features[0].Name)
+    
+
+</script>
+@section scripts{
+    <script>
+        function Finish() {
+            var finish = document.getElementById("finish");
+            var loader = document.getElementById("loader");
+            var lastPrevBtn = document.getElementById("lastPrevBtn");
+
+            dataObj.Title = document.getElementById("title").value;
+            dataObj.Brief = document.getElementById("brief").value;
+            dataObj.Category = document.getElementById("category").value;
+            dataObj.Currency = document.getElementById("currency").value;
+            dataObj.Price = document.getElementById("price").value;
+            dataObj.OldPrice = document.getElementById("oldprice").value;
+            dataObj.Desc = document.getElementById("desc").value;
+            // dataObj.Img1 = $("#CatImage")[0].files[0] == undefined ? "" : ;
+            // dataObj.Img2 = $("#CatImage1")[0].files[0] == undefined ? "" : $("#CatImage1")[0].files[0];
+            // dataObj.Img3 = $("#CatImage2")[0].files[0] == undefined ? "" : $("#CatImage2")[0].files[0];
+            // dataObj.Img4 = $("#CatImage3")[0].files[0] == undefined ? "" : $("#CatImage3")[0].files[0];
+            // dataObj.Img5 = $("#CatImage4")[0].files[0] == undefined ? "" : $("#CatImage4")[0].files[0];
+
+            if (dataObj.OldPrice == "") {
+                dataObj.OldPrice = 0;
+            }
+            if (dataObj.Price == "") {
+                dataObj.Price = 0;
+            }
+            if ($("#CatImage")[0].files[0] == undefined) {
+                alertDanger("Add default image");
+                return;
+            }
+
+            MoveSection('sec5');
+
+            var formData = new FormData();
+            formData.append("itemVM", JSON.stringify(dataObj))
+            formData.append("img", $("#CatImage")[0].files[0])
+            formData.append("img1", $("#CatImage1")[0].files[0])
+            formData.append("img2", $("#CatImage2")[0].files[0])
+            formData.append("img3", $("#CatImage3")[0].files[0])
+            formData.append("img4", $("#CatImage4")[0].files[0])
+
+            $.ajax({
+                type: "POST",
+                url: '/manager/additem',
+                cache : false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    location.reload();
+                    alertSuccess("Item saved!")
+                },
+                error: function (response) {
+                    alertDanger("Item not saved!");
+                    MoveSection('sec4');
+                }
+
+            });
+
+            // finish.classList.add("hidden");
+            // lastPrevBtn.classList.add("hidden");
+            // loader.classList.remove("hidden");
+        }
+    </script>
+}

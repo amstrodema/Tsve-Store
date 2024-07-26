@@ -1,0 +1,504 @@
+﻿@model Store.Model.ViewModel.MainVM
+@using Omega_Store.Services;
+@inject LoginValidator loginValidator
+@{
+    ViewData["Title"] = "Home";
+    var date = $"{Model.Date.ToString("MMM")} {Model.Date.ToString("dd")}, {Model.Date.ToString("yyy")} 00:00:00";
+}
+
+<main class="main__content_wrapper">
+    <!-- Start slider section -->
+    <section class="hero__slider--section">
+        <div class="hero__slider--inner hero__slider--activation swiper">
+            <div class="hero__slider--wrapper swiper-wrapper">
+                <div class="swiper-slide ">
+                    <div class="hero__slider--items bg__gray--color">
+                        <div class="container slider__items--container">
+                            <div class="hero__slider--items__inner">
+                                <div class="row row-cols-lg-2 row-cols-md-2 row-cols-1 align-items-center">
+                                    <div class="col">
+                                        <div class="slider__content slider__content--padding__left">
+                                            <span class="slider__content--subtitle text__primary">Ofada Sauce Mix</span>
+                                            <h2 class="slider__content--maintitle h1">
+                                                Natural is <span class="text__secondary">always</span> <br>
+                                                Healthy
+                                            </h2>
+                                            <p class="slider__content--desc">A multi-purpose unique blend of carefully selected peppers blended with necessary herbs and spices</p>
+                                            <a class="btn slider__btn" asp-action="index" asp-controller="shop">Shop Now</a>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="hero__slider--layer">
+                                            <img class="slider__layer--img " src="assets/img/slider/home1-slider1-layer.png" alt="slider-img">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-slide ">
+                    <div class="hero__slider--items bg__gray--color">
+                        <div class="container slider__items--container">
+                            <div class="hero__slider--items__inner">
+                                <div class="row row-cols-lg-2 row-cols-md-2 row-cols-1 align-items-center">
+                                    <div class="col">
+                                        <div class="slider__content slider__content--padding__left">
+                                            <span class="slider__content--subtitle text__secondary">Crunchy & Spicy Snack</span>
+                                            <h2 class="slider__content--maintitle h1">
+                                                Enjoy our <span class="text__primary">Yummy</span> <br>
+                                                KuliKuli
+                                            </h2>
+                                            <p class="slider__content--desc">Leisure doesn't have to be that boring when you can spice it up with crunchy and spicy snack</p>
+                                            <a class="btn slider__btn" asp-action="index" asp-controller="shop">Shop Now</a>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="hero__slider--layer home1__slider--layer2">
+                                            <img class="slider__layer--img  home1__slider--layer2__img" src="assets/img/slider/home1-slider2-layer.png" alt="slider-img">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-slide ">
+                    <div class="hero__slider--items bg__gray--color">
+                        <div class="container slider__items--container">
+                            <div class="hero__slider--items__inner">
+                                <div class="row row-cols-lg-2 row-cols-md-2 row-cols-1 align-items-center">
+                                    <div class="col">
+                                        <div class="slider__content slider__content--padding__left">
+                                            <span class="slider__content--subtitle text__primary">We have more...</span>
+                                            <h2 class="slider__content--maintitle h1">
+                                                Many more <span class="text__secondary">Healthy</span> <br>
+                                                Products
+                                            </h2>
+                                            <p class="slider__content--desc">We make the kitchen all fun with our dried, picked, stone-free, grounded and well packaged products </p>
+                                            <a class="btn slider__btn" asp-action="index" asp-controller="shop">Shop Now</a>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="hero__slider--layer">
+                                            <img class="slider__layer--img " src="assets/img/slider/home1-slider3-layer.png" alt="slider-img">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slider__pagination swiper-pagination"></div>
+        </div>
+    </section>
+    <!-- End slider section -->
+    <!-- Start categories product section -->
+    <section class="product__section product__categories--section section--padding">
+        <div class="container">
+            <div class="section__heading text-center mb-40">
+               @*  <span class="section__heading--subtitle">Shop from our</span> *@
+                <h2 class="section__heading--maintitle">Our Hottest Categories</h2>
+            </div>
+            <div class="product__section--inner product__swiper--activation swiper">
+                <div class="swiper-wrapper">
+                    @foreach (var cat in Model.CategoryHybrids.OrderByDescending(p=> p.ItemsNo).Take(5))
+                    {
+                        <div class="swiper-slide">
+                            <div class="product__items product__bg">
+                                <div class="product__items--thumbnail">
+                                    <a class="product__items--link" asp-action="index" asp-controller="shop" asp-route-c="@cat.Tag">
+                                        <img class="product__items--img" src="@cat.Image" alt="categories-img">
+                                        <div class="product__categories--content d-flex justify-content-between align-items-center">
+                                            <div class="product__categories--content__left">
+                                                <h3 class="product__categories--content__maintitle">@cat.Name</h3>
+                                                <span class="product__categories--content__subtitle">@cat.ItemsNo items</span>
+                                            </div>
+                                            <div class="product__categories--icon">
+                                                <span class="product__categories--icon__link">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15.995" height="10.979" viewBox="0 0 15.995 10.979">
+                                                        <path d="M212.706,299.839a.425.425,0,0,0,0-.6l-3.458-3.458a.425.425,0,0,1,0-.6l1.008-1.008a.425.425,0,0,1,.6,0l5.065,5.065a.425.425,0,0,1,0,.6l-5.065,5.066a.425.425,0,0,1-.6,0l-1.008-1.008a.425.425,0,0,1,0-.6Zm-6.305-.3a2.215,2.215,0,1,0,2.216-2.216A2.215,2.215,0,0,0,206.4,299.541Zm-3.634,0a1.6,1.6,0,1,0,1.6-1.605A1.6,1.6,0,0,0,202.767,299.541Zm-2.717,0a1.154,1.154,0,1,0,1.154-1.154A1.155,1.155,0,0,0,200.05,299.541Z" transform="translate(-200.05 -294.05)" fill="currentColor" />
+                                                    </svg>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="swiper__nav--btn swiper-button-next"></div>
+                <div class="swiper__nav--btn swiper-button-prev"></div>
+            </div>
+        </div>
+    </section>
+    <!-- End categories product section -->
+    <!-- Start product section -->
+    <section class="product__section section--padding pt-0">
+        <div class="container">
+            <div class="section__heading text-center mb-25">
+                <span class="section__heading--subtitle">We recently added to our store</span>
+                <h2 class="section__heading--maintitle">Trending Products</h2>
+            </div>
+          
+            <div id="product_all" class="tab_pane active show">
+                <div class="product__section--inner">
+                    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-2 mb--n28">
+                        @foreach(var stock in Model.Featured){
+                            <div class="col md-28">
+                                <div class="product__items ">
+                                    <div class="product__items--thumbnail">
+                                        <a class="product__items--link" asp-action="item" asp-controller="shop" asp-route-t="@stock.Tag">
+                                            <img class="product__items--img product__primary--img" src="@stock.Image" alt="product-img">
+                                            <img class="product__items--img product__secondary--img" src="@stock.Image1" alt="product-img">
+                                        </a>
+                                        <div class="product__badge">
+                                            <span class="product__badge--items sale">Sale</span>
+                                        </div>
+                                        <ul class="product__items--action">
+                                            <li class="product__items--action__list">
+                                                <a class="product__items--action__btn" onclick="ToggleFave('@stock.ID')">
+                                                    <svg class="product__items--action__btn--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0018 0c96.26-65.34 184.09-143.09 183-252.42-.54-52.67-42.32-96.81-95.08-96.81z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" /></svg>
+                                                    <span class="visually-hidden">Wishlist</span>
+                                                </a>
+                                            </li>
+                                            <li class="product__items--action__list">
+                                                <a class="product__items--action__btn" data-open="modal1" onclick="QuickView('@stock.Tag')" href="javascript:void(0)">
+                                                    <svg class="product__items--action__btn--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32" /><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M338.29 338.29L448 448" /></svg>
+                                                    <span class="visually-hidden">Quick View</span>
+                                                </a>
+                                            </li>
+                                            <li class="product__items--action__list">
+                                                <a class="product__items--action__btn" asp-action="compare" asp-controller="shop">
+                                                    <svg class="product__items--action__btn--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M400 304l48 48-48 48M400 112l48 48-48 48M64 352h85.19a80 80 0 0066.56-35.62L256 256" /><path d="M64 160h85.19a80 80 0 0166.56 35.62l80.5 120.76A80 80 0 00362.81 352H416M416 160h-53.19a80 80 0 00-66.56 35.62L288 208" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" /></svg>
+                                                    <span class="visually-hidden">Compare</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="product__items--content text-center">
+                                        <a class="add__to--cart__btn" onclick="AddToCart('@stock.ID', 1, [])">+ Add to cart</a>
+                                        <h3 class="product__items--content__title h4"><a asp-action="item" asp-controller="shop" asp-route-t="@stock.Tag">@stock.Title</a></h3>
+                                        <div class="product__items--price">
+                                            <span class="current__price">@stock.CurrencySymbol@stock.Price</span>
+                                            @if(stock.OldPrice > 0)
+                                            {
+                                                <span class="old__price">@stock.CurrencySymbol@stock.OldPrice</span>
+                                            }                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End product section -->
+    <!-- Start banner section -->
+    <section class="banner__section section--padding pt-0">
+        <div class="container">
+            <div class="row row-cols-lg-2 row-cols-md-2 row-cols-sm-2 row-cols-1 mb--n30">
+                <div class="col mb-30">
+                    <div class="banner__items position__relative">
+                        <a class="banner__items--thumbnail display-block" asp-action="index" asp-controller="shop">
+                            <img class="banner__items--thumbnail__img display-block" src="assets/img/banner/bannerSauce.png" alt="banner-img">
+                            <div class="banner__items--content">
+                                <h2 class="banner__items--content__title text__secondary">Grounded Naturals</h2>
+                                <p class="banner__items--content__desc text-white">Shop our selection of grounded products in a discounted price 10% off.</p>
+                                <span class="btn banner__items--content__btn">Shop Now</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col mb-30">
+                    <div class="banner__items position__relative">
+                        <a class="banner__items--thumbnail display-block" asp-action="index" asp-controller="shop">
+                            <img class="banner__items--thumbnail__img display-block" src="assets/img/banner/bannerUgwu.png" alt="banner-img">
+                            <div class="banner__items--content">
+                                <h2 class="banner__items--content__title text__secondary">Organic Food</h2>
+                                <p class="banner__items--content__desc text-black">Shop our selection of organic dried vegetables in a discounted price 10% off.</p>
+                                <span class="btn banner__items--content__btn">Shop Now</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End banner section -->
+    <!-- Start deal product section -->
+    <section class="product__section section--padding pt-0">
+        <div class="container">
+            <div class="section__heading text-center mb-40">
+                <span class="section__heading--subtitle">Check out some of our</span>
+                <h2 class="section__heading--maintitle">Top Rated Products</h2>
+            </div>
+            <div class="product__section--inner product__swiper--activation swiper">
+                <div class="swiper-wrapper">
+                    @foreach (var rated in Model.Featured.OrderByDescending(p=> p.Rating).Take(5))
+                    {
+                        <div class="swiper-slide">
+                            <div class="product__items">
+                                <div class="product__items--thumbnail">
+                                    <a class="product__items--link" asp-action="item" asp-controller="shop" asp-route-t="@rated.Tag">
+                                        <img class="product__items--img product__primary--img" src="@rated.Image" alt="product-img">
+                                        <img class="product__items--img product__secondary--img" src="@rated.Image1" alt="product-img">
+                                    </a>
+                                    <div class="product__badge">
+                                        <span class="product__badge--items sale">Sale</span>
+                                    </div>
+                                    <ul class="product__items--action">
+                                        <li class="product__items--action__list">
+                                            <a class="product__items--action__btn" onclick="ToggleFave('@rated.ID')">
+                                                <svg class="product__items--action__btn--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0018 0c96.26-65.34 184.09-143.09 183-252.42-.54-52.67-42.32-96.81-95.08-96.81z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" /></svg>
+                                                <span class="visually-hidden">Wishlist</span>
+                                            </a>
+                                        </li>
+                                        <li class="product__items--action__list">
+                                            <a class="product__items--action__btn" data-open="modal1" onclick="QuickView('@rated.Tag')" href="javascript:void(0)">
+                                                <svg class="product__items--action__btn--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32" /><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M338.29 338.29L448 448" /></svg>
+                                                <span class="visually-hidden">Quick View</span>
+                                            </a>
+                                        </li>
+                                        <li class="product__items--action__list">
+                                            <a class="product__items--action__btn" asp-action="compare" asp-controller="shop">
+                                                <svg class="product__items--action__btn--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M400 304l48 48-48 48M400 112l48 48-48 48M64 352h85.19a80 80 0 0066.56-35.62L256 256" /><path d="M64 160h85.19a80 80 0 0166.56 35.62l80.5 120.76A80 80 0 00362.81 352H416M416 160h-53.19a80 80 0 00-66.56 35.62L288 208" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" /></svg>
+                                                <span class="visually-hidden">Compare</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="product__items--content text-center">
+                                    <a class="add__to--cart__btn" onclick="AddToCart('@rated.ID', 1, [])">+ Add to cart</a>
+                                    <h3 class="product__items--content__title style2 h4"><a asp-action="item" asp-controller="shop" asp-route-t="@rated.Tag">@rated.Title</a></h3>
+                                    <div class="product__items--price">
+                                        <span class="current__price">@rated.CurrencySymbol@rated.Price</span>
+                                        @if (rated.OldPrice > 0)
+                                        {
+                                            <span class="old__price">@rated.CurrencySymbol@rated.OldPrice</span>
+                                        }
+                                    </div>
+                                   @*  <div class="product__items--sold__stocks d-flex justify-content-between">
+                                        <span class="product__items--sold__stocks--text">Total Sold : 1</span>
+                                        <span class="product__items--sold__stocks--text">Stocks : 35</span>
+                                    </div> *@
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="swiper__nav--btn swiper-button-next"></div>
+                <div class="swiper__nav--btn swiper-button-prev"></div>
+            </div>
+        </div>
+    </section>
+    <!-- End deal product section -->
+    <!-- Start deals banner section -->
+    <section class="deals__banner--section banner__bg">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-5 col-md-5 deals__baner--col">
+                    <div class="deals__banner--content">
+                        <h3 class="deals__banner--content__subtitle text__secondary">Best Deals of today!</h3>
+                        <h2 class="deals__banner--content__maintitle">
+                            Grab Your Cow Share Now
+                        </h2>
+                        <p class="deals__banner--content__desc">With our Cow sharing formula, you can make a minimum order for a quarter share of a cow.</p>
+                        <div class="deals__banner--countdown d-flex" data-countdown="@date"></div>
+                        <a class="btn deals__banner--content__btn" asp-action="index" asp-controller="shop">Discover Now</a>
+                    </div>
+                </div>
+                <div class="col-lg-7 col-md-7 deals__baner--col">
+                    <div class="banner__items text-right">
+                        <a class="banner__items--thumbnail display-block" asp-action="index" asp-controller="shop"><img class="banner__items--thumbnail__img display-block" src="assets/img/banner/bannerCow.png" alt="banner-layer-img"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End deals banner section -->
+   
+    <!-- Start testimonial section -->
+    <section class="testimonial__section testimonial__bg section--padding">
+        <div class="container-fluid p-0">
+            <div class="section__heading text-center mb-55">
+                <span class="section__heading--subtitle">What our Customers have to say</span>
+                <h2 class="section__heading--maintitle">Our Testimonial</h2>
+            </div>
+            <div class="testimonial__section--inner testimonial__swiper--activation swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="testimonial__items d-flex align-items-center">
+                         @*    <div class="testimonial__items--thumbnail">
+                                <img class="testimonial__items--thumbnail__img" src="assets/img/other/testimonial-thumb1.png" alt="testimonial-img">
+                            </div> *@
+                            <div class="testimonial__items--content">
+                                <h3 class="testimonial__items--title">JACKLY SMITH</h3>
+                                <span class="testimonial__items--subtitle">Senior Maneger</span>
+                                <p class="testimonial__items--desc">
+                                    Great Products
+                                </p>
+                                <div class="ratting testimonial__ratting text-warning">
+                                    <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                                </div>
+                                <div class="testimonial__chat--icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="52.472" height="45.687" viewBox="0 0 52.472 45.687">
+                                        <path data-name="Chat icon" d="M105.2,149.979a16.71,16.71,0,0,0,3.8-15.4,18.87,18.87,0,0,0-8.881-11.694,25.79,25.79,0,0,0-17.343-3.676,23.55,23.55,0,0,0-15.238,7.706,16.673,16.673,0,0,0-4.108,15.7,40.137,40.137,0,0,1,1.547,7.124,15.559,15.559,0,0,1-1.727,8.677c-.228.414-.486.81-.744,1.229.1.036.15.066.192.06a26.1,26.1,0,0,0,11.034-3.862.865.865,0,0,1,.983-.132A26.582,26.582,0,0,0,91,157.853a23.243,23.243,0,0,0,14.194-7.874Zm9.5,13.924a8.286,8.286,0,0,1-.911-1.3,11.272,11.272,0,0,1-.354-9.049,12.317,12.317,0,0,0-.486-9.4c-.4-.846-.935-1.625-1.493-2.591-.108.408-.162.582-.2.762a18.517,18.517,0,0,1-2.968,7.076c-4.234,6.141-10.236,9.427-17.468,10.65-1.283.216-2.591.288-3.916.432a.579.579,0,0,0,.126.168c.33.216.648.438,1,.624a19.172,19.172,0,0,0,17.037.846,1.037,1.037,0,0,1,.8,0,18.573,18.573,0,0,0,6.033,2.291,11.879,11.879,0,0,0,2.519.246C115.079,164.647,115.115,164.419,114.7,163.9Z" transform="translate(-62.5 -118.975)" fill="currentColor" opacity="0.11" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial__items d-flex align-items-center">
+                           @*  <div class="testimonial__items--thumbnail">
+                                <img class="testimonial__items--thumbnail__img" src="assets/img/other/testimonial-thumb2.png" alt="testimonial-img">
+                            </div> *@
+                            <div class="testimonial__items--content">
+                                <h3 class="testimonial__items--title">Laura Johnson</h3>
+                                <span class="testimonial__items--subtitle">Products Manager</span>
+                                <p class="testimonial__items--desc">
+                                    Great Products
+                                </p>
+                                <div class="ratting testimonial__ratting text-warning">
+                                    <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                                </div>
+                                <div class="testimonial__chat--icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="52.472" height="45.687" viewBox="0 0 52.472 45.687">
+                                        <path data-name="Chat icon" d="M105.2,149.979a16.71,16.71,0,0,0,3.8-15.4,18.87,18.87,0,0,0-8.881-11.694,25.79,25.79,0,0,0-17.343-3.676,23.55,23.55,0,0,0-15.238,7.706,16.673,16.673,0,0,0-4.108,15.7,40.137,40.137,0,0,1,1.547,7.124,15.559,15.559,0,0,1-1.727,8.677c-.228.414-.486.81-.744,1.229.1.036.15.066.192.06a26.1,26.1,0,0,0,11.034-3.862.865.865,0,0,1,.983-.132A26.582,26.582,0,0,0,91,157.853a23.243,23.243,0,0,0,14.194-7.874Zm9.5,13.924a8.286,8.286,0,0,1-.911-1.3,11.272,11.272,0,0,1-.354-9.049,12.317,12.317,0,0,0-.486-9.4c-.4-.846-.935-1.625-1.493-2.591-.108.408-.162.582-.2.762a18.517,18.517,0,0,1-2.968,7.076c-4.234,6.141-10.236,9.427-17.468,10.65-1.283.216-2.591.288-3.916.432a.579.579,0,0,0,.126.168c.33.216.648.438,1,.624a19.172,19.172,0,0,0,17.037.846,1.037,1.037,0,0,1,.8,0,18.573,18.573,0,0,0,6.033,2.291,11.879,11.879,0,0,0,2.519.246C115.079,164.647,115.115,164.419,114.7,163.9Z" transform="translate(-62.5 -118.975)" fill="currentColor" opacity="0.11" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial__items d-flex align-items-center">
+                           @*  <div class="testimonial__items--thumbnail">
+                                <img class="testimonial__items--thumbnail__img" src="assets/img/other/testimonial-thumb3.png" alt="testimonial-img">
+                            </div> *@
+                            <div class="testimonial__items--content">
+                                <h3 class="testimonial__items--title">Richard Smith</h3>
+                                <span class="testimonial__items--subtitle">CEO - Founder</span>
+                                <p class="testimonial__items--desc">
+                                    Great Products
+                                </p>
+                                <div class="ratting testimonial__ratting text-warning">
+                                    <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                                </div>
+                                <div class="testimonial__chat--icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="52.472" height="45.687" viewBox="0 0 52.472 45.687">
+                                        <path data-name="Chat icon" d="M105.2,149.979a16.71,16.71,0,0,0,3.8-15.4,18.87,18.87,0,0,0-8.881-11.694,25.79,25.79,0,0,0-17.343-3.676,23.55,23.55,0,0,0-15.238,7.706,16.673,16.673,0,0,0-4.108,15.7,40.137,40.137,0,0,1,1.547,7.124,15.559,15.559,0,0,1-1.727,8.677c-.228.414-.486.81-.744,1.229.1.036.15.066.192.06a26.1,26.1,0,0,0,11.034-3.862.865.865,0,0,1,.983-.132A26.582,26.582,0,0,0,91,157.853a23.243,23.243,0,0,0,14.194-7.874Zm9.5,13.924a8.286,8.286,0,0,1-.911-1.3,11.272,11.272,0,0,1-.354-9.049,12.317,12.317,0,0,0-.486-9.4c-.4-.846-.935-1.625-1.493-2.591-.108.408-.162.582-.2.762a18.517,18.517,0,0,1-2.968,7.076c-4.234,6.141-10.236,9.427-17.468,10.65-1.283.216-2.591.288-3.916.432a.579.579,0,0,0,.126.168c.33.216.648.438,1,.624a19.172,19.172,0,0,0,17.037.846,1.037,1.037,0,0,1,.8,0,18.573,18.573,0,0,0,6.033,2.291,11.879,11.879,0,0,0,2.519.246C115.079,164.647,115.115,164.419,114.7,163.9Z" transform="translate(-62.5 -118.975)" fill="currentColor" opacity="0.11" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial__items d-flex align-items-center">
+                         @*    <div class="testimonial__items--thumbnail">
+                                <img class="testimonial__items--thumbnail__img" src="assets/img/other/testimonial-thumb1.png" alt="testimonial-img">
+                            </div> *@
+                            <div class="testimonial__items--content">
+                                <h3 class="testimonial__items--title">JACKLY SMITH</h3>
+                                <span class="testimonial__items--subtitle">Senior Maneger</span>
+                                <p class="testimonial__items--desc">
+                                    Great Products
+                                </p>
+                                <div class="ratting testimonial__ratting text-warning">
+                                    <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                                </div>
+                                <div class="testimonial__chat--icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="52.472" height="45.687" viewBox="0 0 52.472 45.687">
+                                        <path data-name="Chat icon" d="M105.2,149.979a16.71,16.71,0,0,0,3.8-15.4,18.87,18.87,0,0,0-8.881-11.694,25.79,25.79,0,0,0-17.343-3.676,23.55,23.55,0,0,0-15.238,7.706,16.673,16.673,0,0,0-4.108,15.7,40.137,40.137,0,0,1,1.547,7.124,15.559,15.559,0,0,1-1.727,8.677c-.228.414-.486.81-.744,1.229.1.036.15.066.192.06a26.1,26.1,0,0,0,11.034-3.862.865.865,0,0,1,.983-.132A26.582,26.582,0,0,0,91,157.853a23.243,23.243,0,0,0,14.194-7.874Zm9.5,13.924a8.286,8.286,0,0,1-.911-1.3,11.272,11.272,0,0,1-.354-9.049,12.317,12.317,0,0,0-.486-9.4c-.4-.846-.935-1.625-1.493-2.591-.108.408-.162.582-.2.762a18.517,18.517,0,0,1-2.968,7.076c-4.234,6.141-10.236,9.427-17.468,10.65-1.283.216-2.591.288-3.916.432a.579.579,0,0,0,.126.168c.33.216.648.438,1,.624a19.172,19.172,0,0,0,17.037.846,1.037,1.037,0,0,1,.8,0,18.573,18.573,0,0,0,6.033,2.291,11.879,11.879,0,0,0,2.519.246C115.079,164.647,115.115,164.419,114.7,163.9Z" transform="translate(-62.5 -118.975)" fill="currentColor" opacity="0.11" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial__items d-flex align-items-center">
+                           @*  <div class="testimonial__items--thumbnail">
+                                <img class="testimonial__items--thumbnail__img" src="assets/img/other/testimonial-thumb2.png" alt="testimonial-img">
+                            </div> *@
+                            <div class="testimonial__items--content">
+                                <h3 class="testimonial__items--title">Laura Johnson</h3>
+                                <span class="testimonial__items--subtitle">Products Manager</span>
+                                <p class="testimonial__items--desc">
+                                    Great Products
+                                </p>
+                                <div class="ratting testimonial__ratting text-warning">
+                                   <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                                </div>
+                                <div class="testimonial__chat--icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="52.472" height="45.687" viewBox="0 0 52.472 45.687">
+                                        <path data-name="Chat icon" d="M105.2,149.979a16.71,16.71,0,0,0,3.8-15.4,18.87,18.87,0,0,0-8.881-11.694,25.79,25.79,0,0,0-17.343-3.676,23.55,23.55,0,0,0-15.238,7.706,16.673,16.673,0,0,0-4.108,15.7,40.137,40.137,0,0,1,1.547,7.124,15.559,15.559,0,0,1-1.727,8.677c-.228.414-.486.81-.744,1.229.1.036.15.066.192.06a26.1,26.1,0,0,0,11.034-3.862.865.865,0,0,1,.983-.132A26.582,26.582,0,0,0,91,157.853a23.243,23.243,0,0,0,14.194-7.874Zm9.5,13.924a8.286,8.286,0,0,1-.911-1.3,11.272,11.272,0,0,1-.354-9.049,12.317,12.317,0,0,0-.486-9.4c-.4-.846-.935-1.625-1.493-2.591-.108.408-.162.582-.2.762a18.517,18.517,0,0,1-2.968,7.076c-4.234,6.141-10.236,9.427-17.468,10.65-1.283.216-2.591.288-3.916.432a.579.579,0,0,0,.126.168c.33.216.648.438,1,.624a19.172,19.172,0,0,0,17.037.846,1.037,1.037,0,0,1,.8,0,18.573,18.573,0,0,0,6.033,2.291,11.879,11.879,0,0,0,2.519.246C115.079,164.647,115.115,164.419,114.7,163.9Z" transform="translate(-62.5 -118.975)" fill="currentColor" opacity="0.11" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper__nav--btn swiper-button-next"></div>
+                <div class="swiper__nav--btn swiper-button-prev"></div>
+            </div>
+        </div>
+    </section>
+    <!-- End testimonial section -->
+    <!-- Start shipping section -->
+    <section class="shipping__section section--padding">
+        <div class="container">
+            <div class="shipping__section--inner d-flex">
+                <div class="shipping__items">
+                    <div class="shipping__items--icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32.955" height="23.967" viewBox="0 0 32.955 23.967">
+                            <path d="M29.461,9.992H24.967V4H4A3,3,0,0,0,1,7V23.473H4a4.494,4.494,0,0,0,8.988,0h8.988a4.494,4.494,0,1,0,8.988,0h3v-7.49ZM8.49,25.72a2.247,2.247,0,1,1,2.247-2.247A2.244,2.244,0,0,1,8.49,25.72ZM28.712,12.239l2.936,3.745H24.967V12.239ZM26.465,25.72a2.247,2.247,0,1,1,2.247-2.247A2.244,2.244,0,0,1,26.465,25.72Z" transform="translate(-1 -4)" fill="currentColor" opacity="0.73" />
+                        </svg>
+                    </div>
+                    <div class="shipping__items--content text-center">
+                        <h2 class="shipping__items--title h3">Free Shipping</h2>
+                        <p class="shipping__items--desc">On all orders over ₦750,000.00</p>
+                    </div>
+                </div>
+                <div class="shipping__items">
+                    <div class="shipping__items--icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="27.63" height="38.407" viewBox="0 0 27.63 38.407">
+                            <path d="M17.615,6.106V1L10.808,7.808l6.808,6.808V9.509A10.219,10.219,0,0,1,27.826,19.721a9.991,9.991,0,0,1-1.191,4.765l2.485,2.485a13.591,13.591,0,0,0-11.5-20.865Zm0,23.826A10.219,10.219,0,0,1,7.4,19.721,9.991,9.991,0,0,1,8.6,14.955L6.11,12.471a13.591,13.591,0,0,0,11.5,20.865v5.106l6.808-6.808-6.808-6.808Z" transform="translate(-3.8 -0.517)" fill="currentColor" stroke-width="0.4" opacity="0.7" />
+                        </svg>
+                    </div>
+                    <div class="shipping__items--content text-center">
+                        <h2 class="shipping__items--title h3">Cashback Bonus</h2>
+                        <p class="shipping__items--desc">On all orders over ₦1,500,000.00</p>
+                    </div>
+                </div>
+                <div class="shipping__items">
+                    <div class="shipping__items--icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="27.787" height="22.735" viewBox="0 0 27.787 22.735">
+                            <path d="M26.261,3H3.526A2.534,2.534,0,0,0,1,5.526V23.209a2.534,2.534,0,0,0,2.526,2.526H26.261a2.534,2.534,0,0,0,2.526-2.526V5.526A2.534,2.534,0,0,0,26.261,3ZM14.894,13.1H3.526V10.578H14.894Zm0-5.052H3.526V5.526H14.894Z" transform="translate(-1 -3)" fill="currentColor" opacity="0.7" />
+                        </svg>
+                    </div>
+                    <div class="shipping__items--content text-center">
+                        <h2 class="shipping__items--title h3">Secure Payment</h2>
+                        <p class="shipping__items--desc">On all orders</p>
+                    </div>
+                </div>
+                <div class="shipping__items">
+                    <div class="shipping__items--icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="22.143" viewBox="0 0 25 22.143">
+                            <path d="M81.251,82.1c2.151,0,3.12-.959,3.12-2.149S83.4,77.8,81.251,77.8a6.99,6.99,0,0,0-4.694,1.8,3.4,3.4,0,0,0-1.609-.414,3.306,3.306,0,0,0-1.54.385A7,7,0,0,0,68.746,77.8c-2.157,0-3.12.964-3.12,2.149s.96,2.149,3.12,2.149h5.189V99.943H76.06V82.1Zm0-2.862c.709,0,1.554.126,1.554.713s-.846.721-1.554.721H77.7l-.029-.066A5.35,5.35,0,0,1,81.251,79.236ZM72.206,80.67H68.749c-.709,0-1.566-.128-1.566-.721s.854-.713,1.566-.713a5.33,5.33,0,0,1,3.526,1.321Zm-9.706,3.5v2.87H73.44v-4.3H64.066A1.505,1.505,0,0,0,62.5,84.174Zm1.566,14.333a1.5,1.5,0,0,0,1.563,1.434H73.44V88.472H64.066ZM85.934,82.74H76.628v4.306H87.5V84.174A1.507,1.507,0,0,0,85.934,82.74Zm-9.306,17.2h7.743a1.507,1.507,0,0,0,1.566-1.434V88.472H76.628Z" transform="translate(-62.5 -77.8)" fill="currentColor" opacity="0.7" />
+                        </svg>
+                    </div>
+                    <div class="shipping__items--content text-center">
+                        <h2 class="shipping__items--title h3">Gift Service</h2>
+                        <p class="shipping__items--desc">On all orders over ₦500,000.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End shipping section -->
+</main>

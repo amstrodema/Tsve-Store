@@ -1,0 +1,95 @@
+﻿@model Store.Model.Store
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="home">Home</a>
+                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="manager">Manager</a>
+                <span class="breadcrumb-item active">@ViewData["Title"]</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<div class="container-fluid">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">@ViewData["Title"]</span></h2>
+    <form asp-action="updatesettings" asp-controller="manager" enctype="multipart/form-data" method="post">
+        <div class="row px-xl-5">
+            <div class="col-md-6">
+                <div class="bg-light p-5 mb-3">
+                    <div class="table-responsive">
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Logo Prefix (Omega)" maxlength="10" value="@Model.Logo" name="Logo" />
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Logo Suffix (Stores)" maxlength="10" value="@Model.LogoSuffix" name="LogoSuffix" />
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Store Name" value="@Model.Name" name="Name" required />
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Brief Description" value="@Model.Brief" name="Brief" />
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Store Address" maxlength="50" value="@Model.Address" name="Address" />
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Store Email" type="email" value="@Model.Email" name="Email" required />
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Store Telephone" type="tel" value="@Model.Tel" name="Tel" required />
+                        </div>
+                      
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="bg-light p-5 mb-3">
+
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Facebook Handle" value="@Model.FacebookUrl" name="FacebookUrl" />
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" placeholder="X Handle" value="@Model.XUrl" name="XUrl" />
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" placeholder="LinkedIn Handle" value="@Model.LinkedInUrl" name="LinkedInUrl" />
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Footer Tag" maxlength="15" value="@Model.FooterTag" name="FooterTag" />
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Short Description for Footer" maxlength="125" value="@Model.FooterDesc" name="FooterDesc" />
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Website URL" value="@Model.Url" name="Url" />
+                    </div>
+                    <div class="form-group">
+                        <button class="btn full btn-success" type="submit">Update Settings</button>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+</form>
+<hr />
+    <form asp-action="changepassword" asp-controller="manager">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <div class="bg-light">
+                    <div class="p-5 mb-3 col-md-6">
+                        <h3>Change Store Password</h3>
+                        <input type="password" placeholder="Current Password" class="form-control mb-2" name="password" required />
+                        <input type="password" placeholder="New Password" class="form-control mb-2" name="pass" required />
+                        <button class="btn btn-success full" type="submit">Change Password</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

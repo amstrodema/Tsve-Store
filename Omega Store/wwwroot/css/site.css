@@ -1,0 +1,117 @@
+.bold{
+    font-weight:bold
+}
+.firstHeadMenu {
+    color: white
+}
+.firstHeadMenu {
+    color: white
+}
+.firstHeadMenu .header__sub--menu{
+    color: black
+}
+.firstHeadMenu .header__menu--link:hover {
+    color: white !important
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.alertFloater {
+    color: white;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.7);
+    bottom: 3em;
+    padding: 1em;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 5px 10px 0px;
+    font-family: 'Poppins';
+    font-size: 14px;
+    right: 20px;
+    max-width: 15em;
+    max-height: 4em;
+    overflow: hidden;
+    padding-bottom: 2em;
+    z-index: 2000
+}
+
+.alertSuccess {
+    background-color: rgba(0, 105, 0, 0.8) !important;
+}
+
+.alertDanger {
+    background-color: rgba(255, 0, 0, 0.8) !important;
+}
+
+.alertWarning {
+    background-color: rgba(255, 150, 0, 0.7) !important;
+}
+
+.hidden {
+    display: none !important
+}
+.my__account--section{
+  padding-bottom:1em !important;
+  padding-top:1em !important;
+}
+.my__account--section h2 {
+  margin-bottom:1em
+}
+.my__account--section .box {
+  margin-bottom:2em
+}
+.my__account--section .box a {
+    display: block;
+    border: solid 1.8px black;
+    border-radius: 0.5em;
+}
+.my__account--section .box i {
+    background-color: white;
+    color: #f60;
+    padding: 0.6em;
+    border-radius: 1em;
+    margin: 0.6em;
+    display:inline-block;
+    font-size:1em;
+    font-weight:bold
+}
+.my__account--section .box .trem {
+   
+    text-align: center;
+    background-color: rgba(0, 145, 0, 1);
+    cursor: pointer;
+}
+.my__account--section .box .clan {
+   text-align:center;
+    margin-bottom: 1em;
+    font-weight: bold;
+}
+
+.my__account--section .box .clan h3 {
+margin-top:0.5em
+}
+.my__account--section .box .clan small {
+  display:inline-block;
+  padding:0.3em;
+  line-height:1.2em
+}
+.blad{
+    background-color:transparent;
+    color:black;
+}
+.blad:hover{
+      background-color:transparent;
+    color:black;
+}
+#ratingHolder i{
+    font-size: 2em !important
+}
+.itemcart{
+    padding: 2em;
+    padding-bottom: 2em;
+    background-color:#fcfcfc;
+}

@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewData["Title"] = "CheckOut";
+}
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" href="#">Home</a>
+                <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                <span class="breadcrumb-item active">Checkout</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<!-- Checkout Start -->
+<div class="container-fluid" id="checkOutHolder">
+    <div class="text-center">
+        <img src="../gif/loader.gif" style="width:70px" />
+    </div>
+</div>
+<!-- Checkout End -->
+@section scripts {
+    <script>
+        const getCartData = localStorage.getItem('cart');
+
+        $.ajax({
+            type: "POST",
+            url: '/shop/getcheckout',
+            data: JSON.stringify(getCartData),
+            contentType: "application/json;",
+            success: function (response) {
+                var checkOutHolder = document.getElementById("checkOutHolder");
+                checkOutHolder.innerHTML = response;
+            },
+            error: function (response) {
+                /*  alert("bad");*/
+            }
+
+        });
+    </script> 
+}

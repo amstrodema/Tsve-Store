@@ -1,0 +1,53 @@
+﻿@model Store.Model.Slide
+@{
+    ViewData["Title"] = "Add New Slide";
+}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="manager">Manager</a>
+                <a class="breadcrumb-item text-dark" asp-action="slides" asp-controller="manager">Slide</a>
+                <span class="breadcrumb-item active">New</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<div class="container-fluid">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">New Slide</span></h2>
+
+   
+    <div class="row px-xl-5">
+        <div class="col-md-8 bg-light p-30">
+            <h6 class="bold uppercase">Add A New Slide</h6>
+            <p class="mb-4">
+                This slide will be added to your homepage. Make sure to use quality images of recommended sizes and briefly worded texts.<br />
+                <hr />
+            </p>
+            <form asp-action="newSlide" asp-controller="manager" method="post" enctype="multipart/form-data">
+                <input type="text" class="form-control mb-2" name="Caption" maxlength="16" placeholder="Slide Main Caption" />
+                <input type="text" class="form-control mb-2" name="Desc" maxlength="100" placeholder="Brief Expression" />
+                <input type="text" class="form-control mb-2" name="Action" maxlength="10" placeholder="Button Action" />
+                <input type="text" class="form-control mb-2" name="Link" placeholder="Button Link" />
+                <input type="file" class="btn btn-dark mb-2" name="image" required /><hr />
+                <button class="btn btn-primary py-2 px-4" type="submit">
+                    Save New Slide
+                </button>
+            </form>
+        </div>
+        <div class="col-lg-4 p-30">
+            <div class="bg-light p-30 mb-30 text-center">
+                <span>Ads</span>
+            </div>
+            @*   <div class="bg-light p-30 mb-3">
+            <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
+            <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
+            <p class="mb-2"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
+            </div>*@
+        </div>
+    </div>
+    <partial name="_commonNav" />
+</div>

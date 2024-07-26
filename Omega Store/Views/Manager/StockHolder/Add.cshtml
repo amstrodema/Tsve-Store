@@ -1,0 +1,342 @@
+﻿@model Store.Model.ViewModel.MainVM
+@using Omega_Store.Services;
+@inject LoginValidator loginValidator
+@{
+  
+}
+@{
+    ViewData["Title"] = "Add New Stock";
+}
+
+<!-- Breadcrumb Start -->
+<section class="breadcrumb__section breadcrumb__bg">
+    <div class="container">
+        <div class="row row-cols-1">
+            <div class="col">
+                <div class="breadcrumb__content text-center">
+                    <h1 class="breadcrumb__content--title text-white mb-25">New Stock</h1>
+                    <ul class="breadcrumb__content--menu d-flex justify-content-center">
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="home">Home</a></li>
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="manager">Manager</a></li>
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="stocks" asp-controller="manager">Stocks</a></li>
+                        <li class="breadcrumb__content--menu__items"><span class="text-white">New</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Breadcrumb End -->
+<!-- Contact Start -->
+<div class="container mb-5 mt-5">
+    <div class="row">
+        <div class="col-md-2">&nbsp;</div>
+        <div class="col-md-8">
+            <div class="account__login register">
+                <form>
+                    <section id="sec1">
+                        <div class="control-group mb-4 miniTopSpace">
+                            <input type="text" class="account__login--input mb-2" id="title" placeholder="Item Name" required />
+                            <input type="text" class="account__login--input mb-2" id="brief" maxlength="120" placeholder="Brief Description" required />
+
+                            <select class="account__login--input mb-2" id="category">
+                                <option value="">- Select A Category -</option>
+                                @foreach (var cat in Model.Categories)
+                                {
+                                    <option value="@cat.ID">@cat.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" type="button" onclick="MoveSection('sec2')" id="sendMessageButton">
+                                Next >>
+                            </button>
+                        </div>
+                    </section>
+
+                    <section id="sec2" class="hidden">
+                        <div class="control-group mb-4 miniTopSpace">
+                            <textarea class="account__login--input mb-2" id="desc" placeholder="Detailed Item Description" rows="5"></textarea>
+                            <select class="account__login--input" id="currency">
+                                <option value="NGN">NGN</option>
+                            </select>
+                            <input type="number" class="account__login--input" id="price" placeholder="Current Item Price" required>
+                            <input type="number" class="account__login--input" id="oldprice" placeholder="Old Item Price" required>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" type="button" onclick="MoveSection('sec1')">
+                                &lt;&lt; Prev
+                            </button>
+                            <button class="btn btn-primary" type="button" onclick="MoveSection('sec3')">
+                                Next >>
+                            </button>
+                        </div>
+                    </section>
+
+                    <section id="sec3" class="hidden">
+                        <div class="control-group mb-4 miniTopSpace">
+                            <p>
+                                Add features and options of this item to allow your customers easily order variants that suit their taste.
+                                <small>e.g. Color: Black, Red, Blue</small>
+                            </p>
+                            <div class="input-group mb-2">
+                                <input type="text" class="account__login--input" id="feature" placeholder="Item Feature (e.g Color)" aria-describedby="basic-addon2">
+
+                            </div>
+                            <input type="text" class="account__login--input mb-2" id="option" placeholder="Feature Option (e.g. Red,Blue,Pink)" required />
+                        </div>
+                        <div id="featureHolder">
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" type="button" onclick="MoveSection('sec2')">
+                                &lt;&lt; Prev
+                            </button>
+                            <button class="btn btn-primary" type="button" onclick="Add()">
+                                ADD <i class="fa fa-plus"></i>
+                            </button>
+                            <button class="btn btn-primary" type="button" onclick="MoveSection('sec4')">
+                                Next >>
+                            </button>
+                        </div>
+                    </section>
+
+                    <section id="sec4" class="hidden">
+                        <div class="control-group mb-4 miniTopSpace">
+                            <p>
+                                Uploading various sides and variants of this item will give your customers clearer understanding.
+                            </p>
+                            <input type="file" class="account__login--input btn blad" id="CatImage" name="image" required />
+                            <div class=" mb-3">
+                                <small>Default Image of Item</small>
+                            </div>
+
+                            <input type="file" class="account__login--input btn blad" id="CatImage1" name="image" required />
+                            <input type="file" class="account__login--input btn blad" id="CatImage2" name="image" required />
+                            <input type="file" class="account__login--input btn blad" id="CatImage3" name="image" required />
+                            <input type="file" class="account__login--input btn blad" id="CatImage4" name="image" required />
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" type="button" id="lastPrevBtn" onclick="MoveSection('sec3')">
+                                &lt;&lt; Prev
+                            </button>
+                            <button class="btn btn-primary" id="finish" type="button" onclick="Finish()">
+                                Finish
+                            </button>
+                        </div>
+
+                    </section>
+                    <section id="sec5" class="hidden pb-30">
+                        <div class="text-center">
+                            <img src="../gif/loader.gif" id="loader" style="width:50px; height:50px; margin-left:0.5em" />
+                        </div>
+                    </section>
+                </form>
+              
+            </div>
+        </div>
+        <div class="col-md-2">&nbsp;</div>
+    </div>
+
+    @*  <partial name="_commonNav" /> *@
+</div>
+
+<!-- Contact End -->
+<script>
+
+
+    function MoveSection(val) {
+
+        if (!CheckFeatures()) {
+            alertDanger("Add New Feature");
+            return 
+        }
+        var sec1 = document.getElementById("sec1");
+        var sec2 = document.getElementById("sec2");
+        var sec3 = document.getElementById("sec3");
+        var sec4 = document.getElementById("sec4");
+
+        if (val == "sec2" && !CheckSecOne()) {
+            alertDanger("Complete all fields");
+            return;
+        } else if (val == "sec3" && !CheckSecTwo()) {
+            alertDanger("Complete important fields");
+            return;
+        } else if (val == "sec4") {
+
+        }
+
+        if (!sec1.classList.contains("hidden")) {
+            sec1.classList.add("hidden");
+        }
+
+        if (!sec2.classList.contains("hidden")) {
+            sec2.classList.add("hidden");
+        }
+
+        if (!sec3.classList.contains("hidden")) {
+            sec3.classList.add("hidden");
+        }
+
+        if (!sec4.classList.contains("hidden")) {
+            sec4.classList.add("hidden");
+        }
+        if (!sec5.classList.contains("hidden")) {
+            sec5.classList.add("hidden");
+        }
+
+        var thisSection = document.getElementById(val);
+        if (thisSection.classList.contains("hidden")) {
+            thisSection.classList.remove("hidden");
+        }
+    }
+
+    function CheckSecOne(){
+        if (document.getElementById("title").value == "" || document.getElementById("brief").value == "" || document.getElementById("category").value == "") {
+            return false;
+        }
+        return true;
+    }
+
+    function CheckSecTwo(){
+        if (document.getElementById("desc").value == "" || document.getElementById("price").value == "") {
+            return false;
+        }
+        return true;
+    }
+
+    let dataObj = {
+        Title: "",
+        Brief : "",
+        Desc : "",
+        Category : "",
+        Currency : "",
+        Price : 0,
+        OldPrice : 0,
+        Features: [],
+        Img1: "",
+        Img2: "",
+        Img3: "",
+        Img4: "",
+        Img5: ""
+    }
+
+    function CheckFeatures(){
+        var v = document.getElementById("feature").value;
+        var o = document.getElementById("option").value;
+
+        if(v != "" || o != ""){
+            return false;
+        }
+        return true;
+    }
+   
+    function Add() {
+        let feature = {
+            Name: "",
+            Option: ""
+        }
+
+        var featureHolder = document.getElementById("featureHolder");
+        feature.Name = document.getElementById("feature").value;
+        feature.Option = document.getElementById("option").value;
+
+        if (feature.Name == "" || feature.Option=="") {
+            alertDanger("Complete Feature Details");
+            return
+        }
+        dataObj.Features.push(feature);
+
+        RenderFeature();
+        document.getElementById("feature").value = "";
+        document.getElementById("option").value = "";
+    }
+
+    function Remove(val) {
+        dataObj.Features.splice(val, 1);
+        RenderFeature();
+    }
+    function RenderFeature(){
+        var str = "";
+        for (i = 0; i < dataObj.Features.length; i++) {
+            str += '<p class="mb-3"><b>' + dataObj.Features[i].Name + ':</b> ' + dataObj.Features[i].Option + ' <span class="float-right text-danger " onclick="Remove(' + i + ')">x</span></p>'
+        }
+        featureHolder.innerHTML = str;
+    }
+    //$("#fileInput")[0].files[0]
+    // alert(dataObj.features[0].Name)
+    
+
+</script>
+@section scripts{
+    <script>
+        function Finish() {
+            var finish = document.getElementById("finish");
+            var loader = document.getElementById("loader");
+            var lastPrevBtn = document.getElementById("lastPrevBtn");
+
+            dataObj.Title = document.getElementById("title").value;
+            dataObj.Brief = document.getElementById("brief").value;
+            dataObj.Category = document.getElementById("category").value;
+            dataObj.Currency = document.getElementById("currency").value;
+            dataObj.Price = document.getElementById("price").value;
+            dataObj.OldPrice = document.getElementById("oldprice").value;
+            dataObj.Desc = document.getElementById("desc").value;
+            // dataObj.Img1 = $("#CatImage")[0].files[0] == undefined ? "" : ;
+            // dataObj.Img2 = $("#CatImage1")[0].files[0] == undefined ? "" : $("#CatImage1")[0].files[0];
+            // dataObj.Img3 = $("#CatImage2")[0].files[0] == undefined ? "" : $("#CatImage2")[0].files[0];
+            // dataObj.Img4 = $("#CatImage3")[0].files[0] == undefined ? "" : $("#CatImage3")[0].files[0];
+            // dataObj.Img5 = $("#CatImage4")[0].files[0] == undefined ? "" : $("#CatImage4")[0].files[0];
+
+            if (dataObj.OldPrice == "") {
+                dataObj.OldPrice = 0;
+            }
+            if (dataObj.Price == "") {
+                dataObj.Price = 0;
+            }
+            if ($("#CatImage")[0].files[0] == undefined) {
+                alertDanger("Add default image");
+                return;
+            }
+            if ($("#CatImage1")[0].files[0] == undefined) {
+                alertDanger("Add second image");
+                return;
+            }
+
+            MoveSection('sec5');
+
+            var formData = new FormData();
+            formData.append("itemVM", JSON.stringify(dataObj))
+            formData.append("img", $("#CatImage")[0].files[0])
+            formData.append("img1", $("#CatImage1")[0].files[0])
+            formData.append("img2", $("#CatImage2")[0].files[0])
+            try {
+                formData.append("img3", $("#CatImage3")[0].files[0])
+            } catch { }
+            try { formData.append("img4", $("#CatImage4")[0].files[0]) } catch { }
+            
+
+            $.ajax({
+                type: "POST",
+                url: '/manager/additem',
+                cache : false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    location.reload();
+                    alertSuccess("Item saved!")
+                },
+                error: function (response) {
+                    alertDanger("Item not saved!");
+                    MoveSection('sec4');
+                }
+
+            });
+
+            // finish.classList.add("hidden");
+            // lastPrevBtn.classList.add("hidden");
+            // loader.classList.remove("hidden");
+        }
+    </script>
+}

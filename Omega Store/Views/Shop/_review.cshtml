@@ -1,0 +1,92 @@
+﻿@model Store.Model.ViewModel.MainVM
+@using Omega_Store.Services;
+@inject LoginValidator loginValidator
+
+<div class="product__reviews--header">
+    <h2 class="product__reviews--header__title h3 mb-20">Customer Reviews</h2>
+    <div class="reviews__ratting d-flex align-items-center">
+        @for (int i = 1; i <= 5; i++)
+        {
+            if (i <= Model.Ratings)
+            {
+                <i class="fa fa-star text-warning"></i>
+            }
+            else
+            {
+                <i class="fa fa-star-o"></i>
+            }
+
+        }
+        <span class="reviews__summary--caption">Based on @Model.Reviews.Count() reviews</span>
+    </div>
+    <a class="actions__newreviews--btn btn" href="#writereview">Write A Review</a>
+</div>
+<div class="reviews__comment--area">
+    @foreach (var review in Model.Reviews)
+    {
+        <div class="reviews__comment--list d-flex">
+            @*  <div class="reviews__comment--thumb">
+        <img src="../assets/img/other/comment-thumb1.png" alt="comment-thumb">
+        </div> *@
+            <div class="reviews__comment--content">
+                <div class="reviews__comment--top d-flex justify-content-between">
+                    <div class="reviews__comment--top__left">
+                        <h3 class="reviews__comment--content__title h4">@review.Name</h3>
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= review.Rating)
+                            {
+                                <i class="fa fa-star text-warning"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-star-o"></i>
+                            }
+
+                        }
+                    </div>
+                    <span class="reviews__comment--content__date">@review.DateCreated.ToString("D")</span>
+                </div>
+                <p class="reviews__comment--content__desc">
+                    @review.Message
+                </p>
+            </div>
+        </div>
+    }
+</div>
+<div id="writereview" class="reviews__comment--reply__area">
+  
+        <h3 class="reviews__comment--reply__title mb-15 bold capitalize">Add a review </h3>
+        <div class="reviews__ratting d-flex align-items-center mb-20">
+            <div class="text-primary" id="ratingHolder">
+                <i class="fa fa-star-o" onclick="ProcessRating(1)"></i>
+                <i class="fa fa-star-o" onclick="ProcessRating(2)"></i>
+                <i class="fa fa-star-o" onclick="ProcessRating(3)"></i>
+                <i class="fa fa-star-o" onclick="ProcessRating(4)"></i>
+                <i class="fa fa-star-o" onclick="ProcessRating(5)"></i>
+            </div>
+        </div>
+        <div class="row">
+               @if (!loginValidator.IsLoggedIn())
+            {
+            <div class="col-lg-6 col-md-6 mb-15">
+                <label>
+                    <input class="reviews__comment--reply__input" id="name" placeholder="Your Name...." type="text">
+                </label>
+            </div>
+            <div class="col-lg-6 col-md-6 mb-15">
+                <label>
+                    <input class="reviews__comment--reply__input" id="email" placeholder="Your Email...." type="email">
+                </label>
+            </div>
+        }
+            <div class="col-12 mb-10">
+                <textarea class="reviews__comment--reply__textarea" id="message" placeholder="Your Comments...."></textarea>
+            </div>
+          
+        </div>
+        <button class="btn text-white" data-hover="Submit" onclick="ValidateReview()">Leave Your Review</button>
+ 
+</div>
+
+  

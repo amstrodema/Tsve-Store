@@ -1,0 +1,72 @@
+﻿@using Omega_Store.Services;
+@inject LoginValidator loginValidator
+@{
+    var user = loginValidator.GetUser();
+}
+@model IEnumerable<Store.Model.Hybrid.CategoryHybrid>
+<div class="offcanvas__header">
+    <div class="offcanvas__inner">
+        <div class="offcanvas__logo">
+            <a class="offcanvas__logo_link" asp-action="index" asp-controller="home">
+                <img src="../assets/img/logo/nav-log.png" alt="Tsve Logo" width="158" height="36">
+            </a>
+            <button class="offcanvas__close--btn" data-offcanvas>close</button>
+        </div>
+        <nav class="offcanvas__menu">
+            <ul class="offcanvas__menu_ul">
+                <li class="offcanvas__menu_li"><a class="offcanvas__menu_item" asp-action="index" asp-controller="home">Home</a></li>
+                <li class="offcanvas__menu_li">
+                    <a class="offcanvas__menu_item" asp-action="index" asp-controller="shop">Shop</a>
+                    <ul class="offcanvas__sub_menu">
+                        @foreach (var cat in Model)
+                        {
+                            <li class="offcanvas__sub_menu_li"><a asp-action="index" asp-controller="shop" asp-route-c="@cat.Tag" class="offcanvas__sub_menu_item">@cat.Name</a></li>
+                        }
+                    </ul>
+                </li>
+                <li class="offcanvas__menu_li"><a class="offcanvas__menu_item" asp-action="cart" asp-controller="shop">Cart</a></li>
+                <li class="offcanvas__menu_li"><a class="offcanvas__menu_item" asp-action="wishlist" asp-controller="shop">Wishlist</a></li>
+                <li class="offcanvas__menu_li"><a class="offcanvas__menu_item" asp-action="track" asp-controller="shop">Track Order</a></li>
+                <li class="offcanvas__menu_li"><a class="offcanvas__menu_item" asp-action="gallery" asp-controller="home">Gallery</a></li>
+                <li class="offcanvas__menu_li"><a class="offcanvas__menu_item" asp-action="information-center" asp-controller="shop">Information Center</a></li>
+                <li class="offcanvas__menu_li"><a class="offcanvas__menu_item" asp-action="about" asp-controller="home">About Us</a></li>
+                <li class="offcanvas__menu_li"><a class="offcanvas__menu_item" asp-action="contact" asp-controller="home">Contact Us</a></li>
+            </ul>
+            <div class="offcanvas__account--items">
+                @if(user == null)
+                {
+                    <a class="offcanvas__account--items__btn d-flex align-items-center" asp-action="login" asp-controller="manager">
+                        <span class="offcanvas__account--items__icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20.51" height="19.443" viewBox="0 0 512 512"><path d="M344 144c-3.92 52.87-44 96-88 96s-84.15-43.12-88-96c-4-55 35-96 88-96s92 42 88 96z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" /><path d="M256 304c-87 0-175.3 48-191.64 138.6C62.39 453.52 68.57 464 80 464h352c11.44 0 17.62-10.48 15.65-21.4C431.3 352 343 304 256 304z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32" /></svg>
+                        </span>
+                        <span class="offcanvas__account--items__label">Login</span>
+                    </a>
+                }
+                else
+                {
+                    <a class="offcanvas__account--items__btn d-flex align-items-center" asp-action="index" asp-controller="manager">
+                        <span class="offcanvas__account--items__icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20.51" height="19.443" viewBox="0 0 512 512"><path d="M344 144c-3.92 52.87-44 96-88 96s-84.15-43.12-88-96c-4-55 35-96 88-96s92 42 88 96z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" /><path d="M256 304c-87 0-175.3 48-191.64 138.6C62.39 453.52 68.57 464 80 464h352c11.44 0 17.62-10.48 15.65-21.4C431.3 352 343 304 256 304z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32" /></svg>
+                        </span>
+                        <span class="offcanvas__account--items__label">@user.Username</span>
+                    </a>
+                }
+               
+            </div>
+    @*         <div class="offcanvas__account--currency">
+                <a class="offcanvas__account--currency__menu text-black" href="javascript:void(0)">
+                    <img src="assets/img/icon/usd-icon.png" alt="currency">
+                    <span>NGN</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="9.797" height="6.05" viewBox="0 0 9.797 6.05">
+                        <path d="M14.646,8.59,10.9,12.329,7.151,8.59,6,9.741l4.9,4.9,4.9-4.9Z" transform="translate(-6 -8.59)" fill="currentColor" opacity="0.7" />
+                    </svg>
+                </a>
+                <div class="offcanvas__account--currency__submenu">
+                    <ul>
+                        <li class="currency__items"><a class="currency__text" href="#">NGN</a></li>
+                    </ul>
+                </div>
+            </div> *@
+        </nav>
+    </div>
+</div>
