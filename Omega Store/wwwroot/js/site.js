@@ -126,9 +126,9 @@ function AddToCart(itemID, qtyVal, feature, qtyID) {
 
     var data = {};
     if (feature == undefined) {
-       data = { ID: itemID, Qty: quantity }
+        data = { ID: itemID, Qty: quantity, Features:[] }
     } else {
-        data = { ID: itemID, Qty: quantity, Feature: feature }
+        data = { ID: itemID, Qty: quantity, Features: feature }
     }
     //console.log(data, "Final Cart Value")
 
@@ -154,7 +154,7 @@ function AddToCart(itemID, qtyVal, feature, qtyID) {
 
         const jsonData = JSON.stringify(cart);
         localStorage.setItem('cart', jsonData);
-       // console.log(cart)
+        console.log(cart)
     }
     alertSuccess("Added to cart");
     try {
@@ -184,18 +184,26 @@ function UpdateCartQty(index, inputID, costID, price) {
 }
 
 //function ClearCart() {
-   
+
 
 //    var cart = [];
 //    const jsonData = JSON.stringify(cart);
 //    localStorage.setItem('cart', jsonData);
 
-   
+
 
 
 //    loadCartData();
 //    alertDanger("Cart cleared!");
 //}
+function ProcessItem(itemID, qtyID) {
+    var qty = document.getElementById('itemQty');
+    if (qtyID == "itemQtyPrep")
+        AddToCart(itemID, 1, [], qtyID);
+    else
+        AddToCart(itemID, 1, features, qtyID);
+    //features = [];
+}
 function ClearCart() {
 
     var cart = [];
@@ -211,6 +219,7 @@ function ClearCart() {
 
     loadCartData();
     alertDanger("Cart cleared!");
+    QuickCart();
 }
 
 
@@ -615,21 +624,7 @@ function QuickView(itemTag) {
     }
 }
 function GetFullCart() {
-    const getCartData = localStorage.getItem('cart');
-    $.ajax({
-        type: "POST",
-        url: '/shop/getcart',
-        data: JSON.stringify(getCartData),
-        contentType: "application/json;",
-        success: function (response) {
-            var cartHolder = document.getElementById("cartHolder");
-            cartHolder.innerHTML = response;
-        },
-        error: function (response) {
-            /*  alert("bad");*/
-        }
-
-    });
+   
 }
 function QuickCart() {
 

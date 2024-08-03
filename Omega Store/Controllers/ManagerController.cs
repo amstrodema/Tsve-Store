@@ -22,9 +22,10 @@ namespace Omega_Store.Controllers
         private readonly SlideBusiness _slideBusiness;
         private readonly OfferBusiness _offerBusiness;
         private readonly LoggerBusiness _loggerBusiness;
+        private readonly SearchBusiness _searchBusiness;
 
         public ManagerController(UserBusiness userBusiness, IHttpContextAccessor context, LoginValidator loginValidator, CategoryBusiness categoryBusiness,
-            GroupBusiness groupBusiness, StoreBusiness storeBusiness, SlideBusiness slideBusiness, OfferBusiness offerBusiness, LoggerBusiness loggerBusiness)
+            GroupBusiness groupBusiness, StoreBusiness storeBusiness, SlideBusiness slideBusiness, OfferBusiness offerBusiness, LoggerBusiness loggerBusiness, SearchBusiness searchBusiness)
         {
             _userBusiness = userBusiness;
             _context = context;
@@ -35,6 +36,7 @@ namespace Omega_Store.Controllers
             _slideBusiness = slideBusiness;
             _offerBusiness = offerBusiness;
             _loggerBusiness = loggerBusiness;
+            _searchBusiness = searchBusiness;                               
         }
         private void SetFeedBack(int code, string message)
         {
@@ -250,8 +252,7 @@ namespace Omega_Store.Controllers
 
             return RedirectToAction("Settings");
         }
-        [Route("Categories")]
-        public async Task<IActionResult> Categories(string s, string t)
+        public async Task<IActionResult> Information(string s, string t, int pageno)
         {
             var user = await _loginValidator.GetUserAuth();
             if (user == null)
@@ -260,8 +261,40 @@ namespace Omega_Store.Controllers
             }
             if(s== "add")
             {
-                return View("categoryholder/add");
+                return View("infocenterholder/add");
             }else if(s == "modify" && !string.IsNullOrEmpty(t))
+                try { return View("infocenterholder/edit", await _searchBusiness.GetQuestion(t)); }
+                catch { }
+
+            return View("infocenterholder/information", await _searchBusiness.GetQuestions(pageno));
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateKnowledge(string question, string answer)
+        {
+            var user = await _loginValidator.GetUserAuth();
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+            var res = await _searchBusiness.AddQuestion(question, answer, user.ID);
+
+            SetFeedBack(res.StatusCode, res.Message);
+            return RedirectToAction("information", new {s = "add"});
+        }
+
+        [Route("Categories")]
+        public async Task<IActionResult> Categories(string s, string t)
+        {
+            var user = await _loginValidator.GetUserAuth();
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+            if (s == "add")
+            {
+                return View("categoryholder/add");
+            }
+            else if (s == "modify" && !string.IsNullOrEmpty(t))
                 try { return View("categoryholder/edit", await _categoryBusiness.GetVM(t)); }
                 catch { }
 

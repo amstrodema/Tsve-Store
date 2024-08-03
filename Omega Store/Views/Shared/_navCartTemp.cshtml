@@ -6,7 +6,7 @@
     @foreach (var orderItem in Model){
         <div class="minicart__product--items d-flex">
             <div class="minicart__thumb">
-                <a href="product-details.html"><img src="@orderItem.Image" alt="prduct-img"></a>
+                <a asp-action="item" asp-controller="shop" asp-route-t="@orderItem.Tag"><img src="@orderItem.Image" alt="prduct-img"></a>
             </div>
             <div class="minicart__text">
                 <h4 class="minicart__subtitle"><a asp-action="item" asp-controller="shop" asp-route-t="@orderItem.Tag">@orderItem.ItemName</a></h4>

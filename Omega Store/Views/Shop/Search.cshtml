@@ -1,0 +1,46 @@
+﻿@model IEnumerable<App.Services.GoogleCSEItem>
+@{
+    ViewData["Title"] = "Search - " + ViewData["Query"];
+}
+
+<main class="main__content_wrapper">
+
+    <!-- Start breadcrumb section -->
+    <section class="breadcrumb__section breadcrumb__bg">
+        <div class="container">
+            <div class="row row-cols-1">
+                <div class="col">
+                    <div class="breadcrumb__content text-center">
+                        <h1 class="breadcrumb__content--title text-white mb-25">Search Results</h1>
+                        <ul class="breadcrumb__content--menu d-flex justify-content-center">
+                            <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="home">Home</a></li>
+                            <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="shop">Shop</a></li>
+                            <li class="breadcrumb__content--menu__items"><span class="text-white">Search Results</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End breadcrumb section -->
+    <!-- Start product details section -->
+    <section class="product__details--section section--padding">
+        <div class="container">
+            <div class="row">
+                @Model.Count() result(s)
+            </div>
+            <div class="row">
+                <table class="table search">
+                    <tr>
+                      @foreach(var result in Model ){
+                            <td>
+                                <h5><a href="@result.Link">@result.Title</a></h5>
+                                <div>@result.Snippet</div>
+                            </td>
+                        }
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>

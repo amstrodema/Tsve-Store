@@ -15,7 +15,7 @@
     <meta content="" name="description">
     <title>@title</title>
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <link href="../assets/img/favicon.ico" rel="icon">
 
    <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" type="image/x-icon" href="../assets/img/favicon.ico">
@@ -95,9 +95,9 @@
         <div class="predictive__search--box ">
             <div class="predictive__search--box__inner">
                 <h2 class="predictive__search--title">Search / Track</h2>
-                <form class="predictive__search--form" action="#">
+                <form class="predictive__search--form" asp-action="search" asp-controller="shop" method="get">
                     <label>
-                        <input class="predictive__search--input" placeholder="Type Search Item / Tracking ID" type="text">
+                        <input class="predictive__search--input" name="query" placeholder="Type Search Item / Tracking ID" type="text">
                     </label>
                     <button class="predictive__search--button" aria-label="search button"><svg class="product__items--action__btn--svg" xmlns="http://www.w3.org/2000/svg" width="30.51" height="25.443" viewBox="0 0 512 512"><path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32" /><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M338.29 338.29L448 448" /></svg>  </button>
                 </form>
@@ -129,10 +129,9 @@
     <button id="scroll__top"><svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M112 244l144-144 144 144M256 120v292" /></svg></button>
     <a class="hidden" data-open="modal1" id="popModal" href="javascript:void(0)"></a>
     <!-- All Script JS Plugins here  -->
-    @await RenderSectionAsync("Scripts", required: false)
     <script src="../assets/js/vendor/popper.js" defer="defer"></script>
     <script src="../assets/js/vendor/bootstrap.min.js" defer="defer"></script>
-    <script src="../assets/js/vendor/jquery.min.js" defer="defer"></script>
+    <script src="../assets/js/vendor/jquery.min.js" ></script>
     <script src="../assets/js/plugins/swiper-bundle.min.js"></script>
     <script src="../assets/js/plugins/glightbox.min.js"></script>
 
@@ -168,7 +167,8 @@
             });
         }
     </script>
-   
+
+    @await RenderSectionAsync("Scripts", required: false)
   
 </body>
 </html>

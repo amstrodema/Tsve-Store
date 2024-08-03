@@ -1,0 +1,35 @@
+﻿@model Store.Model.Knowledge
+@{
+    ViewData["Title"] = Model.Question;
+}
+
+<main class="main__content_wrapper">
+
+    <!-- Start breadcrumb section -->
+    <section class="breadcrumb__section breadcrumb__bg">
+        <div class="container">
+            <div class="row row-cols-1">
+                <div class="col">
+                    <div class="breadcrumb__content text-center">
+                        <h1 class="breadcrumb__content--title text-white mb-25">@Model.Question</h1>
+                        <ul class="breadcrumb__content--menu d-flex justify-content-center">
+                            <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="home">Home</a></li>
+                            <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="shop">Shop</a></li>
+                            <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="information" asp-controller="shop">Information Center</a></li>
+                            <li class="breadcrumb__content--menu__items"><span class="text-white">@Model.Question</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End breadcrumb section -->
+    <!-- Start product details section -->
+    <section class="product__details--section section--padding">
+        <div class="container">
+            <div class="row row-cols-lg-2 row-cols-md-2">
+
+            </div>
+        </div>
+    </section>
+</main>

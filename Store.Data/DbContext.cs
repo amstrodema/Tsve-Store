@@ -40,5 +40,7 @@ namespace Store.Data
         public virtual DbSet<Slide> Tsve_Slides { get; set; }
         public virtual DbSet<Offer> Tsve_Offers { get; set; }
         public virtual DbSet<Brand> Tsve_Brands { get; set; }
+        public virtual DbSet<SearchKeyword> Tsve_SearchKeywords { get; set; }
+        public virtual DbSet<Knowledge> Tsve_Knowledge { get; set; }
     }
 }

@@ -3,42 +3,47 @@
     ViewData["Title"] = "Order Tracking";
 }
 
-<!-- Breadcrumb Start -->
-<div class="container-fluid">
-    <div class="row px-xl-5">
-        <div class="col-12">
-            <nav class="breadcrumb bg-light mb-30">
-                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="home">Home</a>
-                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="shop">Shop</a>
-                <span class="breadcrumb-item active">Order Tracking</span>
-            </nav>
-        </div>
-    </div>
-</div>
-<!-- Breadcrumb End -->
-<!-- Contact Start -->
-<div class="container-fluid">
-    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Order Tracking</span></h2>
-    <div class="row px-xl-5">
-        <div class="col-lg-7 mb-5">
-            <div class="contact-form bg-light p-30 mb-2">
-                <div id="success"></div>
-                <form name="sentMessage" id="contactForm" novalidate="novalidate">
-                    <div class="control-group">
-                        <input type="text" class="form-control" id="name" placeholder="Order Tracking ID"
-                               required="required" data-validation-required-message="Enter Order Tracking Number" />
-                        <p class="help-block text-danger"></p>
+<main class="main__content_wrapper">
+
+    <!-- Start breadcrumb section -->
+    <section class="breadcrumb__section breadcrumb__bg">
+        <div class="container">
+            <div class="row row-cols-1">
+                <div class="col">
+                    <div class="breadcrumb__content text-center">
+                        <h1 class="breadcrumb__content--title text-white mb-25">Tracking</h1>
+                        <ul class="breadcrumb__content--menu d-flex justify-content-center">
+                            <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="home">Home</a></li>
+                            <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="shop">Shop</a></li>
+                            <li class="breadcrumb__content--menu__items"><span class="text-white">Order Tracking</span></li>
+                        </ul>
                     </div>
-                    <div>
-                        <button class="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">
-                           Track Order
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
-            <p class="text-muted">To get full updates about your order with a single button click, enter your Tracking ID above and click <b>Track Order</b> to proceed. For further information and enquiries, contact us.</p>
         </div>
-        
-    </div>
-</div>
-<!-- Contact End -->
+    </section>
+    <!-- End breadcrumb section -->
+    <!-- Start product details section -->
+    <section class="product__details--section section--padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        Do you have a pending order? Track your order below to know the progress level of your order
+                    </p>
+                    <div class="account__login register">
+                        <form id="contactForm" asp-action="createcategory" asp-controller="manager" method="post" enctype="multipart/form-data">
+                            <div class="account__login--inner">
+                                <label>
+                                    <input class="account__login--input" placeholder="Tracking ID" name="name" type="text" required>
+                                </label>
+                                <button class="account__login--btn btn mb-10" type="submit">Track Order</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+

@@ -8,6 +8,9 @@ namespace Store.Data.Interface
 {
     public interface IUnitOfWork
     {
+
+        IKnowledge Knowledge { get; }
+        ISearchKeyword SearchKeywords { get; }
         IFavourite Favourites { get; }
         IUser Users { get; }
         IOrder Orders { get; }

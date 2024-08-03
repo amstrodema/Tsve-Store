@@ -115,3 +115,26 @@ margin-top:0.5em
     padding-bottom: 2em;
     background-color:#fcfcfc;
 }
+.btn:hover {
+    background-color: #585 !important;
+}
+.btn-warning{
+    background-color: #f60 !important;
+}
+.btn-warning:hover{
+      background-color: #e50 !important;
+}
+.btn-danger{
+    background-color: #f00 !important;
+}
+    .btn-danger:hover {
+         background-color: #f55 !important;
+      
+    }
+.noContent{
+    padding:1em;
+    text-align:center;
+    padding-top:2em;
+    padding-bottom:2em;
+    font-weight:bold;
+}

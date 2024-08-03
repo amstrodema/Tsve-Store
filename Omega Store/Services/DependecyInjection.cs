@@ -14,14 +14,22 @@ namespace Omega_Store.Services
     {
         public static void Register(IServiceCollection services)
         {
+            var config = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
+
             services
 
                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
-
+                .Configure<GoogleCSESettings>(config.GetSection("GoogleCSESettings"))
                 .AddSingleton<GenericBusiness>()
+                .AddSingleton<GoogleCSEService>()
                 .AddTransient<LoginValidator>()
                 .AddScoped<DbContext>()
                 .AddScoped<IUnitOfWork, UnitOfWork>()
+                .AddScoped<ISearchKeyword, SearchKeywordRepository>()
+                .AddScoped<IKnowledge, KnowledgeRepository>()
                 .AddScoped<IUser, UserRepository>()
                 .AddScoped<IOrder, OrderRepository>()
                 .AddScoped<ICategory, CategoryRepository>()
@@ -56,6 +64,7 @@ namespace Omega_Store.Services
                 .AddScoped<LoggerBusiness>()
 
                 .AddScoped<GeneralBusiness>()
+                .AddScoped<SearchBusiness>()
                 .AddScoped<GroupBusiness>()
                 .AddScoped<BillingDetailBusiness>()
                 .AddScoped<CategoryBusiness>()

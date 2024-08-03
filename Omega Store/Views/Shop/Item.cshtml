@@ -167,7 +167,7 @@
                                                     optnCount++;
                                                     var id = "option-" + optnCount;
                                                     <li class="variant__size--list">
-                                                        <input  id="@id" onclick="AddOption('@Model.Stock.ID','@feature.ID','@option')" name="@feature.ID" type="radio" value="@option">
+                                                        <input id="@id" onclick="AddOption('@Model.Stock.ID','@feature.ID','@option', '@feature.Name')" name="@feature.ID" type="radio" value="@option">
                                                         <label class="variant__size--value" for="@id">@option</label>
                                                     </li>
                                                 }
@@ -278,7 +278,7 @@
                                     </ul>
                                 </div>
                                 <div class="product__items--content product__items2--content text-center">
-                                    <a class="add__to--cart__btn" href="cart.html">+ Add to cart</a>
+                                    <a class="add__to--cart__btn" onclick="AddToCart('@stock.ID', 1, [])">+ Add to cart</a>
                                     <h3 class="product__items--content__title h4"><a asp-action="item" asp-controller="shop" asp-route-t="@stock.Tag">@stock.Title</a></h3>
                                     <div class="product__items--price">
                                         <span class="current__price">@stock.CurrencySymbol@stock.Price</span>
@@ -325,22 +325,27 @@
   
     var features = [];
     var rating = 0;
-    function AddOption(itemID, featureID, featureOption){
+    function AddOption(itemID, featureID, featureOption, featureName){
         var feature = {
             orderItemID : itemID,
             featureID : featureID,
-            featureOption : featureOption
+            featureOption : featureOption,
+            featureName: featureName
         }
-        features.push(feature);
+        if (features.find(m => m.featureID == featureID) == undefined){
+            features.push(feature);
+        }else{
+           var val = features.find(m => m.featureID == featureID);
+            val.orderItemID = itemID;
+            val.featureID = featureID;
+            val.featureOption = featureOption;
+            val.featureName = featureName;
+        }
+        
+       // console.log(feature)
+      //  console.log(features)
     }
-    function ProcessItem(itemID, qtyID) {
-        var qty = document.getElementById('itemQty');
-        if (qtyID == "itemQtyPrep")
-        AddToCart(itemID, 1, [], qtyID);
-        else
-            AddToCart(itemID, 1, features, qtyID);
-        //features = [];
-    }
+ 
  
   
     function ProcessRating(val) {

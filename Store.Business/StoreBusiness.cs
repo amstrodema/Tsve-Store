@@ -22,7 +22,7 @@ namespace Store.Business
             _unitOfWork = unitOfWork;
             _genericBusiness = genericBusiness;
             _generalBusiness = generalBusiness;
-            _categoryBusiness = categoryBusiness;   
+            _categoryBusiness = categoryBusiness;            
         }
         public async Task<IEnumerable<Item>> Get() => await _unitOfWork.Items.GetByStoreID(_genericBusiness.StoreID);
         public async Task<Model.Store> GetStore() => await _unitOfWork.Stores.Find(_genericBusiness.StoreID);
@@ -435,18 +435,18 @@ namespace Store.Business
             
             return checkOutVM;
         }
-        public async Task<ResponseMessage<string>> CheckOutCart(CheckOutVM checkOutVM)
+        public async Task<ResponseMessage<string>> CheckOutCart(CheckOutVM checkOutVM, User? user)
         {
             ResponseMessage<string> responseMessage = new ResponseMessage<string>();
             try
             {
-                var store = await _unitOfWork.Stores.Find(_genericBusiness.StoreID);
-                checkOutVM.BillingDetail.StoreID = _genericBusiness.StoreID;
-                checkOutVM.BillingDetail.ID = Guid.NewGuid();
-                checkOutVM.BillingDetail.IsActive = true;
-                checkOutVM.BillingDetail.Addr2 = string.IsNullOrEmpty(checkOutVM.BillingDetail.Addr2) ? string.Empty : checkOutVM.BillingDetail.Addr2;
-                checkOutVM.BillingDetail.DateCreated = DateTime.UtcNow.AddHours(1);
-                await _unitOfWork.BillingDetails.Create(checkOutVM.BillingDetail);
+               // var store = await _unitOfWork.Stores.Find(_genericBusiness.StoreID);
+                //checkOutVM.BillingDetail.StoreID = _genericBusiness.StoreID;
+                //checkOutVM.BillingDetail.ID = Guid.NewGuid();
+                //checkOutVM.BillingDetail.IsActive = true;
+                //checkOutVM.BillingDetail.Addr2 = string.IsNullOrEmpty(checkOutVM.BillingDetail.Addr2) ? string.Empty : checkOutVM.BillingDetail.Addr2;
+                //checkOutVM.BillingDetail.DateCreated = DateTime.UtcNow.AddHours(1);
+                //await _unitOfWork.BillingDetails.Create(checkOutVM.BillingDetail);
 
                 Order order = new Order()
                 {
@@ -483,7 +483,6 @@ namespace Store.Business
                                      ItemID = oder.ID,
                                      IsActive = true,
                                      OrderID = order.ID,
-                                     StoreID = _genericBusiness.StoreID,
                                      Price = item.Price,
                                      Qty = oder.Qty,
                                      Tag = item.Tag
@@ -503,9 +502,9 @@ namespace Store.Business
                         }
                 }
 
-                if (checkOutVM.IsCreateAccount)
+                if (checkOutVM.IsCreateAccount && user == null)
                 {
-                    User user = new User()
+                    user = new User()
                     {
                         ID = Guid.NewGuid(),
                         Fname = checkOutVM.BillingDetail.FName == null ? string.Empty : checkOutVM.BillingDetail.FName,
@@ -529,26 +528,26 @@ namespace Store.Business
                     responseMessage.StatusCode = 200;
                     responseMessage.Message = "Completed!";
                     responseMessage.Data = order.Ref;
-                    try
-                    {
-                        Email email = new Email()
-                        {
-                            DisplayName = $"{store.Name}",
-                            Message = $"<h2>ORDER ALERT</h2><br><b>You have a new order.</b> <br>Click the link to view: <a href='{store.Url}/manager/orders?ref={order.Ref}'>{store.Url}/manager/orders?ref={order.Ref}</a>",
-                            Subject = "New Order",
-                            Recipients = new List<string>()
-                {
-                                store.Email == null ? string.Empty : store.Email
-                }
-                        };
+                //    try
+                //    {
+                //        Email email = new Email()
+                //        {
+                //            DisplayName = $"{store.Name}",
+                //            Message = $"<h2>ORDER ALERT</h2><br><b>You have a new order.</b> <br>Click the link to view: <a href='{store.Url}/manager/orders?ref={order.Ref}'>{store.Url}/manager/orders?ref={order.Ref}</a>",
+                //            Subject = "New Order",
+                //            Recipients = new List<string>()
+                //{
+                //                store.Email == null ? string.Empty : store.Email
+                //}
+                //        };
 
-                        EmailService.SendMail(email, "salmatraglobal@gmail.com", "Salm1!0#009");
-                        EmailService.FastMail("", $"New Order Alert - {order.Ref}", $"You have a new order. Click to view: {store.Url}/manager/orders?ref={order.Ref}");
-                    }
-                    catch (Exception)
-                    {
+                //        EmailService.SendMail(email, "salmatraglobal@gmail.com", "Salm1!0#009");
+                //        EmailService.FastMail("", $"New Order Alert - {order.Ref}", $"You have a new order. Click to view: {store.Url}/manager/orders?ref={order.Ref}");
+                //    }
+                //    catch (Exception)
+                //    {
 
-                    }
+                //    }
                 }
                 else
                 {
@@ -829,6 +828,8 @@ namespace Store.Business
             }
             return 0;
         }
+
+       
 
         public async Task<ResponseMessage<string>> CheckOut(Guid itemID, Guid userID)
         {

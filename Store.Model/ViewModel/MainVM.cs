@@ -23,6 +23,7 @@ namespace Store.Model.ViewModel
         public IEnumerable<Group> Groups { get; set; }
         public IEnumerable<Slide> Slides { get; set; }
         public IEnumerable<Brand> Brands { get; set; }
+        public IEnumerable<dynamic> dynamics { get; set; }
         public List<Offer> Offers { get; set; }
         public Order Order { get; set; }
         public Group Group { get; set; }

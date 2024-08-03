@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Create New Information";
+}
+<section class="breadcrumb__section breadcrumb__bg">
+    <div class="container">
+        <div class="row row-cols-1">
+            <div class="col">
+                <div class="breadcrumb__content text-center">
+                    <h1 class="breadcrumb__content--title text-white mb-25">New Information</h1>
+                    <ul class="breadcrumb__content--menu d-flex justify-content-center">
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="home" >Home</a></li>
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="manager">Manager</a></li>
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="information" asp-controller="manager">Information</a></li>
+                        <li class="breadcrumb__content--menu__items"><span class="text-white">New</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Breadcrumb End -->
+<!-- Contact Start -->
+<div class="container mb-5 mt-5">
+    <div class="row">
+        <div class="col-md-2">&nbsp;</div>
+        <div class="col-md-8">
+            <div class="account__login register">
+                <form id="contactForm" asp-action="createknowledge" asp-controller="manager" method="post" enctype="multipart/form-data">
+                    <div class="account__login--header mb-25">
+                        <h2 class="account__login--header__title h3 mb-10">Create New Information</h2>
+                        <p class="account__login--header__desc">Add a new knowledge to the information center</p>
+                    </div>
+                    <div class="account__login--inner">
+                        <label>
+                            <input class="account__login--input" placeholder="Type a Question" name="question" type="text" required>
+                        </label>
+                        <label>
+                            <textarea class="account__login--input" placeholder="Answer the Question" name="answer" required></textarea>
+                        </label>
+                        <button class="account__login--btn btn mb-10" type="submit">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-2">&nbsp;</div>
+    </div>
+
+   @*  <partial name="_commonNav" /> *@
+</div>
+<!-- Contact End -->

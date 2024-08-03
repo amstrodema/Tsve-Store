@@ -8,179 +8,306 @@
 }
 
     <form asp-action="checkoutcart" asp-controller="shop" method="post">
-    <div class="row px-xl-5">
-        <div class="col-lg-8">
+        @Html.HiddenFor(m=> m.Orders)
+    <div class="checkout__page--area">
+        <div class="container">
+            <div class="checkout__page--inner d-flex">
+                <div class="main checkout__mian">
+                    <header class="main__header checkout__mian--header mb-30">
+                        <nav class="mb-4">
+                            <ol class="breadcrumb checkout__breadcrumb d-flex">
+                                <li class="breadcrumb__item breadcrumb__item--completed d-flex align-items-center">
+                                    <a class="breadcrumb__link" asp-action="index" asp-controller="home">Home</a>
+                                    <svg class="readcrumb__chevron-icon" xmlns="http://www.w3.org/2000/svg" width="17.007" height="16.831" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144"></path></svg>
+                                </li>
 
+                                <li class="breadcrumb__item breadcrumb__item--current d-flex align-items-center">
+                                    <a class="breadcrumb__link" asp-action="index" asp-controller="shop">Shop</a>
+                                    <svg class="readcrumb__chevron-icon" xmlns="http://www.w3.org/2000/svg" width="17.007" height="16.831" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144"></path></svg>
+                                </li>
+                                <li class="breadcrumb__item breadcrumb__item--blank d-flex align-items-center">
+                                    <a class="breadcrumb__link" asp-action="cart" asp-controller="shop">Cart</a>
+                                    <svg class="readcrumb__chevron-icon" xmlns="http://www.w3.org/2000/svg" width="17.007" height="16.831" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144"></path></svg>
+                                </li>
+                                <li class="breadcrumb__item breadcrumb__item--blank">
+                                    <span class="breadcrumb__text current">Checkout</span>
+                                </li>
+                            </ol>
+                        </nav>
+                        <details class="order__summary--mobile__version">
+                            <summary class="order__summary--toggle border-radius-5">
+                                <span class="order__summary--toggle__inner">
+                                    <span class="order__summary--toggle__icon">
+                                        <svg width="20" height="19" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M17.178 13.088H5.453c-.454 0-.91-.364-.91-.818L3.727 1.818H0V0h4.544c.455 0 .91.364.91.818l.09 1.272h13.45c.274 0 .547.09.73.364.18.182.27.454.18.727l-1.817 9.18c-.09.455-.455.728-.91.728zM6.27 11.27h10.09l1.454-7.362H5.634l.637 7.362zm.092 7.715c1.004 0 1.818-.813 1.818-1.817s-.814-1.818-1.818-1.818-1.818.814-1.818 1.818.814 1.817 1.818 1.817zm9.18 0c1.004 0 1.817-.813 1.817-1.817s-.814-1.818-1.818-1.818-1.818.814-1.818 1.818.814 1.817 1.818 1.817z" fill="currentColor"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="order__summary--toggle__text show">
+                                        <span>Show order summary</span>
+                                        <svg width="11" height="6" xmlns="http://www.w3.org/2000/svg" class="order-summary-toggle__dropdown" fill="currentColor"><path d="M.504 1.813l4.358 3.845.496.438.496-.438 4.642-4.096L9.504.438 4.862 4.534h.992L1.496.69.504 1.812z"></path></svg>
+                                    </span>
+                                    <span class="order__summary--final__price">₦@Model.Orders.Sum(p=> p.Price * p.Qty)</span>
+                                </span>
+                            </summary>
+                            <div class="order__summary--section">
+                                <div class="cart__table checkout__product--table">
+                                    <table class="summary__table">
+                                        <tbody class="summary__table--body">
+                                            @{
+                                                subTotal = 0;
+                                            }
+                                             @foreach (var item in Model.Orders)
+                                            {
+                                                  symbol = item.CurrenySymbol;
+                                    var cost = item.Price * item.Qty;
 
-            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span></h5>
-            <div class="bg-light p-30 mb-5">
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label>First Name</label>
-                        <input class="form-control" type="text" placeholder="Femi" name="BillingDetail.FName" required>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Last Name</label>
-                        <input class="form-control" type="text" placeholder="Falana" name="BillingDetail.LName" required>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>E-mail</label>
-                        <input class="form-control" type="text" placeholder="example@email.com" name="BillingDetail.Email" required>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Mobile No</label>
-                        <input class="form-control" type="tel" placeholder="+234 810 789 8900" name="BillingDetail.Tel" required>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Address Line 1</label>
-                        <input class="form-control" type="text" placeholder="123 Street" name="BillingDetail.Addr1" required>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Address Line 2</label>
-                        <input class="form-control" type="text" placeholder="123 Street" name="BillingDetail.Addr2">
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Country</label>
-                        <select class="custom-select" name="BillingDetail.Country" required>
-                            <option value="Nigeria" selected>Nigeria</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>State</label>
-                        <input class="form-control" type="text" placeholder="Oyo State" name="BillingDetail.State" required>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>City</label>
-                        <input class="form-control" type="text" placeholder="Ibadan" name="BillingDetail.City" required>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>ZIP Code</label>
-                        <input class="form-control" type="text" placeholder="200123" name="BillingDetail.Zip">
-                    </div>
-                    <div class="col-md-12 form-group">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="newaccount" name="IsCreateAccount" disabled>
-                            <label class="custom-control-label" for="newaccount">Create an account</label>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="shipto" name="IsDifferentShipping">
-                            <label class="custom-control-label" for="shipto" data-toggle="collapse" data-target="#shipping-address">Ship to different address</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="collapse mb-5" id="shipping-address">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Shipping Address</span></h5>
-                <div class="bg-light p-30">
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>First Name</label>
-                            <input class="form-control" type="text" placeholder="Tope" name="ShippingDetail.FName">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Last Name</label>
-                            <input class="form-control" type="text" placeholder="Adesina" name="ShippingDetail.LName">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>E-mail</label>
-                            <input class="form-control" type="text" placeholder="example@email.com" name="ShippingDetail.Email">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Mobile No</label>
-                            <input class="form-control" type="text" placeholder="+234 814 789 9011" name="ShippingDetail.Tel">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Address Line 1</label>
-                            <input class="form-control" type="text" placeholder="123 Street" name="ShippingDetail.Addr1">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Address Line 2</label>
-                            <input class="form-control" type="text" placeholder="123 Street" name="ShippingDetail.Addr2">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Country</label>
-                            <select class="custom-select" name="ShippingDetail.Country">
-                                <option selected>Nigeria</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>State</label>
-                            <input class="form-control" type="text" placeholder="Rivers State" name="ShippingDetail.State">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>City</label>
-                            <input class="form-control" type="text" placeholder="Portharcourt" name="ShippingDetail.City">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>ZIP Code</label>
-                            <input class="form-control" type="text" placeholder="200110" name="ShippingDetail.Zip">
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                                <tr class=" summary__table--items">
+                                                    <td class=" summary__table--list">
+                                                        <div class="product__image two  d-flex align-items-center">
+                                                            <div class="product__thumbnail border-radius-5">
+                                                                <a  asp-action="item" asp-controller="shop" asp-route-t="@item.Tag"><img class="border-radius-5" src="@item.Image" alt="cart-product"></a>
+                                                                <span class="product__thumbnail--quantity">@item.Qty</span>
+                                                            </div>
+                                                            <div class="product__description">
+                                                                <h3 class="product__description--name h4"><a   asp-action="item" asp-controller="shop" asp-route-t="@item.Tag">@item.ItemName</a></h3>
+                                                                @foreach (var feature in item.Features)
+                                                                {
+                                                                    <span class="product__description--variant">@feature.FeatureName: @feature.FeatureOption</span>
+                                                                }
 
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class=" summary__table--list">
+                                                        <span class="cart__price">@item.CurrenySymbol@item.Price</span>
+                                                    </td>
+                                                </tr>
 
-        </div>
-        <div class="col-lg-4">
-            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span></h5>
-            <div class="bg-light p-30 mb-5">
-                <div class="border-bottom">
-                    <h6 class="mb-3">Products</h6>
-                    @foreach (var item in Model.Orders)
-                    {
-                        symbol = item.CurrenySymbol;
-                        var cost = item.Price * item.Qty;
-                        <div class="d-flex justify-content-between">
-                            <p>@item.ItemName</p>
-                            <p>@item.CurrenySymbol@cost</p>
+                                                subTotal += cost;
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="checkout__discount--code">
+                                    <div class="d-flex" action="#">
+                                        <label>
+                                            <input class="checkout__discount--code__input--field border-radius-5" placeholder="Coupon or Discount code" type="text">
+                                        </label>
+                                        <button class="checkout__discount--code__btn btn border-radius-5" type="submit">Apply</button>
+                                    </div>
+                                </div>
+                                <div class="checkout__total">
+                                    <table class="checkout__total--table">
+                                        <tbody class="checkout__total--body">
+                                            <tr class="checkout__total--items">
+                                                <td class="checkout__total--title text-left">Subtotal </td>
+                                                <td class="checkout__total--amount text-right">@symbol@subTotal</td>
+                                            </tr>
+                                            <tr class="checkout__total--items">
+                                                <td class="checkout__total--title text-left">Shipping</td>
+                                                <td class="checkout__total--calculated__text text-right">Calculated at next step</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot class="checkout__total--footer">
+                                            <tr class="checkout__total--footer__items">
+                                                <td class="checkout__total--footer__title checkout__total--footer__list text-left">Total </td>
+                                                <td class="checkout__total--footer__amount checkout__total--footer__list text-right">@symbol@subTotal</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </details>
+                 
+                    </header>
+                    <main class="main__content_wrapper section--padding pt-0">
+                        <div class="checkout__content--step section__contact--information">
+                            <div class="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
+                                <h2 class="section__header--title h3">Contact information</h2>
+                                <p class="layout__flex--item">
+                                    Already have an account?
+                                    <a class="layout__flex--item__link" asp-action="login" asp-controller="manager">Log in</a>
+                                </p>
+                            </div>
+                            <div class="customer__information">
+                                <div class="checkout__email--phone mb-12">
+                                    <label>
+                                        <input class="checkout__input--field border-radius-5" placeholder="Email or mobile phone mumber" type="text">
+                                    </label>
+                                </div>
+                                <div class="checkout__checkbox">
+                                    <input class="checkout__checkbox--input" id="check1" name="IsNewsletter" type="checkbox">
+                                    <span class="checkout__checkbox--checkmark"></span>
+                                    <label class="checkout__checkbox--label" for="check1">
+                                        Email me with news and offers
+                                    </label>
+                                </div>
+                            </div>
                         </div>
+                        <div class="checkout__content--step section__shipping--address">
+                            <div class="section__header mb-25">
+                                <h2 class="section__header--title h3">Shipping address</h2>
+                            </div>
+                            <div class="section__shipping--address__content">
+                                <div class="row">
+                                    <div class="col-lg-6 mb-12">
+                                        <div class="checkout__input--list ">
+                                            <label>
+                                                <input class="checkout__input--field border-radius-5" placeholder="First name (optional)" type="text" name="ShippingDetail.FName" required>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-12">
+                                        <div class="checkout__input--list">
+                                            <label>
+                                                <input class="checkout__input--field border-radius-5" placeholder="Last name" type="text" name="ShippingDetail.LName">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mb-12">
+                                        <div class="checkout__input--list">
+                                            <label>
+                                                <input class="checkout__input--field border-radius-5" placeholder="Company (optional)" type="text">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mb-12">
+                                        <div class="checkout__input--list">
+                                            <label>
+                                                <input class="checkout__input--field border-radius-5" placeholder="Address1" type="text" name="ShippingDetail.Addr1">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mb-12">
+                                        <div class="checkout__input--list">
+                                            <label>
+                                                <input class="checkout__input--field border-radius-5" placeholder="Apartment, suite, etc. (optional)" type="text" name="ShippingDetail.Addr2">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mb-12">
+                                        <div class="checkout__input--list">
+                                            <label>
+                                                <input class="checkout__input--field border-radius-5" placeholder="City" type="text" name="ShippingDetail.City">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mb-12">
+                                        <div class="checkout__input--list">
+                                            <label>
+                                                <input class="checkout__input--field border-radius-5" placeholder="City" type="text" name="ShippingDetail.State">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-12">
+                                        <div class="checkout__input--list checkout__input--select select">
+                                            <label class="checkout__select--label" for="country">Country/region</label>
+                                            <select class="checkout__input--select__field border-radius-5" name="ShippingDetail.Country" id="country">
+                                                <option value="Nigeria" selected>Nigeria</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-12">
+                                        <div class="checkout__input--list">
+                                            <label>
+                                                <input class="checkout__input--field border-radius-5" placeholder="Postal code" type="text">
+                                               
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input class="hidden" type="text" required id="cartHolder">
+                                <div class="checkout__checkbox">
+                                    <input class="checkout__checkbox--input" id="check2" name="IsCreateAccount" type="checkbox">
+                                    <span class="checkout__checkbox--checkmark"></span>
+                                    <label class="checkout__checkbox--label" for="check2">
+                                        Save this information for next time
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkout__content--step__footer d-flex align-items-center">
+                            <button class="continue__shipping--btn btn border-radius-5" type="submit" >Continue To Shipping</button>
+                            <a class="previous__link--content" asp-action="cart" asp-controller="shop">Return to cart</a>
+                        </div>
+                    </main>
+             
+                </div>
+                <aside class="checkout__sidebar sidebar">
+                    <div class="cart__table checkout__product--table">
+                        <table class="cart__table--inner">
+                            <tbody class="cart__table--body">
+                                @{
+                                    subTotal = 0;
+                                }
+                                @foreach (var item in Model.Orders)
+                                {
+                                    symbol = item.CurrenySymbol;
+                                    var cost = item.Price * item.Qty;
+                                
+                                    <tr class="cart__table--body__items">
+                                        <td class="cart__table--body__list">
+                                            <div class="product__image two  d-flex align-items-center">
+                                                <div class="product__thumbnail border-radius-5">
+                                                    <a   asp-action="item" asp-controller="shop" asp-route-t="@item.Tag"><img class="border-radius-5" src="@item.Image" alt="cart-product"></a>
+                                                    <span class="product__thumbnail--quantity">@item.Qty</span>
+                                                </div>
+                                                <div class="product__description">
+                                                    <h3 class="product__description--name h4"><a   asp-action="item" asp-controller="shop" asp-route-t="@item.Tag">@item.ItemName</a></h3>
+                                                    @foreach (var feature in item.Features)
+                                                    {
+                                                        <span class="product__description--variant">@feature.FeatureName: @feature.FeatureOption</span>
+                                                    }
+                                                    
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="cart__table--body__list">
+                                            <span class="cart__price">@item.CurrenySymbol@item.Price</span>
+                                        </td>
+                                    </tr>
 
-                        subTotal += cost;
-                    }
-                </div>
-                <div class="border-bottom pt-3 pb-2">
-                    <div class="d-flex justify-content-between mb-3">
-                        <h6>Subtotal</h6>
-                        <h6>@symbol@subTotal</h6>
+                                    subTotal += cost;
+                                }
+                              
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="d-flex justify-content-between">
-                        <h6 class="font-weight-medium">Shipping</h6>
-                        <h6 class="font-weight-medium">N/A</h6>
-                    </div>
-                </div>
-                <div class="pt-2">
-                    <div class="d-flex justify-content-between mt-2">
-                        <h5>Total</h5>
-                        <h5>@symbol@subTotal</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="mb-5">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Payment</span></h5>
-                <div class="bg-light p-30">
-                  @*   <div class="form-group">
-                        <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" name="payment" id="cardPayment" disabled>
-                            <label class="custom-control-label" for="cardPayment">Card Payment</label>
+                    <div class="checkout__discount--code">
+                        <div class="d-flex" action="#">
+                            <label>
+                                <input class="checkout__discount--code__input--field border-radius-5" placeholder="Coupon or Discount code" type="text">
+                            </label>
+                            <button class="checkout__discount--code__btn btn border-radius-5" type="submit">Apply</button>
                         </div>
                     </div>
-                    <div class="form-group mb-4">
-                        <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" name="payment" id="banktransfer" disabled>
-                            <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
-                        </div>
+                    <div class="checkout__total">
+                        <table class="checkout__total--table">
+                            <tbody class="checkout__total--body">
+                                <tr class="checkout__total--items">
+                                    <td class="checkout__total--title text-left">Subtotal </td>
+                                    <td class="checkout__total--amount text-right">@symbol@subTotal</td>
+                                </tr>
+                                <tr class="checkout__total--items">
+                                    <td class="checkout__total--title text-left">Shipping</td>
+                                    <td class="checkout__total--calculated__text text-right">Calculated at next step</td>
+                                </tr>
+                            </tbody>
+                            <tfoot class="checkout__total--footer">
+                                <tr class="checkout__total--footer__items">
+                                    <td class="checkout__total--footer__title checkout__total--footer__list text-left">Total </td>
+                                    <td class="checkout__total--footer__amount checkout__total--footer__list text-right">@symbol@subTotal</td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
-                    <div class="form-group">
-                        <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" name="payment" id="paypal" disabled>
-                            <label class="custom-control-label" for="paypal">Paypal</label>
-                        </div>
-                    </div> *@
-                    <button class="btn btn-block btn-primary font-weight-bold py-3">Place Order</button>
-                </div>
+                </aside>
             </div>
         </div>
     </div>
+
+   
     </form>
+    <script>
+
+    </script>

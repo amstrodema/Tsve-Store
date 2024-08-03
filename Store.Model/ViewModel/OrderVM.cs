@@ -19,6 +19,7 @@ namespace Store.Model.ViewModel
         public decimal Qty { get; set; }
         public decimal Price { get; set; }
         public ItemFeature[] Features { get; set; }
+        public Feature[] ItemFeatures { get; set; }
         public DateTime DateCreated { get; set; }
     }
 }

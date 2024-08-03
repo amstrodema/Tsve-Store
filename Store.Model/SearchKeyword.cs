@@ -1,14 +1,9 @@
 ﻿namespace Store.Model
 {
-    public class ItemFeature
+    public class SearchKeyword
     {
         public Guid ID { get; set; }
-        public Guid StoreID { get; set; }
-        public Guid OrderID { get; set; }
-        public Guid OrderItemID { get; set; }
-        public Guid FeatureID { get; set; }
-        public string FeatureOption { get; set; } = string.Empty;
-        public string FeatureName { get; set; } = string.Empty;
+        public string Keyword { get; set; }
 
         public bool IsApproved { get; set; }
         public bool IsActive { get; set; }

@@ -37,10 +37,13 @@ namespace Store.Data.Repository
         public IBrand Brands { get; }
         public IOffer Offers { get; }
         public ISlide Slides { get; }
+        public IKnowledge Knowledge { get; }
+        public ISearchKeyword SearchKeywords { get; }
 
         public UnitOfWork(DbContext db, IUser users, IOrder orders, ICategory categories, IBillingDetail billingDetails, ICustomer customers, IFeature features, IFeatureOption featureOptions,
             IFile files, IItem items, IItemFeature itemFeatures, IKey keys, INotification notifications, IOrderItem orderItems, IReview reviews, IShippingDetail shippingDetails, IStore stores,
-            ITracking trackings, IPayment payments, ITransaction transactions, ILoginMonitor loginMonitors, IGroup groups, IFavourite favourites, IBrand brands, IOffer offers, ISlide slides)
+            ITracking trackings, IPayment payments, ITransaction transactions, ILoginMonitor loginMonitors, IGroup groups, IFavourite favourites,
+            IBrand brands, IOffer offers, ISlide slides, IKnowledge knowledge, ISearchKeyword searchKeywords)
         {
             _db = db;
             Users = users;
@@ -68,6 +71,8 @@ namespace Store.Data.Repository
             Brands = brands;
             Offers = offers;
             Slides = slides;
+            Knowledge = knowledge;
+            SearchKeywords = searchKeywords;
         }
 
 

@@ -1,19 +1,24 @@
 ﻿
 @{
-    ViewData["Title"] = "CheckOut";
+    ViewData["Title"] = "Cart CheckOut";
 }
 <!-- Breadcrumb Start -->
-<div class="container-fluid">
-    <div class="row px-xl-5">
-        <div class="col-12">
-            <nav class="breadcrumb bg-light mb-30">
-                <a class="breadcrumb-item text-dark" href="#">Home</a>
-                <a class="breadcrumb-item text-dark" href="#">Shop</a>
-                <span class="breadcrumb-item active">Checkout</span>
-            </nav>
+<section class="breadcrumb__section breadcrumb__bg">
+    <div class="container">
+        <div class="row row-cols-1">
+            <div class="col">
+                <div class="breadcrumb__content text-center">
+                    <h1 class="breadcrumb__content--title text-white mb-25">Cart Checkout</h1>
+                    <ul class="breadcrumb__content--menu d-flex justify-content-center">
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="home">Home</a></li>
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="shop">Shop</a></li>
+                        <li class="breadcrumb__content--menu__items"><span class="text-white">Cart Checkout</span></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</section>
 <!-- Breadcrumb End -->
 <!-- Checkout Start -->
 <div class="container-fluid" id="checkOutHolder">
@@ -25,6 +30,8 @@
 @section scripts {
     <script>
         const getCartData = localStorage.getItem('cart');
+        var cartHolder = document.getElementById("cartHolder");
+        cartHolder.value = JSON.stringify(getCartData);
 
         $.ajax({
             type: "POST",
