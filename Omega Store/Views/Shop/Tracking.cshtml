@@ -1,6 +1,9 @@
-﻿@model Store.Model.ViewModel.LoginVM
+﻿@model Store.Model.ViewModel.CheckOutVM
 @{
-    ViewData["Title"] = "Order Tracking";
+    var order = Model == null ? null : Model.Order;
+    var trackings = Model == null ? null : Model.Trackings;
+    ViewData["Title"] = order == null ? "Order Tracking" : "Order-"+order.Ref;
+    int count = 0;
 }
 
 <main class="main__content_wrapper">
@@ -15,7 +18,7 @@
                         <ul class="breadcrumb__content--menu d-flex justify-content-center">
                             <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="home">Home</a></li>
                             <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="shop">Shop</a></li>
-                            <li class="breadcrumb__content--menu__items"><span class="text-white">Order Tracking</span></li>
+                            <li class="breadcrumb__content--menu__items"><span class="text-white">@ViewData["Title"]</span></li>
                         </ul>
                     </div>
                 </div>
@@ -26,24 +29,99 @@
     <!-- Start product details section -->
     <section class="product__details--section section--padding">
         <div class="container">
+
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-2">&nbsp;</div>
+                @if (Model == null)
+                {
+
+                }
+                else if (order == null)
+                {
+                    <div class="col-md-8">
+                        <partial name="_nocontent" />
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-8 trackingInfo">
+                        <h2 class="text-center mb-4">Order @order.Ref Workflow</h2>
+                        @if (trackings == null || trackings.Count() == 0)
+                        {
+                            <div class="tracker">
+                                <div class="ms-4">
+                                    <h5>No Workflow Yet!</h5>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @foreach (var track in trackings)
+                            {
+                                count++;
+                                if (count > 1)
+                                {
+                                    <div class="flow-step">
+                                        <div class="arrow"><i class="fa fa-arrow-down"></i></div>
+
+                                    </div>
+                                }
+                                <div class="tracker">
+                                    <div class="ms-4">
+                                        <h5>@track.Action</h5>
+                                        <p class="mb-2">@track.Details</p>
+                                        <small>@track.DateCreated.ToString("D") | @track.DateCreated.ToString("t")</small>
+                                    </div>
+                                    <i class="fa fa-circle circle"></i>
+                                </div>
+
+
+                            }
+                        }
+
+                    </div>
+                }
+
+                <div class="col-md-2">&nbsp;</div>
+
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-2">&nbsp;</div>
+                <div class="col-md-8">
                     <p>
                         Do you have a pending order? Track your order below to know the progress level of your order
                     </p>
                     <div class="account__login register">
-                        <form id="contactForm" asp-action="createcategory" asp-controller="manager" method="post" enctype="multipart/form-data">
+                        <form asp-action="trackOrder" asp-controller="shop" method="post">
                             <div class="account__login--inner">
                                 <label>
-                                    <input class="account__login--input" placeholder="Tracking ID" name="name" type="text" required>
+                                    <input class="account__login--input" placeholder="Tracking ID" id="trackingID" name="trackID" type="text" required>
                                 </label>
                                 <button class="account__login--btn btn mb-10" type="submit">Track Order</button>
+                                <a class="anchor" onclick="ConfirmOrder()">Check Confirmation</a>
+                                
                             </div>
                         </form>
                     </div>
                 </div>
+                <div class="col-md-2">&nbsp;</div>
             </div>
+          
         </div>
     </section>
 </main>
 
+<script>
+   
+    function ConfirmOrder() {
+        var trackingID = document.getElementById("trackingID");
+        var confirmOrda = document.getElementById("confirm");
+        if (trackingID.value == "") {
+            alertDanger("Enter Tracking ID");
+            return false;
+        }
+        var a = document.createElement("a");
+        a.setAttribute("href", "shop/confirmation?order=" + trackingID.value)
+        a.click();
+    }
+</script>

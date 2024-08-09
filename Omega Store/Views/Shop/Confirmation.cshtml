@@ -1,26 +1,440 @@
-﻿@using Omega_Store.Services;
+﻿@model Store.Model.ViewModel.CheckOutVM
+@using Omega_Store.Services;
 @inject LoginValidator loginValidator
 
 @{
-    ViewData["Title"] = "Order Completed";
-    var store = await loginValidator.GetShop();
-    var message = $"You have a new order. Click to view: {store.Url}/manager/orders?ref={TempData["OrderRef"]}";
+    ViewData["Title"] = "Order Confirmation";
+    decimal subTotal = 0;
+    decimal shipping = 0;
+    string symbol = "";
 }
 <!-- Breadcrumb Start -->
-<div class="container-fluid">
-    <div class="row px-xl-5">
-        <div class="col-12 text-center p-30 bg-light">
-            <img class="mb-3" src="../img/completed.jpg" style="width:70px" />
-            <h4 class="uppercase">Order Completed</h4>
-            <h6>Order ID: @TempData["OrderRef"] (<a class="text-info" id="whatsApp" onclick="GenerateLink('@message','@store.Tel')">Click to alert seller on WhatsApp</a>)</h6>
+<section class="breadcrumb__section breadcrumb__bg">
+    <div class="container">
+        <div class="row row-cols-1">
+            <div class="col">
+                <div class="breadcrumb__content text-center">
+                    <h1 class="breadcrumb__content--title text-white mb-25">Order Confirmation</h1>
+                    <ul class="breadcrumb__content--menu d-flex justify-content-center">
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="home">Home</a></li>
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="shop">Shop</a></li>
+                        <li class="breadcrumb__content--menu__items"><span class="text-white">Order Confirmation</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb End -->
+<div class="checkout__page--area">
+    <div class="container">
+        <div class="checkout__page--inner d-flex">
+            <div class="main checkout__mian">
+                @if (!Model.Order.IsApproved)
+                {
+                    <header class="main__header checkout__mian--header mb-30">
+                        <nav class="mb-4">
+                            <ol class="breadcrumb checkout__breadcrumb d-flex">
+                                <li class="breadcrumb__item breadcrumb__item--completed d-flex align-items-center">
+                                    <a class="breadcrumb__link" asp-action="index" asp-controller="home">Home</a>
+                                    <svg class="readcrumb__chevron-icon" xmlns="http://www.w3.org/2000/svg" width="17.007" height="16.831" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144"></path></svg>
+                                </li>
+
+                                <li class="breadcrumb__item breadcrumb__item--current d-flex align-items-center">
+                                    <a class="breadcrumb__link" asp-action="index" asp-controller="shop">Shop</a>
+                                    <svg class="readcrumb__chevron-icon" xmlns="http://www.w3.org/2000/svg" width="17.007" height="16.831" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144"></path></svg>
+                                </li>
+                                <li class="breadcrumb__item breadcrumb__item--blank">
+                                    <span class="breadcrumb__text current">Confirmation</span>
+                                </li>
+                            </ol>
+                        </nav>
+                        <details class="order__summary--mobile__version">
+                            <summary class="order__summary--toggle border-radius-5">
+                                <span class="order__summary--toggle__inner">
+                                    <span class="order__summary--toggle__icon">
+                                        <svg width="20" height="19" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M17.178 13.088H5.453c-.454 0-.91-.364-.91-.818L3.727 1.818H0V0h4.544c.455 0 .91.364.91.818l.09 1.272h13.45c.274 0 .547.09.73.364.18.182.27.454.18.727l-1.817 9.18c-.09.455-.455.728-.91.728zM6.27 11.27h10.09l1.454-7.362H5.634l.637 7.362zm.092 7.715c1.004 0 1.818-.813 1.818-1.817s-.814-1.818-1.818-1.818-1.818.814-1.818 1.818.814 1.817 1.818 1.817zm9.18 0c1.004 0 1.817-.813 1.817-1.817s-.814-1.818-1.818-1.818-1.818.814-1.818 1.818.814 1.817 1.818 1.817z" fill="currentColor"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="order__summary--toggle__text show">
+                                        <span>Show order summary</span>
+                                        <svg width="11" height="6" xmlns="http://www.w3.org/2000/svg" class="order-summary-toggle__dropdown" fill="currentColor"><path d="M.504 1.813l4.358 3.845.496.438.496-.438 4.642-4.096L9.504.438 4.862 4.534h.992L1.496.69.504 1.812z"></path></svg>
+                                    </span>
+                                    <span class="order__summary--final__price">₦@Model.Orders.Sum(p => p.Price * p.Qty).ToString("##.##")</span>
+                                </span>
+                            </summary>
+                            <div class="order__summary--section">
+                                <div class="cart__table checkout__product--table">
+                                    <table class="summary__table">
+                                        <tbody class="summary__table--body">
+                                            @{
+                                                subTotal = 0;
+                                            }
+                                            @foreach (var item in Model.Orders)
+                                            {
+                                                symbol = item.CurrenySymbol;
+                                                var cost = item.Price * item.Qty;
+
+                                                <tr class=" summary__table--items">
+                                                    <td class=" summary__table--list">
+                                                        <div class="product__image two  d-flex align-items-center">
+                                                            <div class="product__thumbnail border-radius-5">
+                                                                <a asp-action="item" asp-controller="shop" asp-route-t="@item.Tag"><img class="border-radius-5" src="@item.Image" alt="cart-product"></a>
+                                                                <span class="product__thumbnail--quantity">@item.Qty.ToString("##")</span>
+                                                            </div>
+                                                            <div class="product__description">
+                                                                <h3 class="product__description--name h4"><a asp-action="item" asp-controller="shop" asp-route-t="@item.Tag">@item.ItemName</a></h3>
+                                                                @foreach (var feature in item.Features)
+                                                                {
+                                                                    <span class="product__description--variant">@feature.FeatureName: @feature.FeatureOption</span>
+                                                                }
+
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class=" summary__table--list">
+                                                        <span class="cart__price">@item.CurrenySymbol@cost.ToString("##.##")</span>
+                                                    </td>
+                                                </tr>
+
+                                                subTotal += cost;
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                             
+                                <div class="checkout__total">
+                                    <table class="checkout__total--table">
+                                        <tbody class="checkout__total--body">
+                                            <tr class="checkout__total--items">
+                                                <td class="checkout__total--title text-left">Subtotal </td>
+                                                <td class="checkout__total--amount text-right">@symbol@subTotal.ToString("##.##")</td>
+                                            </tr>
+                                            <tr class="checkout__total--items">
+                                                <td class="checkout__total--title text-left">Shipping<br /><small>Additional fees may apply!</small></td>
+                                                <td class="checkout__total--calculated__text text-right">@symbol@shipping.ToString("##.##")</td>
+                                            </tr>
+                                        </tbody>
+                                        @{
+                                            subTotal += shipping;
+                                        }
+                                        <tfoot class="checkout__total--footer">
+                                            <tr class="checkout__total--footer__items">
+                                                <td class="checkout__total--footer__title checkout__total--footer__list text-left">Total </td>
+                                                <td class="checkout__total--footer__amount checkout__total--footer__list text-right">@symbol@subTotal.ToString("##.##")</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </details>
+
+                    </header>
+                    <main class="main__content_wrapper section--padding pt-0 mt-4">
+                        <div class="checkout__content--step section__shipping--address pt-0">
+                            <div class="mb-25  text-center">
+                                <div class="col-12 text-center pt-5">
+                                    <img class="mb-3" src="../assets/img/icon/completed.jpg" style="max-width:100px" />
+                                </div>
+                                <span class="checkout__order--number">Order @Model.Order.Ref</span>
+                                <h1 class="bold">Thank You!</h1>
+
+                            </div>
+                            <div class="order__confirmed--area border-radius-5 mb-15">
+                                <h3 class="order__confirmed--title h4">Your order was submitted!</h3>
+                                <p class="order__confirmed--desc">You will receive a confirmation email with your order details shortly</p>
+                                <a class="continue__shipping--btn btn border-radius-5" href="@Model.Order.PaymentLink">Pay now</a>
+                                <a class="previous__link--content" asp-action="tracking" asp-controller="shop" asp-route-order="@Model.Order.Ref">Track Order</a>
+                            </div>
+                            <div class="customer__information--area border-radius-5">
+                                <h3 class="customer__information--title h4">Order Information</h3>
+                                <div class="customer__information--inner d-flex">
+                                    <div class="customer__information--list">
+                                        <div class="customer__information--step">
+                                            <h4 class="customer__information--subtitle h5">Contact information</h4>
+                                            <ul>
+                                                <li><a class="customer__information--text__link" href="#">@Model.Order.Email</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="customer__information--step">
+                                            <h4 class="customer__information--subtitle h5">Shipping Contact</h4>
+                                            <ul>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.FName</span></li>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.LName</span></li>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.Tel</span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="customer__information--step">
+                                            <h4 class="customer__information--subtitle h5">Shipping Address</h4>
+                                            <ul>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.Addr1</span></li>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.Addr2</span></li>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.City</span></li>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.State</span></li>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.Country</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="customer__information--list">
+                                        <div class="customer__information--step">
+                                            <h4 class="customer__information--subtitle h5">Payment Status</h4>
+                                            <ul>
+                                                <li><span class="customer__information--text">Pending</span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="customer__information--step">
+                                            <h4 class="customer__information--subtitle h5">Shipping method</h4>
+                                            <ul>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.Delivery</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkout__content--step__footer d-flex align-items-center">
+                            <a class="continue__shipping--btn btn border-radius-5" href="@Model.Order.PaymentLink">Pay now</a>
+                            <a class="previous__link--content" asp-action="checkout" asp-controller="shop">Return to shipping</a>
+                        </div>
+
+                    </main>
+                }
+                else
+                {
+                    <header class="main__header checkout__mian--header mb-30">
+                        <nav class="mb-4">
+                            <ol class="breadcrumb checkout__breadcrumb d-flex">
+                                <li class="breadcrumb__item breadcrumb__item--completed d-flex align-items-center">
+                                    <a class="breadcrumb__link" asp-action="index" asp-controller="home">Home</a>
+                                    <svg class="readcrumb__chevron-icon" xmlns="http://www.w3.org/2000/svg" width="17.007" height="16.831" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144"></path></svg>
+                                </li>
+
+                                <li class="breadcrumb__item breadcrumb__item--current d-flex align-items-center">
+                                    <a class="breadcrumb__link" asp-action="index" asp-controller="shop">Shop</a>
+                                    <svg class="readcrumb__chevron-icon" xmlns="http://www.w3.org/2000/svg" width="17.007" height="16.831" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144"></path></svg>
+                                </li>
+                                <li class="breadcrumb__item breadcrumb__item--blank">
+                                    <span class="breadcrumb__text current">Confirmation</span>
+                                </li>
+                            </ol>
+                        </nav>
+                        <details class="order__summary--mobile__version">
+                            <summary class="order__summary--toggle border-radius-5">
+                                <span class="order__summary--toggle__inner">
+                                    <span class="order__summary--toggle__icon">
+                                        <svg width="20" height="19" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M17.178 13.088H5.453c-.454 0-.91-.364-.91-.818L3.727 1.818H0V0h4.544c.455 0 .91.364.91.818l.09 1.272h13.45c.274 0 .547.09.73.364.18.182.27.454.18.727l-1.817 9.18c-.09.455-.455.728-.91.728zM6.27 11.27h10.09l1.454-7.362H5.634l.637 7.362zm.092 7.715c1.004 0 1.818-.813 1.818-1.817s-.814-1.818-1.818-1.818-1.818.814-1.818 1.818.814 1.817 1.818 1.817zm9.18 0c1.004 0 1.817-.813 1.817-1.817s-.814-1.818-1.818-1.818-1.818.814-1.818 1.818.814 1.817 1.818 1.817z" fill="currentColor"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="order__summary--toggle__text show">
+                                        <span>Show order summary</span>
+                                        <svg width="11" height="6" xmlns="http://www.w3.org/2000/svg" class="order-summary-toggle__dropdown" fill="currentColor"><path d="M.504 1.813l4.358 3.845.496.438.496-.438 4.642-4.096L9.504.438 4.862 4.534h.992L1.496.69.504 1.812z"></path></svg>
+                                    </span>
+                                    <span class="order__summary--final__price">₦@Model.Orders.Sum(p => p.Price * p.Qty).ToString("##.##")</span>
+                                </span>
+                            </summary>
+                            <div class="order__summary--section">
+                                <div class="cart__table checkout__product--table">
+                                    <table class="summary__table">
+                                        <tbody class="summary__table--body">
+                                            @{
+                                                subTotal = 0;
+                                            }
+                                            @foreach (var item in Model.Orders)
+                                            {
+                                                symbol = item.CurrenySymbol;
+                                                var cost = item.Price * item.Qty;
+
+                                                <tr class=" summary__table--items">
+                                                    <td class=" summary__table--list">
+                                                        <div class="product__image two  d-flex align-items-center">
+                                                            <div class="product__thumbnail border-radius-5">
+                                                                <a asp-action="item" asp-controller="shop" asp-route-t="@item.Tag"><img class="border-radius-5" src="@item.Image" alt="cart-product"></a>
+                                                                <span class="product__thumbnail--quantity">@item.Qty.ToString("##")</span>
+                                                            </div>
+                                                            <div class="product__description">
+                                                                <h3 class="product__description--name h4"><a asp-action="item" asp-controller="shop" asp-route-t="@item.Tag">@item.ItemName</a></h3>
+                                                                @foreach (var feature in item.Features)
+                                                                {
+                                                                    <span class="product__description--variant">@feature.FeatureName: @feature.FeatureOption</span>
+                                                                }
+
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class=" summary__table--list">
+                                                        <span class="cart__price">@item.CurrenySymbol@cost.ToString("##.##")</span>
+                                                    </td>
+                                                </tr>
+
+                                                subTotal += cost;
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="checkout__total">
+                                    <table class="checkout__total--table">
+                                        <tbody class="checkout__total--body">
+                                            <tr class="checkout__total--items">
+                                                <td class="checkout__total--title text-left">Subtotal </td>
+                                                <td class="checkout__total--amount text-right">@symbol@subTotal.ToString("##.##")</td>
+                                            </tr>
+                                            <tr class="checkout__total--items">
+                                                <td class="checkout__total--title text-left">Shipping<br /><small>Additional fees may apply!</small></td>
+                                                <td class="checkout__total--calculated__text text-right">@symbol@shipping.ToString("##.##")</td>
+                                            </tr>
+                                        </tbody>
+                                        @{
+                                            subTotal += shipping;
+                                        }
+                                        <tfoot class="checkout__total--footer">
+                                            <tr class="checkout__total--footer__items">
+                                                <td class="checkout__total--footer__title checkout__total--footer__list text-left">Total </td>
+                                                <td class="checkout__total--footer__amount checkout__total--footer__list text-right">@symbol@subTotal.ToString("##.##")</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </details>
+
+                    </header>
+                    <main class="main__content_wrapper section--padding pt-0 mt-4">
+                        <div class="checkout__content--step section__shipping--address pt-0">
+                            <div class="mb-25  text-center">
+                                <div class="col-12 text-center pt-5">
+                                    <img class="mb-3" src="../assets/img/icon/completed.jpg" style="max-width:100px" />
+                                </div>
+                                <span class="checkout__order--number">Order @Model.Order.Ref</span>
+                                <h1 class="bold">Thank You!</h1>
+
+                            </div>
+                            <div class="order__confirmed--area border-radius-5 mb-15">
+                                <h3 class="order__confirmed--title h4">Your order was submitted!</h3>
+                                <p class="order__confirmed--desc">You will receive a confirmation email with your order details shortly</p>
+                                <a class="continue__shipping--btn btn border-radius-5">Paid</a>
+                                <a class="previous__link--content" asp-action="tracking" asp-controller="shop" asp-route-order="@Model.Order.Ref">Track Order</a>
+                            </div>
+                            <div class="customer__information--area border-radius-5">
+                                <h3 class="customer__information--title h4">Order Information</h3>
+                                <div class="customer__information--inner d-flex">
+                                    <div class="customer__information--list">
+                                        <div class="customer__information--step">
+                                            <h4 class="customer__information--subtitle h5">Contact information</h4>
+                                            <ul>
+                                                <li><a class="customer__information--text__link" href="#">@Model.Order.Email</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="customer__information--step">
+                                            <h4 class="customer__information--subtitle h5">Shipping Contact</h4>
+                                            <ul>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.FName</span></li>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.LName</span></li>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.Tel</span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="customer__information--step">
+                                            <h4 class="customer__information--subtitle h5">Shipping Address</h4>
+                                            <ul>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.Addr1</span></li>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.Addr2</span></li>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.City</span></li>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.State</span></li>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.Country</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="customer__information--list">
+                                        <div class="customer__information--step">
+                                            <h4 class="customer__information--subtitle h5">Payment Status</h4>
+                                            <ul>
+                                                <li><span class="customer__information--text">Pending</span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="customer__information--step">
+                                            <h4 class="customer__information--subtitle h5">Shipping method</h4>
+                                            <ul>
+                                                <li><span class="customer__information--text">@Model.ShippingDetail.Delivery</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkout__content--step__footer d-flex align-items-center">
+                            <a class="continue__shipping--btn btn border-radius-5">Paid</a>
+                            <a class="previous__link--content" asp-action="checkout" asp-controller="shop">Return to shipping</a>
+                        </div>
+
+                    </main>
+                }
+            </div>
+            <aside class="checkout__sidebar sidebar">
+                <div class="cart__table checkout__product--table">
+                    <table class="cart__table--inner">
+                        <tbody class="cart__table--body">
+                            @{
+                                subTotal = 0;
+                            }
+                            @foreach (var item in Model.Orders)
+                            {
+                                symbol = item.CurrenySymbol;
+                                var cost = item.Price * item.Qty;
+
+                                <tr class="cart__table--body__items">
+                                    <td class="cart__table--body__list">
+                                        <div class="product__image two  d-flex align-items-center">
+                                            <div class="product__thumbnail border-radius-5">
+                                                <a asp-action="item" asp-controller="shop" asp-route-t="@item.Tag"><img class="border-radius-5" src="@item.Image" alt="cart-product"></a>
+                                                <span class="product__thumbnail--quantity">@item.Qty.ToString("##")</span>
+                                            </div>
+                                            <div class="product__description">
+                                                <h3 class="product__description--name h4"><a asp-action="item" asp-controller="shop" asp-route-t="@item.Tag">@item.ItemName</a></h3>
+                                                @foreach (var feature in item.Features)
+                                                {
+                                                    <span class="product__description--variant">@feature.FeatureName: @feature.FeatureOption</span>
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="cart__table--body__list">
+                                        <span class="cart__price">@item.CurrenySymbol@cost.ToString("##.##")</span>
+                                    </td>
+                                </tr>
+
+                                subTotal += cost;
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="checkout__total">
+                    <table class="checkout__total--table">
+                        <tbody class="checkout__total--body">
+                            <tr class="checkout__total--items">
+                                <td class="checkout__total--title text-left">Subtotal </td>
+                                <td class="checkout__total--amount text-right">@symbol@subTotal.ToString("##.##")</td>
+                            </tr>
+                            <tr class="checkout__total--items">
+                                <td class="checkout__total--title text-left">Shipping<br /><small>Additional fees may apply!</small></td>
+                                <td class="checkout__total--calculated__text text-right">@symbol@shipping.ToString("##.##")</td>
+                            </tr>
+                        </tbody>
+                        @{
+                            subTotal += shipping;
+                        }
+                        <tfoot class="checkout__total--footer">
+                            <tr class="checkout__total--footer__items">
+                                <td class="checkout__total--footer__title checkout__total--footer__list text-left">Total </td>
+                                <td class="checkout__total--footer__amount checkout__total--footer__list text-right">@symbol@subTotal.ToString("##.##")</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </aside>
         </div>
     </div>
 </div>
-@section scripts {
-    <script>
-        ClearCart();
-        // GenerateLink('@message', '@store.Tel');
-        var whatsApp = document.getElementById("whatsApp");
-        whatsApp.click();
-    </script>
-}

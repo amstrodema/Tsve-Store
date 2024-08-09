@@ -3,6 +3,7 @@
                 Favourites
  * 
  */
+var reload = false;
 
 CheckFave();
 
@@ -154,7 +155,7 @@ function AddToCart(itemID, qtyVal, feature, qtyID) {
 
         const jsonData = JSON.stringify(cart);
         localStorage.setItem('cart', jsonData);
-        console.log(cart)
+       // console.log(cart)
     }
     alertSuccess("Added to cart");
     try {
@@ -214,7 +215,7 @@ function ClearCart() {
     if (cartHolder != null) {
 
         cartHolder.innerHTML = "";
-        cartHolder.innerHTML = '<div class="container-fluid"><div class="row px-xl-5">  <div class="col-12"> <div> <h5>No Content Found!</h5></div> </div> </div></div>';
+        cartHolder.innerHTML = '<div class="container-fluid"><div class="row px-xl-5"><div class="col-12"><h5 class="noContent">No Content Found!</h5></div></div></div>';
     }
 
     loadCartData();
@@ -503,16 +504,13 @@ function CheckStore(storeLevel, requiredLevel) {
     return false;
 }
 
-function ResolveQuantity(isAdd, quantityID, itemPrice, itemTotalID, itemID) {
+function ResolveQuantity(isAdd, quantityID, itemPrice, itemTotalID, itemID, totalID, navReload) {
 
     var qtyInput = document.getElementById(quantityID);
     var itemTotal = document.getElementById(itemTotalID);
-    var subTotal = document.getElementById("subTotal");
-    var shipping = document.getElementById("shipping");
-    var total = document.getElementById("total");
+    var total = document.getElementById(totalID);
     
-    var subT = subTotal.innerText * 1;
-    var shippn = shipping.innerText * 1;
+    var subT = total.innerText * 1;
     var itmTotal = itemTotal.innerText * 1;
 
     subT = subT - itmTotal;
@@ -533,8 +531,7 @@ function ResolveQuantity(isAdd, quantityID, itemPrice, itemTotalID, itemID) {
     itemTotal.innerText = itmTotal;
 
     subT += itmTotal;
-    var totl = subT + shippn;
-    subTotal.innerText = subT;
+    var totl = subT;
     total.innerText = totl;
 
 
@@ -547,33 +544,36 @@ function ResolveQuantity(isAdd, quantityID, itemPrice, itemTotalID, itemID) {
         const jsonData = JSON.stringify(cart);
         localStorage.setItem('cart', jsonData);
     }
+
+    if (reload && navReload)
+        location.reload();
     
 }
 
 
-function RemoveFromCart(ID, tableIndex, totalLabel) {
-    var cartTable = document.getElementById("cartTable");
+function RemoveFromCart(ID, tableIndex, totalLabel, cartTable, totalID, navReload) {
+    var cartTable = document.getElementById(cartTable);
     const retrievedData = localStorage.getItem('cart');
 
     if (retrievedData != null) {
 
         var itemTotal = document.getElementById(totalLabel);
-        var total = document.getElementById("total");
-        var subTotal = document.getElementById("subTotal");
-        var shipping = document.getElementById("shipping");
+        var total = document.getElementById(totalID);
 
-        var subT = subTotal.innerText * 1;
+        var subT = total.innerText * 1;
         var itmTotal = itemTotal.innerText * 1;
-        var shippn = shipping.innerText * 1;
 
         subT -= itmTotal;
-        subTotal.innerText = subT;
-        total.innerText = subT + shippn;
+        total.innerText = subT;
 
         var cart = JSON.parse(retrievedData);
         const index = cart.findIndex(o => o.hasOwnProperty("ID") && o["ID"] === ID);
 
-        cartTable.deleteRow(index+1);
+        try {
+            cartTable.deleteRow(index + 1);
+        } catch {
+            cartTable.classList.add("hidden");
+        }
 
         
         cart.splice(index, 1);
@@ -583,7 +583,8 @@ function RemoveFromCart(ID, tableIndex, totalLabel) {
 
         loadCartData();
 
-      
+        if (reload && navReload)
+            location.reload();
         //console.log(cartTable.rows.length);
         //console.log(tableIndex);
        

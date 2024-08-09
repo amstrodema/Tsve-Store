@@ -16,23 +16,30 @@ namespace Omega_Store.Controllers
         private readonly LoginValidator _loginValidator;
         private readonly LoggerBusiness _loggerBusiness;
         private readonly SearchBusiness _searchBusiness;                        
+        private readonly TrackingBusiness _trackingBusiness;                        
         //private static string? cartHoldings = "";
 
-        public ShopController(IUnitOfWork unitOfWork, StoreBusiness storeBusiness, LoginValidator loginValidator, LoggerBusiness loggerBusiness, SearchBusiness searchBusiness)
+        public ShopController(IUnitOfWork unitOfWork, StoreBusiness storeBusiness, LoginValidator loginValidator, LoggerBusiness loggerBusiness, SearchBusiness searchBusiness, TrackingBusiness trackingBusiness)
         {
             _unitOfWork = unitOfWork;
             _storeBusiness = storeBusiness;
             _loginValidator = loginValidator;
             _loggerBusiness = loggerBusiness;
-            _searchBusiness = searchBusiness;           
+            _searchBusiness = searchBusiness;
+            _trackingBusiness = trackingBusiness;
         }
         [Route("Shop")]
         public async Task<IActionResult> Index(string c, string orderID)
         {
             await _loggerBusiness.Traffic("Shop", _loginValidator.GetUserID());
-            if (!string.IsNullOrEmpty(orderID))
+            //if (!string.IsNullOrEmpty(orderID))
+            //{
+            //    return RedirectToAction("orders", "manager", new { Ref = orderID });
+            //}
+            if (!string.IsNullOrEmpty(c))
             {
-                return RedirectToAction("orders", "manager", new { Ref = orderID });
+                var rez = await _storeBusiness.GetVMForShop();
+                return View(rez);
             }
           
             var res = await _storeBusiness.GetVMForShop();
@@ -152,20 +159,21 @@ namespace Omega_Store.Controllers
         //    }
         //    return RedirectToAction("Index");
         //}
-        public async Task<IActionResult> Confirmation()
+        public async Task<IActionResult> Confirmation(string order)
         {
-            await _loggerBusiness.Traffic("Confirmation", _loginValidator.GetUserID());
             try
             {
-                if (TempData["CheckOutCart"].ToString() == "Confirmed")
+                if (!string.IsNullOrEmpty(order))
                 {
-                    return View();
+                    var res = await _storeBusiness.ConfirmOrder(order);
+                    return View(res.Data);
                 }
             }
             catch (Exception)
             {
             }
-            return RedirectToAction("Index");
+            TempData["MessageError"] = "Order not found!";
+            return RedirectToAction("Checkout");
         }
 
         public async Task<IActionResult> Checkout()
@@ -193,6 +201,7 @@ namespace Omega_Store.Controllers
                     return RedirectToAction("Checkout");
                 }
                 checkOutVM.Orders = hold;
+
                 var res = await _storeBusiness.CheckOutCart(checkOutVM, user);
                 if (res.StatusCode != 200)
                 {
@@ -201,53 +210,86 @@ namespace Omega_Store.Controllers
                 }
                 TempData["OrderRef"] = res.Data;
                 TempData["MessageSuccess"] = res.Message;
-            }
 
+                TempData["CheckOutCart"] = "Confirmed";
+                return RedirectToAction("Confirmation", new {order = res.Data });
+            }
             catch (Exception)
             {
                 TempData["MessageError"] = "Not Completed";
                 return RedirectToAction("Checkout");
             }
 
-            TempData["CheckOutCart"] = "Confirmed";
-
-            return RedirectToAction("Confirmation");
         }
-        //[HttpPost]
-        //public async Task<IActionResult> GetCheckOut([FromBody] string orders)
-        //{
-        //    await _loggerBusiness.Traffic("View CheckOut", _loginValidator.GetUserID());
-        //    try
-        //    {
-        //        var orderVM = JsonConvert.DeserializeObject<OrderVM[]>(orders);
-        //        var res = await _storeBusiness.GetCart(orderVM);
-        //        if (res.Orders.Count() < 1)
-        //        {
-        //            return PartialView("_nocontent");
-        //        }
-        //        cartHoldings = orders;
-        //        //_loginValidator.SetSession("cartHolder", JsonConvert.SerializeObject(orders));
-        //        //_loginValidator.SetSession("cartHolder", orders);
-        //      //  var ordas = _loginValidator.GetSession("cartHolder");
-        //        return PartialView("_checkout", res);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return PartialView("_nocontent");
-        //    }
-        //}
+        [HttpPost]
+        public async Task<IActionResult> GetCheckOut([FromBody] string orders)
+        {
+            await _loggerBusiness.Traffic("View CheckOut", _loginValidator.GetUserID());
+            try
+            {
+                var orderVM = JsonConvert.DeserializeObject<OrderVM[]>(orders);
+                var res = await _storeBusiness.GetCart(orderVM);
+                if (res.Orders.Count() < 1)
+                {
+                    return PartialView("_nocontent");
+                }
+               // cartHoldings = orders;
+                //_loginValidator.SetSession("cartHolder", JsonConvert.SerializeObject(orders));
+                //_loginValidator.SetSession("cartHolder", orders);
+                //  var ordas = _loginValidator.GetSession("cartHolder");
+                return PartialView("_checkout", res);
+            }
+            catch (Exception)
+            {
+                return PartialView("_nocontent");
+            }
+        }
+       
+        public async Task<IActionResult> Gallery()
+        {
+            return View(await _storeBusiness.Gallery());
+        }
+        public IActionResult Compare()
+        {
+            return View();
+        }
+        public IActionResult Wishlist()
+        {
+            return View();
+        }
         [HttpPost]
         public async Task<IActionResult> GetFave([FromBody] string faves)
         {
             try
             {
                 var favorites = JsonConvert.DeserializeObject<Guid[]>(faves);
-                var res = await _storeBusiness.GetVMForFave(favorites);
+                var res = await _storeBusiness.GetVMForFave(favorites, await _loginValidator.GetUserAuth());
                 return PartialView("_favourite", res);
             }
             catch (Exception)
             {
                 return PartialView("_nocontent");
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> ToggleFave([FromBody] string faveID)
+        {
+            try
+            {
+                var user = await _loginValidator.GetUserAuth();
+
+                if(user == null)
+                {
+                    return Ok();
+                }
+
+                var favorite = JsonConvert.DeserializeObject<Guid>(faveID);
+                var res = await _storeBusiness.ToggleFave(favorite, user.ID );
+                return PartialView("_favourite", res);
+            }
+            catch (Exception)
+            {
+                return Ok();
             }
         }
         [HttpPost]
@@ -273,14 +315,27 @@ namespace Omega_Store.Controllers
         [Route("Search")]
         public async Task<IActionResult> Search(string query, int pageNo)
         {
+            if (!string.IsNullOrWhiteSpace(query) && query.Length == 18 && query.Contains("TSVE") && query.Contains("X-NY")) {
+                return RedirectToAction("tracking", new { order = query });
+            }
             ViewData["Query"] = query;
             var val = await _searchBusiness.SearchQuestion(query, pageNo);
             return View(val.Data);
         }
         [Route("Tracking")]
-        public async Task<IActionResult> Tracking(string orderID)
+        public async Task<IActionResult> Tracking(string order)
         {
+            if (!string.IsNullOrEmpty(order))
+            {
+                var res = await _trackingBusiness.Tracking(order);
+                return View(res.Data);
+            }
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> TrackOrder(string trackID)
+        {
+            return RedirectToAction("tracking", new { order = trackID });
         }
         [HttpPost]
         public IActionResult Currency([FromBody] string val)

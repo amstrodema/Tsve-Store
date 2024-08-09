@@ -1,5 +1,9 @@
 ﻿using App.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Store.Data.Interface;
 using Store.Model;
 using Store.Model.ViewModel;
@@ -17,6 +21,11 @@ namespace Store.Business
         private readonly GenericBusiness _genericBusiness;
         private readonly GeneralBusiness _generalBusiness;
         private readonly CategoryBusiness _categoryBusiness;
+        public static bool IsLive = true;
+        public readonly static string secretKey = IsLive ? "sk_live_41810b5f8f5a1bbec3a7768e9d8df755d447b711" : "sk_test_a816f19ac9aa7cfe587048ff252bba9c6da56ebe";
+        public readonly static string publicKey = IsLive ? "pk_live_f54d8d97e29f4919fc08ed54757279219fff4450" : "pk_test_6d6956d2424d5eab1ae4b31c2c55eda167913679";
+        public readonly static string Site = IsLive ? "https://customseam-001-site1.jtempurl.com/" : "https://localhost:7029/";
+
         public StoreBusiness(IUnitOfWork unitOfWork, GenericBusiness genericBusiness, GeneralBusiness generalBusiness, CategoryBusiness categoryBusiness)
         {
             _unitOfWork = unitOfWork;
@@ -408,9 +417,25 @@ namespace Store.Business
             responseMessage.Data = mainVM;
             try
             {
-                var order = await _unitOfWork.Orders.GetByOrderRef(_genericBusiness.StoreID, Ref);
-                mainVM.OrderItems = await _unitOfWork.OrderItems.GetByStoreIDAndOrderID(_genericBusiness.StoreID, order.ID);
-                mainVM.BillingDetail = await _unitOfWork.BillingDetails.Find(order.BillingID);
+                var order = await _unitOfWork.Orders.GetByOrderRef( Ref);
+                mainVM.OrderVMs = from orderItem in await _unitOfWork.OrderItems.GetByOrderID(order.ID)
+                                  join item in await _unitOfWork.Items.GetAll() on orderItem.ItemID equals item.ID
+                                  join feature in await _unitOfWork.ItemFeatures.GetByOrderID(order.ID) on orderItem.ID equals feature.OrderItemID into features
+                                  from feat in features.DefaultIfEmpty()
+                                  select new OrderVM()
+                                  {
+                                      ID = orderItem.ID,
+                                      Image = ImageService.GetSmallImagePath(item.Image, "ItemImage"),
+                                      ItemName = item.Title,
+                                      Qty = orderItem.Qty,
+                                      Features = features.ToArray(),
+                                      Price = item.Price,
+                                      CurrenySymbol = item.CurrencySymbol,
+                                      Tag = item.Tag
+                                  };
+
+                mainVM.ShippingDetail = await _unitOfWork.ShippingDetails.GetByOrder(order.ID);
+                mainVM.Order = order;
                 responseMessage.StatusCode = 200;
             }
             catch (Exception)
@@ -422,25 +447,144 @@ namespace Store.Business
         }
         public async Task<CheckOutVM> Orders() {
             CheckOutVM checkOutVM = new CheckOutVM();
-            checkOutVM.Orders = (from order in await _unitOfWork.Orders.GetByStoreID(_genericBusiness.StoreID)
-                            join billingDetail in await _unitOfWork.BillingDetails.GetAll() on order.BillingID equals billingDetail.ID
+            checkOutVM.Orders = (from order in await _unitOfWork.Orders.GetAll()
+                            join shipping in await _unitOfWork.ShippingDetails.GetAll() on order.ID equals shipping.OrderID
                             select new OrderVM()
                             {
                                 ID = order.ID,
-                                Tel = billingDetail.Tel== null ? "" : billingDetail.Tel,
-                                Mail = billingDetail.Email== null ? "" : billingDetail.Email,
+                                Tel = shipping.Tel== null ? "" : shipping.Tel,
+                                Mail = order.Email== null ? "" : order.Email,
                                 Ref = order.Ref,
-                                DateCreated = order.DateCreated
+                                DateCreated = order.DateCreated,
+                                IsFinished = order.IsFinished,
+                                IsPaid = order.IsPaid
                             }).OrderByDescending(p=> p.DateCreated);
             
             return checkOutVM;
+        }
+
+        public async Task<ResponseMessage<CheckOutVM>> AddToGallery(IFormFile resource, Guid userID)
+        {
+            ResponseMessage<CheckOutVM> responseMessage = new ResponseMessage<CheckOutVM>();
+            if(resource == null)
+            {
+                responseMessage.StatusCode = 201;
+                responseMessage.Message = "No media found!";
+                return responseMessage;
+            }
+            try {
+                Model.File file = new Model.File()
+                {
+                    ID = Guid.NewGuid(),
+                    CreatedBy = userID,
+                    DateCreated = DateTime.UtcNow.AddHours(1),
+                    IsActive = true
+                };
+                try
+                {
+                    file.Resource = await VideoServices.SaveVideoFile(resource, "Gallery", file.ID.ToString());
+                    file.IsVideo = true;
+                }
+                catch
+                {
+                    try
+                    {
+                        file.Resource = await ImageService.SaveImageInFolder(resource, file.ID.ToString(), "Gallery", false);
+                        file.IsVideo = false;
+                    }
+                    catch
+                    {
+                        responseMessage.StatusCode = 201;
+                        responseMessage.Message = "Invalid media format!";
+                        return responseMessage;
+                    }
+                }
+                
+                await _unitOfWork.Files.Create(file);
+
+                if(await _unitOfWork.Commit() > 0)
+                {
+                    responseMessage.StatusCode = 200;
+                    responseMessage.Message = "Media saved!";
+                }
+                else
+                {
+                    responseMessage.StatusCode = 201;
+                    responseMessage.Message = "Media not saved!";
+                }
+
+
+            }
+            catch {
+                responseMessage.StatusCode = 201;
+                responseMessage.Message = "Media not saved!";
+            }
+
+            responseMessage.Data = new CheckOutVM()
+            {
+                Files = await _unitOfWork.Files.GetAll()
+            };
+
+            return responseMessage;
+        }
+
+        public async Task<CheckOutVM> Gallery()
+        {
+            CheckOutVM responseMessage = new CheckOutVM();
+            responseMessage.Files = new List<Model.File>();
+            try {
+                responseMessage = new CheckOutVM()
+                {
+                    Files = from file in await _unitOfWork.Files.GetAll()
+                            select new Model.File()
+                            {
+                                ID = file.ID,
+                                Resource = file.IsVideo ? VideoServices.GetVideoFromFolder(file.Resource, "Gallery") : ImageService.GetLargeImagePath(file.Resource, "Gallery"),
+                                IsVideo = file.IsVideo,
+                                DateCreated = file.DateCreated
+                            }
+                };
+            }
+            catch { }
+            return responseMessage;
+        }
+    
+        public async Task<ResponseMessage<CheckOutVM>> ConfirmOrder(string orderRef)
+        {
+            ResponseMessage<CheckOutVM> responseMessage = new ResponseMessage<CheckOutVM>();
+            try
+            {
+                var order = await _unitOfWork.Orders.GetByOrderRef(orderRef);
+                responseMessage.Data = new CheckOutVM()
+                {
+                    ShippingDetail = await _unitOfWork.ShippingDetails.GetByOrder(order.ID),
+                    Order = order,
+                    Orders = from orderItem in await _unitOfWork.OrderItems.GetByOrderID(order.ID)
+                             join item in await _unitOfWork.Items.GetAll() on orderItem.ItemID equals item.ID
+                             join feature in await _unitOfWork.ItemFeatures.GetByOrderID(order.ID) on orderItem.ID equals feature.OrderItemID into features
+                             from feat in features.DefaultIfEmpty()
+                             select new OrderVM()
+                             {
+                                 ID = orderItem.ID,
+                                 Image = ImageService.GetSmallImagePath(item.Image, "ItemImage"),
+                                 ItemName = item.Title,
+                                 Qty = orderItem.Qty,
+                                 Features = features.ToArray(),
+                                 Price = item.Price,
+                                 CurrenySymbol = item.CurrencySymbol,
+                                 Tag = item.Tag
+                             }
+            };
+            }
+            catch { throw; }
+            return responseMessage;
         }
         public async Task<ResponseMessage<string>> CheckOutCart(CheckOutVM checkOutVM, User? user)
         {
             ResponseMessage<string> responseMessage = new ResponseMessage<string>();
             try
             {
-               // var store = await _unitOfWork.Stores.Find(_genericBusiness.StoreID);
+                // var store = await _unitOfWork.Stores.Find(_genericBusiness.StoreID);
                 //checkOutVM.BillingDetail.StoreID = _genericBusiness.StoreID;
                 //checkOutVM.BillingDetail.ID = Guid.NewGuid();
                 //checkOutVM.BillingDetail.IsActive = true;
@@ -448,28 +592,23 @@ namespace Store.Business
                 //checkOutVM.BillingDetail.DateCreated = DateTime.UtcNow.AddHours(1);
                 //await _unitOfWork.BillingDetails.Create(checkOutVM.BillingDetail);
 
+                if (checkOutVM.Mail == null || checkOutVM.Tel == null)
+                {
+                    responseMessage.StatusCode = 201;
+                    responseMessage.Message = "Email not provided!";
+                    return responseMessage;
+                }
+
                 Order order = new Order()
                 {
                     ID = Guid.NewGuid(),
                     DateCreated = DateTime.UtcNow.AddHours(1),
-                    Ref = GenService.Gen10DigitNumericCode(),
-                    Amount = checkOutVM.Orders.Sum(p => p.Qty * p.Price),
-                    BillingID = checkOutVM.BillingDetail.ID,
-                    StoreID = _genericBusiness.StoreID,
+                    Ref = "TSVE" + GenService.Gen10DigitNumericCode()+"X-NY",
                     IsActive = true,
-                    IsApproved = true
+                    IsApproved = false,
+                    Email = user == null ? checkOutVM.Mail : user.Email,
+                    Tel = user == null ? checkOutVM.Tel : user.Tel
                 };
-                await _unitOfWork.Orders.Create(order);
-
-                if (checkOutVM.IsDifferentShipping)
-                {
-                    checkOutVM.ShippingDetail.StoreID = _genericBusiness.StoreID;
-                    checkOutVM.ShippingDetail.ID = Guid.NewGuid();
-                    checkOutVM.ShippingDetail.IsActive = true;
-                    checkOutVM.ShippingDetail.DateCreated = DateTime.UtcNow.AddHours(1);
-                    order.ShippingID = checkOutVM.ShippingDetail.ID;
-                    await _unitOfWork.ShippingDetails.Create(checkOutVM.ShippingDetail);
-                }
 
                 var orderItems = from oder in checkOutVM.Orders
                                  join item in await _unitOfWork.Items.GetAll() on oder.ID equals item.ID
@@ -487,6 +626,33 @@ namespace Store.Business
                                      Qty = oder.Qty,
                                      Tag = item.Tag
                                  };
+
+                order.Amount = orderItems.Sum(p => p.Qty * p.Price);
+
+
+                if (order.Amount <= 0)
+                {
+                    responseMessage.StatusCode = 201;
+                    responseMessage.Message = "Invalid Purchase Total";
+                    return responseMessage;
+                }
+
+                while (await _unitOfWork.Orders.GetByOrderRef(order.Ref) != null)
+                {
+                    order.Ref = "TSVE" + GenService.Gen10DigitNumericCode() + "X-NY";
+                }
+                
+                var resp = await PaystackService.InitializePaymentAsync(secretKey, order.Email, order.Amount * 100, order.ID.ToString(), "Store", $"{Site}confirmation?order={order.Ref}");
+                order.PaymentLink = resp.Data.AuthorizationUrl;
+
+                await _unitOfWork.Orders.Create(order);
+
+                checkOutVM.ShippingDetail.ID = Guid.NewGuid();
+                checkOutVM.ShippingDetail.OrderID = order.ID;
+                checkOutVM.ShippingDetail.IsActive = true;
+                checkOutVM.ShippingDetail.DateCreated = DateTime.UtcNow.AddHours(1);
+
+                await _unitOfWork.ShippingDetails.Create(checkOutVM.ShippingDetail);
                 await _unitOfWork.OrderItems.CreateMultiple(orderItems.ToArray());
 
                 foreach (var oder in checkOutVM.Orders)
@@ -507,17 +673,14 @@ namespace Store.Business
                     user = new User()
                     {
                         ID = Guid.NewGuid(),
-                        Fname = checkOutVM.BillingDetail.FName == null ? string.Empty : checkOutVM.BillingDetail.FName,
-                        LName = checkOutVM.BillingDetail.LName == null ? string.Empty : checkOutVM.BillingDetail.LName,
-                        Email = checkOutVM.BillingDetail.Email == null ? string.Empty : checkOutVM.BillingDetail.Email,
+                        Email = checkOutVM.Mail ?? "",
                         EmailVerCode = GenService.Gen10DigitCode(),
                         EmailVerExp = DateTime.UtcNow.AddMinutes(10),
-                        Address = checkOutVM.BillingDetail.Addr1 == null ? string.Empty : checkOutVM.BillingDetail.Addr1,
-                        Tel = checkOutVM.BillingDetail.Tel == null ? string.Empty : checkOutVM.BillingDetail.Tel,
                         StoreID = _genericBusiness.StoreID,
                         DateCreated = DateTime.UtcNow.AddHours(1),
                         IsActive = true,
-                        Username = "User-" + GenService.Gen10DigitNumericCode(),
+                        Username = "Cust-" + GenService.Gen10DigitNumericCode(),
+                        Tel = checkOutVM.Tel ?? "",
                         Password = EncryptionService.Encrypt(GenService.Gen10DigitCode()),
                     };
                     await _unitOfWork.Users.Create(user);
@@ -526,7 +689,7 @@ namespace Store.Business
                 if (await _unitOfWork.Commit() > 0)
                 {
                     responseMessage.StatusCode = 200;
-                    responseMessage.Message = "Completed!";
+                    responseMessage.Message = "Order Logged!";
                     responseMessage.Data = order.Ref;
                 //    try
                 //    {
@@ -562,15 +725,51 @@ namespace Store.Business
             }
             return responseMessage;
         }
-        public async Task<MainVM> GetVMForFave(Guid[] ? faves)
+        public async Task<int> ToggleFave(Guid itemID, Guid userID)
+        {
+            try
+            {
+                var fave = await _unitOfWork.Favourites.GetByUserAndItemID(itemID, userID);
+                if (fave != null)
+                    _unitOfWork.Favourites.Delete(fave);
+                else
+                    await _unitOfWork.Favourites.Create(new Favourite()
+                    {
+                        ID = Guid.NewGuid(),
+                        DateCreated = DateTime.UtcNow.AddHours(1),
+                        StoreID = _genericBusiness.StoreID,
+                        ItemID = itemID,
+                        CreatedBy = userID,
+                        UserID = userID
+                    });
+
+                if (await _unitOfWork.Commit() > 0)
+                {
+                    return 1;
+                }
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+            return 0;
+        }
+
+        public async Task<MainVM> GetVMForFave(Guid[] ? faves, User? user)
         {
             MainVM mainVM = new MainVM();
 
             try
             {
-                if (faves == null)
+                if (faves == null && user == null)
                 {
                     throw new Exception();
+                }
+
+                if(user != null)
+                {
+                    faves = (from fav in await _unitOfWork.Favourites.GetByUserID(user.ID) 
+                              select fav.ID).ToArray();
                 }
 
                 mainVM.Favourite = (from fave in faves
@@ -581,6 +780,7 @@ namespace Store.Business
                                        CatID = item.CatID,
                                        Tag = item.Tag,
                                        Image = ImageService.GetLargeImagePath(item.Image, "ItemImage"),
+                                       Image1 = ImageService.GetLargeImagePath(item.Image1, "ItemImage"),
                                        Currency = item.Currency,
                                        CurrencySymbol = item.CurrencySymbol,
                                        Title = item.Title,
@@ -593,7 +793,8 @@ namespace Store.Business
                                        Reviews = reviews.Count()
                                    }).OrderByDescending(o=> o.DateCreated);
 
-                mainVM.Favourite = _generalBusiness.AttachImage(mainVM.Favourite);
+              //  mainVM.Favourite = _generalBusiness.AttachImage(mainVM.Favourite);
+                mainVM.Faves = JsonConvert.SerializeObject(faves);
             }
             catch (Exception)
             {
@@ -714,11 +915,24 @@ namespace Store.Business
 
             return mainVM;
         }
-        public async Task<MainVM> GetVMForShop()
+        public async Task<MainVM> GetVMForShop(string c = "")
         {
             MainVM mainVM = new MainVM();
             mainVM.CategoryHybrids = await _categoryBusiness.GetHybrids();
-            mainVM.Stocks = (from item in await _unitOfWork.Items.GetAll()
+            var stocks = await _unitOfWork.Items.GetAll();
+
+            if (!string.IsNullOrEmpty(c))
+            {
+                var cat = await _unitOfWork.Categories.GetByCategoryTag(c);
+                if(cat != null)
+                {
+                    stocks = stocks.Where(o => o.CatID == cat.ID).ToList();
+                    mainVM.Category = cat;
+                }
+                
+            }
+
+            mainVM.Stocks = (from item in stocks
                               where item.Currency == GenericBusiness.ShoppingCurrency
                               join review in await _unitOfWork.Reviews.GetAll() on item.ID equals review.ItemID into reviews
                               select new Item()
@@ -799,37 +1013,9 @@ namespace Store.Business
 
             return mainVM;
         }
-        public async Task<int> MarkAsFave(Guid itemID, Guid userID)
-        {
-            try
-            {
-                var fave = await _unitOfWork.Favourites.GetByUserAndItemID(itemID, userID);
-                if (fave != null)
-                    _unitOfWork.Favourites.Delete(fave);
-                else
-                    await _unitOfWork.Favourites.Create(new Favourite()
-                    {
-                        ID = Guid.NewGuid(),
-                        DateCreated = DateTime.UtcNow.AddHours(1),
-                        StoreID = _genericBusiness.StoreID,
-                        ItemID = itemID,
-                        CreatedBy = userID,
-                        UserID = userID
-                    });
 
-                if (await _unitOfWork.Commit() > 0)
-                {
-                    return 1;
-                }
-            }
-            catch (Exception)
-            {
-                return 0;
-            }
-            return 0;
-        }
 
-       
+
 
         public async Task<ResponseMessage<string>> CheckOut(Guid itemID, Guid userID)
         {
@@ -861,6 +1047,42 @@ namespace Store.Business
             {
                 responseMessage.StatusCode = 201;
                 responseMessage.Message = "Item Not Deleted!";
+            }
+
+            return responseMessage;
+        }
+        public async Task<ResponseMessage<string>> DeleteMedia(Guid mID)
+        {
+            var responseMessage = new ResponseMessage<string>();
+            try
+            {
+                var media = await _unitOfWork.Files.Find(mID);
+                _unitOfWork.Files.Delete(media);
+
+                if (await _unitOfWork.Commit() > 0)
+                {
+                    if (media.IsVideo)
+                    {
+                        VideoServices.Delete(media.Resource, "Gallery");
+                    }
+                    else
+                    {
+                        ImageService.DeleteImage(media.Resource, "Gallery");
+                    }
+                    
+                    responseMessage.StatusCode = 200;
+                    responseMessage.Message = "Media Deleted!";
+                }
+                else
+                {
+                    responseMessage.StatusCode = 201;
+                    responseMessage.Message = "Media Not Deleted!";
+                }
+            }
+            catch (Exception)
+            {
+                responseMessage.StatusCode = 201;
+                responseMessage.Message = "Media Not Deleted!";
             }
 
             return responseMessage;

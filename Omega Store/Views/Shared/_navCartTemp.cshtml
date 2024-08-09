@@ -1,27 +1,36 @@
 ﻿@model IEnumerable<Store.Model.ViewModel.OrderVM>
 @{
     var total = Model.Sum(o => o.Qty * o.Price);
+    var navCartCount = 0;
 }
 <div class="minicart__product">
     @foreach (var orderItem in Model){
-        <div class="minicart__product--items d-flex">
+        navCartCount++;
+        var addBtn = @orderItem.ID + "navCartAdd" + navCartCount;
+        var minusBtn = @orderItem.ID + "navCartMinus" + navCartCount;
+        var totalLabel = @orderItem.ID + "navCartTotalLabel" + navCartCount;
+        var totalQty = @orderItem.ID + "navCartQty" + navCartCount;
+        var itemDiv = @orderItem.ID + "itemDiv" + navCartCount;
+        var totalPerItem = orderItem.Qty * orderItem.Price;
+
+        <div class="minicart__product--items d-flex" id="@itemDiv">
             <div class="minicart__thumb">
                 <a asp-action="item" asp-controller="shop" asp-route-t="@orderItem.Tag"><img src="@orderItem.Image" alt="prduct-img"></a>
             </div>
             <div class="minicart__text">
                 <h4 class="minicart__subtitle"><a asp-action="item" asp-controller="shop" asp-route-t="@orderItem.Tag">@orderItem.ItemName</a></h4>
                 <div class="minicart__price">
-                    <span class="current__price">@orderItem.Price</span>
+                    <span class="current__price" id="@totalLabel">@totalPerItem</span>
                 </div>
                 <div class="minicart__text--footer d-flex align-items-center">
                     <div class="quantity__box minicart__quantity">
-                        <button type="button" class="quantity__value decrease" aria-label="quantity value" value="Decrease Value">-</button>
+                        <button type="button" class="quantity__value decrease" aria-label="quantity value" id="@minusBtn" onclick="ResolveQuantity('minus', '@totalQty', '@orderItem.Price', '@totalLabel','@orderItem.ID','navTotal',true)" value="Decrease Value">-</button>
                         <label>
-                            <input type="number" class="quantity__number" value="@orderItem.Qty" data-counter />
+                            <input type="number" class="quantity__number" id="@totalQty" value="@orderItem.Qty" onchange="ResolveQuantity('direct', '@totalQty', '@orderItem.Price', '@totalLabel','@orderItem.ID','navTotal',true)" value="@orderItem.Qty" data-counter />
                         </label>
-                        <button type="button" class="quantity__value increase" aria-label="quantity value" value="Increase Value">+</button>
+                        <button type="button" class="quantity__value increase" aria-label="quantity value" id="@addBtn" onclick="ResolveQuantity('add', '@totalQty', '@orderItem.Price', '@totalLabel','@orderItem.ID','navTotal',true)" value="Increase Value">+</button>
                     </div>
-                    <button class="minicart__product--remove" type="button">Remove</button>
+                    <button class="minicart__product--remove" onclick="RemoveFromCart('@orderItem.ID', '@navCartCount','@totalLabel','@itemDiv','navTotal',true)" type="button">Remove</button>
                 </div>
             </div>
         </div>
@@ -35,6 +44,6 @@
     </div> *@
     <div class="minicart__amount_list d-flex justify-content-between">
         <span>Total:</span>
-        <span><b>₦@total</b></span>
+        <span><b>₦<span id="navTotal">@total</span></b></span>
     </div>
 </div>

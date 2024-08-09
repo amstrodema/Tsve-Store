@@ -222,7 +222,7 @@ namespace App.Services
                 {
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

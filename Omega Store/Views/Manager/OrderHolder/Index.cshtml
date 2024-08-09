@@ -3,7 +3,7 @@
 @inject LoginValidator loginValidator
 
 @{
-    ViewData["Title"] = "Order Manager";
+    ViewData["Title"] = "Orders Manager";
     int count = 0;
     var thisShop = await loginValidator.GetShop();
 }
@@ -13,56 +13,74 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 <!-- Breadcrumb Start -->
-<div class="container-fluid">
-    <div class="row px-xl-5">
-        <div class="col-12">
-            <nav class="breadcrumb bg-light mb-30">
-                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="home">Home</a>
-                <a class="breadcrumb-item text-dark" asp-action="index" asp-controller="manager">Manager</a>
-                <span class="breadcrumb-item active">Order Manager</span>
-            </nav>
+<section class="breadcrumb__section breadcrumb__bg">
+    <div class="container">
+        <div class="row row-cols-1">
+            <div class="col">
+                <div class="breadcrumb__content text-center">
+                    <h1 class="breadcrumb__content--title text-white mb-25">Orders Manager</h1>
+                    <ul class="breadcrumb__content--menu d-flex justify-content-center">
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="home">Home</a></li>
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="manager">Manager</a></li>
+                        <li class="breadcrumb__content--menu__items"><span class="text-white">Orders</span></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</section>
 <!-- Breadcrumb End -->
 <!-- Contact Start -->
 <div class="container-fluid">
-    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Order Manager</span></h2>
-   
-    <div class="row px-xl-5">
+
+    <div class="row px-xl-5 mt-3">
         <div class="col-12 mb-5">
-            <div class="contact-form bg-light p-30">
-               <div class="table-responsive">
-                   <table class="table">
-                       <tr>
-                           <th>S/N</th>
-                           <th>OrderID</th>
-                           <th>Date</th>
-                           <th>&nbsp;</th>
-                           <th>&nbsp;</th>
-                           <th>&nbsp;</th>
-                           <th>&nbsp;</th>
-                           <th>&nbsp;</th>
-                       </tr>
-                     @foreach (var order in Model.Orders)
+            <div class="contact-form p-30 mt-3">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>S/N</th>
+                            <th>TrackID</th>
+                            <th>Date</th>
+                            <th>Date</th>
+                            <th class="nowrap">Shipping Tel</th>
+                            <th class="nowrap">Buyer Mail</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        @foreach (var order in Model.Orders)
                         {
                             count++;
                             <tr>
                                 <td>@count</td>
                                 <td><a asp-action="orders" asp-controller="manager" asp-route-ref="@order.Ref" class="text-info">@order.Ref</a></td>
+                                <td class="nowrap">
+                                    @if (order.IsFinished)
+                                    {
+                                        <span>Completed</span>
+                                    }
+                                    else if (order.IsPaid)
+                                    {
+                                        <span>Paid</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Not Paid</span>
+                                    }
+                                </td>
                                 <td class="nowrap">@order.DateCreated.ToString("g")</td>
                                 <td><a href="tel:@order.Tel" class="text-success"><i class="fa fa-phone"></i> Call</a></td>
                                 <td><a href="mailto:@order.Mail" class="text-black"><i class="fa fa-envelope"></i> Mail</a></td>
-                                <td><a href="#" class="text-info" onclick="return CheckStore(@thisShop.Level, 4)"><i class="fa fa-link"></i> Track</a></td>
-                                <td><a href="" class="text-success" onclick="return CheckStore(@thisShop.Level, 4)"><i class="fa fa-check"></i> Finish</a></td>
-                                <td><a href="" onclick="return CheckStore(@thisShop.Level, 4)" class="text-danger"><i class="fa fa-trash"></i></a></td>
+                                <td><a class="text-info" asp-action="tracking" asp-controller="manager" asp-route-orderRef="@order.Ref"><i class="fa fa-link"></i> Track</a></td>
+                                <td><a href="" class="text-danger"><i class="fa fa-trash"></i></a></td>
                             </tr>
                         }
-                   </table>
-               </div>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    <partial name="_commonNav" />
+
 </div>
 <!-- Contact End -->

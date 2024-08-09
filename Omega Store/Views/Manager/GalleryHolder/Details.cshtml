@@ -1,0 +1,91 @@
+﻿@model Store.Model.ViewModel.CheckOutVM
+@{
+    ViewData["Title"] = "Gallery Manager";
+    var count = 0;
+}
+
+<!-- Breadcrumb Start -->
+<section class="breadcrumb__section breadcrumb__bg">
+    <div class="container">
+        <div class="row row-cols-1">
+            <div class="col">
+                <div class="breadcrumb__content text-center">
+                    <h1 class="breadcrumb__content--title text-white mb-25">Gallery</h1>
+                    <ul class="breadcrumb__content--menu d-flex justify-content-center">
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="home">Home</a></li>
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="manager">Manager</a></li>
+                        <li class="breadcrumb__content--menu__items"><span class="text-white">Gallery</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb End -->
+<div class="login__section section--padding mb-80">
+    <div class="container">
+        <div class="login__section--inner">
+            <div class="row row-cols-md-2 row-cols-1">
+                <div class="col-md-8 order-1 order-md-0 mt-2">
+                    <div class="table-responsive p-30">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>S/N</th>
+                                    <th style="min-width:25%">Resource</th>
+                                    <th>Date</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    if (Model.Files.Count() < 1)
+                                    {
+                                        <tr>
+                                            <td colspan="4">
+                                                No Media Found
+                                            </td>
+                                        </tr>
+                                    }
+                                    foreach (var file in Model.Files)
+                                    {
+                                        count++;
+                                        <tr>
+                                            <td>@count</td>
+                                            <td>
+                                                @if (file.IsVideo)
+                                                {
+                                                    <video style="max-width:200px;" preload="metadata" controls>
+                                                        <source src="@file.Resource" type="video/mp4" />
+                                                        Try a different browser..
+                                                    </video>
+                                                }
+                                                else
+                                                {
+                                                    <img src="@file.Resource" style="max-width:200px;" />
+                                                }
+                                            </td>
+                                            <td>@file.DateCreated.ToString("d")</td>
+                                            <td><a asp-action="deletemedia" asp-controller="manager" asp-route-mID="@file.ID"><i class="fa fa-trash text-danger"></i></a></td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-4 order-0 order-md-1 mb-5">
+                    <div>
+                        <form asp-action="addmedia" asp-controller="manager" method="post" enctype="multipart/form-data">
+                            <h6 class="bold uppercase">Add A New Media</h6>
+                            <input class="account__login--input btn blad" type="file" name="media" required>
+                            <hr />
+                            <button class="account__login--btn btn mb-10" type="submit">Save Media</button>
+                       </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

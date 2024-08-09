@@ -1,0 +1,108 @@
+﻿@model Store.Model.ViewModel.CheckOutVM
+@{
+    var order = Model == null ? null : Model.Order;
+    var trackings = Model == null ? null : Model.Trackings;
+    ViewData["Title"] = order == null ? "Order Tracker" : "Order-" + order.Ref+" Tracker Manager";
+    int count = 0;
+}
+
+<!-- Breadcrumb Start -->
+<section class="breadcrumb__section breadcrumb__bg">
+    <div class="container">
+        <div class="row row-cols-1">
+            <div class="col">
+                <div class="breadcrumb__content text-center">
+                    <h1 class="breadcrumb__content--title text-white mb-25">Tracker Manager</h1>
+                    <ul class="breadcrumb__content--menu d-flex justify-content-center">
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="home">Home</a></li>
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="orders" asp-controller="manager">Orders</a></li>
+                        <li class="breadcrumb__content--menu__items"><span class="text-white">@order.Ref</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb End -->
+<div class="login__section section--padding mb-80">
+    <div class="container">
+        <div class="login__section--inner">
+            <div class="row row-cols-md-2 row-cols-1">
+                @if (Model == null)
+                {
+
+                }
+                else if (order == null)
+                {
+                    <div class="col-md-8 order-1 order-md-0 mt-2">
+                        <partial name="_nocontent" />
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-8 order-1 order-md-0 mt-2 trackingInfo">
+                        <h2 class="text-center mb-4">Order @order.Ref Workflow</h2>
+                        @if (trackings == null || trackings.Count() == 0)
+                        {
+                            <div class="tracker">
+                                <div class="ms-4">
+                                    <h5>No Workflow Yet!</h5>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @foreach (var track in trackings)
+                            {
+                                count++;
+                                if (count > 1)
+                                {
+                                    <div class="flow-step">
+                                        <div class="arrow"><i class="fa fa-arrow-down"></i></div>
+
+                                    </div>
+                                }
+                                <div class="tracker">
+                                    <div class="ms-4">
+                                        <h5>@track.Action</h5>
+                                        <p class="mb-2">@track.Details</p>
+                                        <small>@track.DateCreated.ToString("D") | @track.DateCreated.ToString("t")</small>
+                                    </div>
+                                    <i class="fa fa-circle circle"></i>
+                                </div>
+
+
+                            }
+                        }
+
+                    </div>
+                }
+               
+                <div class="col-md-4 order-0 order-md-1 mb-5">
+                    <div>
+                        <form asp-action="addtracking" asp-controller="manager" method="post">
+                            <h6 class="bold uppercase">Update Tracking on Order @Model.Order.Ref</h6>
+                            <label>
+                                <input class="account__login--input" placeholder="Tracking Action" maxlength="30" name="action" type="text" required>
+                            </label>
+                            <label>
+                                <input class="account__login--input" placeholder="Tracking Details" maxlength="100" name="details" type="text" required>
+                            </label>
+                            <div class="checkout__checkbox">
+                                <input class="checkout__checkbox--input" id="check1" name="isFinished" type="checkbox">
+                                <span class="checkout__checkbox--checkmark"></span>
+                                <label class="checkout__checkbox--label" for="check1">
+                                    Check if this is the last update
+                                </label>
+                            </div>
+                            <input class="hidden" name="orderRef" value="@Model.Order.Ref" type="text" required readonly>
+                            <hr />
+                            <button class="account__login--btn btn mb-10" type="submit">Update Tracker</button>
+                       </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

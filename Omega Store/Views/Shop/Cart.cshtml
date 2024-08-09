@@ -29,9 +29,11 @@
     </div>
 </div>
 @section scripts {
+    
   <script>
+        reload = true;
         const getCartData = localStorage.getItem('cart');
-        console.log(getCartData)
+      //  console.log(getCartData)
         $.ajax({
             type: "POST",
             url: '/shop/getcart',

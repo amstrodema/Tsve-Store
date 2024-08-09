@@ -9,5 +9,6 @@ namespace Store.Data.Interface
 {
     public interface IShippingDetail : IGeneric<ShippingDetail>
     {
+        Task<ShippingDetail> GetByOrder(Guid orderID);
     }
 }

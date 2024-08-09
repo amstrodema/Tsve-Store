@@ -1,0 +1,49 @@
+﻿@model Store.Model.ViewModel.LoginVM
+@{
+    ViewData["Title"] = "Order Tracking";
+}
+
+<main class="main__content_wrapper">
+
+    <!-- Start breadcrumb section -->
+    <section class="breadcrumb__section breadcrumb__bg">
+        <div class="container">
+            <div class="row row-cols-1">
+                <div class="col">
+                    <div class="breadcrumb__content text-center">
+                        <h1 class="breadcrumb__content--title text-white mb-25">Tracking</h1>
+                        <ul class="breadcrumb__content--menu d-flex justify-content-center">
+                            <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="home">Home</a></li>
+                            <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="shop">Shop</a></li>
+                            <li class="breadcrumb__content--menu__items"><span class="text-white">Order Tracking</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End breadcrumb section -->
+    <!-- Start product details section -->
+    <section class="product__details--section section--padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        Do you have a pending order? Track your order below to know the progress level of your order
+                    </p>
+                    <div class="account__login register">
+                        <form id="contactForm" asp-action="createcategory" asp-controller="manager" method="post" enctype="multipart/form-data">
+                            <div class="account__login--inner">
+                                <label>
+                                    <input class="account__login--input" placeholder="Tracking ID" name="name" type="text" required>
+                                </label>
+                                <button class="account__login--btn btn mb-10" type="submit">Track Order</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+

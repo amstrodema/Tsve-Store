@@ -9,5 +9,6 @@ namespace Store.Data.Interface
 {
     public interface IItemFeature : IGeneric<ItemFeature>
     {
+        Task<IEnumerable<ItemFeature>> GetByOrderID(Guid orderID);
     }
 }

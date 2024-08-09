@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<Store.Model.ViewModel.OrderVM>
 @{
     decimal subTotal = 0;
-    decimal shipping = 0;
     string symbol = "";
     int count = 0;
 }
@@ -10,89 +9,88 @@
     <section class="cart__section section--padding">
         <div class="container-fluid">
             <div class="cart__section--inner">
-                <form action="#">
-                   
-                    <div class="row">
-                        <div class="col-md-2">&nbsp;</div>
-                        <div class="col-md-8">
-                            <h2 class="cart__title mb-40 text-center">Shopping Cart Items</h2>
-                            <hr />
-                            <div class="cart__table table-responsive">
-                                <table class="cart__table--inner">
-                                    <thead class="cart__table--header">
-                                        <tr class="cart__table--header__items">
-                                            <th class="cart__table--header__list">Product</th>
-                                            <th class="cart__table--header__list">Price</th>
-                                            <th class="cart__table--header__list">Quantity</th>
-                                            <th class="cart__table--header__list">Total</th>
-                                            <th class="cart__table--header__list">&nbsp;</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="cart__table--body">
-                                        @foreach (var orderItem in Model)
-                                        {
-                                            count++;
-                                            var addBtn = @orderItem.ID + "Add";
-                                            var minusBtn = @orderItem.ID + "Minus";
-                                            var totalLabel = @orderItem.ID + "TotalLabel";
-                                            var total = orderItem.Qty * orderItem.Price;
-                                            subTotal += total;
-                                            symbol = orderItem.CurrenySymbol;
-                                            <tr class="cart__table--body__items">
-                                                <td class="cart__table--body__list">
-                                                    <div class="cart__product d-flex align-items-center">
-                                                        <div class="cart__thumbnail">
-                                                            <a asp-action="item" asp-controller="shop" target="_blank" class="text-dark" asp-route-t="@orderItem.Tag"><img class="border-radius-5" src="@orderItem.Image" alt="cart-product"></a>
-                                                        </div>
-                                                        <div class="cart__content">
-                                                            <h3 class="cart__content--title h4"><a asp-action="item" target="_blank" asp-controller="shop" class="text-dark" asp-route-t="@orderItem.Tag">Fresh-whole-fish</a></h3>
-                                                               
-                                                            @foreach(var feature in orderItem.Features){
-                                                        <span class="cart__content--variant">@feature.FeatureName: @feature.FeatureOption</span>
-                                                        }
-                                                        </div>
+                <div class="row">
+                    <div class="col-md-2">&nbsp;</div>
+                    <div class="col-md-8">
+                        <h2 class="cart__title mb-40 text-center">Shopping Cart Items</h2>
+                        <hr />
+                        <div class="cart__table table-responsive">
+                            <table class="cart__table--inner" id="cartTable">
+                                <thead class="cart__table--header">
+                                    <tr class="cart__table--header__items">
+                                        <th class="cart__table--header__list">Product</th>
+                                        <th class="cart__table--header__list">Price</th>
+                                        <th class="cart__table--header__list">Quantity</th>
+                                        <th class="cart__table--header__list">Total</th>
+                                        <th class="cart__table--header__list">&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="cart__table--body">
+                                    @foreach (var orderItem in Model)
+                                    {
+                                        count++;
+                                        var addBtn = @orderItem.ID + "Add"+count;
+                                        var minusBtn = @orderItem.ID + "Minus" + count;
+                                        var totalLabel = @orderItem.ID + "TotalLabel" + count;
+                                        var totalQty = @orderItem.ID + "Qty" + count;
+                                        var total = orderItem.Qty * orderItem.Price;
+                                        subTotal += total;
+                                        symbol = orderItem.CurrenySymbol;
+                                        <tr class="cart__table--body__items">
+                                            <td class="cart__table--body__list">
+                                                <div class="cart__product d-flex align-items-center">
+                                                    <div class="cart__thumbnail">
+                                                        <a asp-action="item" asp-controller="shop" target="_blank" class="text-dark" asp-route-t="@orderItem.Tag"><img class="border-radius-5" src="@orderItem.Image" alt="cart-product"></a>
                                                     </div>
-                                                </td>
-                                                <td class="cart__table--body__list">
-                                                    <span class="cart__price">@orderItem.CurrenySymbol@orderItem.Price</span>
-                                                </td>
-                                                <td class="cart__table--body__list">
-                                                    <div class="quantity__box">
-                                                        <button type="button" class="quantity__value quickview__value--quantity decrease" aria-label="quantity value" value="Decrease Value" id="@minusBtn" onclick="ResolveQuantity('minus', '@orderItem.ID', '@orderItem.Price', '@totalLabel','@orderItem.ID')">-</button>
-                                                        <label>
-                                                            <input type="number" class="quantity__number quickview__value--number" id="@orderItem.ID" value="@orderItem.Qty" onchange="ResolveQuantity('direct', '@orderItem.ID', '@orderItem.Price', '@totalLabel','@orderItem.ID')" data-counter />
-                                                        </label>
-                                                        <button type="button" class="quantity__value quickview__value--quantity increase" aria-label="quantity value" value="Increase Value" id="@addBtn" onclick="ResolveQuantity('add', '@orderItem.ID', '@orderItem.Price', '@totalLabel','@orderItem.ID')">+</button>
-                                                    </div>
-                                                </td>
-                                                <td class="cart__table--body__list">
-                                                    <span class="cart__price end">@orderItem.CurrenySymbol<span id="@totalLabel">@total</span></span>
-                                                </td>
-                                                <td class="p-3 text-center">
-                                                    <button class="btn btn-sm btn-danger" onclick="RemoveFromCart('@orderItem.ID', '@count','@totalLabel')"><i class="fa fa-times"></i></button>
-                                                </td>
-                                            </tr>
-                                        }
+                                                    <div class="cart__content">
+                                                        <h3 class="cart__content--title h4"><a asp-action="item" target="_blank" asp-controller="shop" class="text-dark" asp-route-t="@orderItem.Tag">Fresh-whole-fish</a></h3>
 
-                                    </tbody>
-                                </table>
-                                <h3 class="continue__shopping bold">
-                                    TOTAL: @symbol<span id="subTotal">@subTotal</span>
-                                </h3>
-                                <div class="continue__shopping d-flex justify-content-between">
-                                    <button class=" btn-danger btn bold" onclick="ClearCart()">Clear Cart</button>
-                                    <button class="btn bold" asp-action="checkout" asp-controller="shop">Checkout Cart</button>
-                                </div>
-                                <div>
-                                    <br />
-                                    <hr />
-                                    <a class="continue__shopping--link" asp-action="index" asp-controller="shop">Continue shopping</a>
-                                </div>
+                                                        @foreach (var feature in orderItem.Features)
+                                                        {
+                                                            <span class="cart__content--variant">@feature.FeatureName: @feature.FeatureOption</span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="cart__table--body__list">
+                                                <span class="cart__price">@orderItem.CurrenySymbol@orderItem.Price</span>
+                                            </td>
+                                            <td class="cart__table--body__list">
+                                                <div class="quantity__box">
+                                                    <button type="button" class="quantity__value quickview__value--quantity decrease" aria-label="quantity value" value="Decrease Value" id="@minusBtn" onclick="ResolveQuantity('minus', '@totalQty', '@orderItem.Price', '@totalLabel','@orderItem.ID','total')">-</button>
+                                                    <label>
+                                                        <input type="number" class="quantity__number quickview__value--number" id="@totalQty" value="@orderItem.Qty" onchange="ResolveQuantity('direct', '@totalQty', '@orderItem.Price', '@totalLabel','@orderItem.ID','total')" data-counter />
+                                                    </label>
+                                                    <button type="button" class="quantity__value quickview__value--quantity increase" aria-label="quantity value" value="Increase Value" id="@addBtn" onclick="ResolveQuantity('add', '@totalQty', '@orderItem.Price', '@totalLabel','@orderItem.ID','total')">+</button>
+                                                </div>
+                                            </td>
+                                            <td class="cart__table--body__list">
+                                                <span class="cart__price end">@orderItem.CurrenySymbol<span id="@totalLabel">@total</span></span>
+                                            </td>
+                                            <td class="p-3 text-center">
+                                                <a class="btn btn-sm btn-danger" onclick="RemoveFromCart('@orderItem.ID', '@count','@totalLabel','cartTable','total')"><i class="fa fa-times"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                            <h3 class="continue__shopping bold">
+                                TOTAL: @symbol<span id="total">@subTotal</span>
+                            </h3>
+                            <div class="continue__shopping d-flex justify-content-between">
+                                <button class=" btn-danger btn bold" onclick="ClearCart()">Clear Cart</button>
+                                <a class="btn bold" asp-action="checkout" asp-controller="shop">Checkout Cart</a>
+                            </div>
+                            <div>
+                                <br />
+                                <hr />
+                                <a class="continue__shopping--link" asp-action="index" asp-controller="shop">Continue shopping</a>
                             </div>
                         </div>
-                        <div class="col-md-2">&nbsp;</div>
                     </div>
-                </form>
+                    <div class="col-md-2">&nbsp;</div>
+                </div>
             </div>
         </div>
     </section>

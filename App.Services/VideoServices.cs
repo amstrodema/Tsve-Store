@@ -87,6 +87,33 @@ namespace App.Services
 
             return filePath;
         }
+        public static void Delete(string ID, string folderName)
+        {
+            var roota = AppDomain.CurrentDomain;
+            var root = roota.BaseDirectory;
+            string folder = Path.Combine(root, "Videos");
+            folder = Path.Combine(folder, folderName);
+            string filePath = Path.Combine(folder, ID);
+
+            // Specify the file path
+            //string filePath = @"C:\path\to\your\file.txt";
+
+            try
+            {
+                // Check if the file exists
+                if (File.Exists(filePath))
+                {
+                    // Delete the file
+                    File.Delete(filePath);
+                }
+                else
+                {
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
     }
 
 }

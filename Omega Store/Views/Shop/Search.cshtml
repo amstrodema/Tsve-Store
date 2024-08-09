@@ -26,19 +26,23 @@
     <!-- Start product details section -->
     <section class="product__details--section section--padding">
         <div class="container">
-            <div class="row">
+            <h2 class="row bold mb-4">
                 @Model.Count() result(s)
-            </div>
+            </h2>
             <div class="row">
-                <table class="table search">
-                    <tr>
-                      @foreach(var result in Model ){
+                <table class="table table-borderless search">
+                    @foreach (var result in Model)
+                    {
+                        <tr>
                             <td>
-                                <h5><a href="@result.Link">@result.Title</a></h5>
-                                <div>@result.Snippet</div>
+                                <div>
+                                    <h5 style="color:blue"><a href="@result.Link">@result.Title</a></h5>
+                                    <p>@result.Snippet</p>
+                                </div>
                             </td>
-                        }
-                    </tr>
+
+                        </tr>
+                    }
                 </table>
             </div>
         </div>

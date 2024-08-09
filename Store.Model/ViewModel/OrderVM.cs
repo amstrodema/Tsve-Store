@@ -18,6 +18,8 @@ namespace Store.Model.ViewModel
         public string CurrenySymbol { get; set; } = string.Empty;
         public decimal Qty { get; set; }
         public decimal Price { get; set; }
+        public bool IsFinished { get; set; }
+        public bool IsPaid { get; set; }
         public ItemFeature[] Features { get; set; }
         public Feature[] ItemFeatures { get; set; }
         public DateTime DateCreated { get; set; }

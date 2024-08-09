@@ -10,5 +10,6 @@ namespace Store.Data.Interface
     public interface IFavourite : IGeneric<Favourite>
     {
         Task<Favourite> GetByUserAndItemID(Guid itemID, Guid userID);
+        Task<IEnumerable<Favourite>> GetByUserID(Guid userID);
     }
 }

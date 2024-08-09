@@ -23,9 +23,11 @@ namespace Omega_Store.Controllers
         private readonly OfferBusiness _offerBusiness;
         private readonly LoggerBusiness _loggerBusiness;
         private readonly SearchBusiness _searchBusiness;
+        private readonly TrackingBusiness _trackingBusiness;
 
         public ManagerController(UserBusiness userBusiness, IHttpContextAccessor context, LoginValidator loginValidator, CategoryBusiness categoryBusiness,
-            GroupBusiness groupBusiness, StoreBusiness storeBusiness, SlideBusiness slideBusiness, OfferBusiness offerBusiness, LoggerBusiness loggerBusiness, SearchBusiness searchBusiness)
+            GroupBusiness groupBusiness, StoreBusiness storeBusiness, SlideBusiness slideBusiness, OfferBusiness offerBusiness, LoggerBusiness loggerBusiness, SearchBusiness searchBusiness,
+            TrackingBusiness trackingBusiness)
         {
             _userBusiness = userBusiness;
             _context = context;
@@ -36,7 +38,8 @@ namespace Omega_Store.Controllers
             _slideBusiness = slideBusiness;
             _offerBusiness = offerBusiness;
             _loggerBusiness = loggerBusiness;
-            _searchBusiness = searchBusiness;                               
+            _searchBusiness = searchBusiness;
+            _trackingBusiness = trackingBusiness;
         }
         private void SetFeedBack(int code, string message)
         {
@@ -694,6 +697,115 @@ namespace Omega_Store.Controllers
                 TempData["MessageSuccess"] = res.Message;
                 return RedirectToAction("slides");
             }
+        }
+        public async Task<IActionResult> Gallery()
+        {
+            var user = await _loginValidator.GetUserAuth();
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+            return View("GalleryHolder/details", await _storeBusiness.Gallery());
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddMedia(IFormFile media)
+        {
+            var user = await _loginValidator.GetUserAuth();
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+            var res = await _storeBusiness.AddToGallery(media, user.ID);
+            if (res.StatusCode != 200)
+            {
+                TempData["MessageError"] = res.Message;
+            }
+            else
+            {
+                TempData["MessageSuccess"] = res.Message;
+            }
+
+            return RedirectToAction("gallery");
+        }
+
+        public async Task<IActionResult> DeleteMedia(Guid mID)
+        {
+            var user = await _loginValidator.GetUserAuth();
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+            var res = await _storeBusiness.DeleteMedia(mID);
+            if (res.StatusCode != 200)
+            {
+                TempData["MessageError"] = res.Message;
+            }
+            else
+            {
+                TempData["MessageSuccess"] = res.Message;
+            }
+
+            return RedirectToAction("gallery");
+        }
+        public async Task<IActionResult> Tracking(string orderRef)
+        {
+            var user = await _loginValidator.GetUserAuth();
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+            if (string.IsNullOrEmpty(orderRef))
+            {
+                return RedirectToAction("Orders");
+            }
+            var res = await _trackingBusiness.Tracking(orderRef);
+            return View("OrderHolder/tracking", res.Data);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddTracking(string action, string details, string orderRef, bool isFinished)
+        {
+            var user = await _loginValidator.GetUserAuth();
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            Tracking tracking = new Tracking()
+            {
+                Action = action,
+                Details = details
+            };
+            
+            var res = await _trackingBusiness.UpdateTracking(tracking, orderRef, isFinished, user.ID);
+            if (res.StatusCode != 200)
+            {
+                TempData["MessageError"] = res.Message;
+            }
+            else
+            {
+                TempData["MessageSuccess"] = res.Message;
+            }
+
+            return RedirectToAction("tracking", new { orderRef= orderRef });
+        }
+
+        public async Task<IActionResult> DeleteTracking(Guid tID)
+        {
+            var user = await _loginValidator.GetUserAuth();
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+            var res = await _trackingBusiness.Delete(tID);
+            if (res.StatusCode != 200)
+            {
+                TempData["MessageError"] = res.Message;
+            }
+            else
+            {
+                TempData["MessageSuccess"] = res.Message;
+            }
+            return RedirectToAction("tracking", new { orderRef = res.Data });
         }
     }
 }

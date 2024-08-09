@@ -9,5 +9,6 @@ namespace Store.Data.Interface
 {
     public interface ITracking : IGeneric<Tracking>
     {
+        Task<IEnumerable<Tracking>> GetByOrderID(Guid orderID);
     }
 }

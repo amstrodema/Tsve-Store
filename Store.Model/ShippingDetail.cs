@@ -4,16 +4,18 @@
     {
         public Guid ID { get; set; }
         public Guid StoreID { get; set; }
+        public Guid OrderID { get; set; }
         public string? FName { get; set; } = string.Empty;
         public string? LName { get; set; } = string.Empty;
         public string? Email { get; set; } = string.Empty;
         public string? Tel { get; set; } = string.Empty;
         public string? Addr1 { get; set; } = string.Empty;
         public string? Addr2 { get; set; } = string.Empty;
-        public string? Country { get; set; } = string.Empty;
-        public string? State { get; set; } = string.Empty;
-        public string? City { get; set; } = string.Empty;
-        public string? Zip { get; set; } = string.Empty;
+        public string? Country { get; set; }
+        public string? State { get; set; }
+        public string? City { get; set; }
+        public string? Zip { get; set; }
+        public string? Delivery { get; set; }
 
 
         public bool IsApproved { get; set; }

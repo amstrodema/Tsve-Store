@@ -16,5 +16,10 @@ namespace Store.Data.Repository
         {
 
         }
+
+        public async Task<IEnumerable<Tracking>> GetByOrderID(Guid orderID)
+        {
+            return await GetBy(o => o.OrderID == orderID);
+        }
     }
 }

@@ -1,0 +1,88 @@
+﻿@model Store.Model.ViewModel.CheckOutVM
+@{
+    ViewData["Title"] = "Gallery";
+}
+
+<main class="main__content_wrapper">
+
+    <!-- Start breadcrumb section -->
+    <section class="breadcrumb__section breadcrumb__bg">
+        <div class="container">
+            <div class="row row-cols-1">
+                <div class="col">
+                    <div class="breadcrumb__content text-center">
+                        <h1 class="breadcrumb__content--title text-white mb-25">Gallery</h1>
+                        <ul class="breadcrumb__content--menu d-flex justify-content-center">
+                            <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="home">Home</a></li>
+                            <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="shop">Shop</a></li>
+                            <li class="breadcrumb__content--menu__items"><span class="text-white">Gallery</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End breadcrumb section -->
+    <!-- Start product details section -->
+    <!-- Start portfolio section -->
+    <section class="portfolio__section section--padding">
+        <div class="container">
+            <div class="section__heading text-center mb-40">
+                <span class="section__heading--subtitle">Our Gallery</span>
+                <h2 class="section__heading--maintitle">See Our Pictures and Videos</h2>
+            </div>
+            <div class="portfolio__section--inner">
+                @if(Model.Files.Count() < 1)
+                {
+                    <div class="row">
+                        <partial name="_nocontent" />
+                    </div>
+                }
+                else
+                {
+                    <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-2 row-cols-2 mb--n30">
+                        @foreach (var resource in Model.Files)
+                        {
+                            if (resource.IsVideo)
+                            {
+                                <div class="col mb-30">
+                                    <div class="portfolio__items">
+                                        <div class="portfolio__items--thumbnail position__relative">
+                                            <video preload="metadata" style="max-width:100%" controls>
+                                                    <source src="@resource.Resource" type="video/mp4" />
+                                                    Try a different browser..
+                                                </video>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col mb-30">
+                                    <div class="portfolio__items">
+                                        <div class="portfolio__items--thumbnail position__relative">
+                                            <a class="portfolio__items--thumbnail__link display-block glightbox" data-gallery="portfolio" href="@resource.Resource">
+                                                <img class="portfolio__items--thumbnail__img display-block" src="@resource.Resource" alt="portfolio-img">
+                                                <div class="portfolio__view--icon">
+                                                    <span class="portfolio__view--icon__link ">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="39.697" height="27.066" viewBox="0 0 39.697 27.066">
+                                                            <path d="M20.849,4.5A21.341,21.341,0,0,0,1,18.033a21.322,21.322,0,0,0,39.7,0A21.341,21.341,0,0,0,20.849,4.5Zm0,22.555a9.022,9.022,0,1,1,9.022-9.022A9.025,9.025,0,0,1,20.849,27.055Zm0-14.435a5.413,5.413,0,1,0,5.413,5.413A5.406,5.406,0,0,0,20.849,12.62Z" transform="translate(-1 -4.5)" fill="currentColor" />
+                                                        </svg>
+                                                    </span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        }
+                    </div>
+                }
+               
+            </div>
+        </div>
+    </section>
+    <!-- End portfolio section -->
+</main>
+

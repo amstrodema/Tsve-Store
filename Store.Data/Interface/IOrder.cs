@@ -9,7 +9,6 @@ namespace Store.Data.Interface
 {
     public interface IOrder : IGeneric<Order>
     {
-        Task<IEnumerable<Order>> GetByStoreID(Guid storeID);
-        Task<Order> GetByOrderRef(Guid storeID, string orderRef);
+        Task<Order> GetByOrderRef(string orderRef);
     }
 }

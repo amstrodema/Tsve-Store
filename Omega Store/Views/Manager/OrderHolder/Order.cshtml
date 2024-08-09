@@ -1,119 +1,99 @@
 ﻿@model Store.Model.ViewModel.MainVM
 @{
-    ViewData["Title"] = "Order";
+    ViewData["Title"] = "Order "+Model.Order;
     decimal subTotal = 0;
     string symbol = "";
     int count = 0;
 }
 <!-- Breadcrumb Start -->
-<div class="container-fluid">
-    <div class="row px-xl-5">
-        <div class="col-md-6 p-30 bg-light mb-3">
-            <details>
-                <summary>
-                    <h6 class="text-info">View Billing Details ></h6>
-                </summary>
-                <hr />
-                <h2>Billing Details</h2>
-                <table class="table">
-                    <tr>
-                        <td class="nowrap bold">Name: </td>
-                        <td><p>@Model.BillingDetail.LName @Model.BillingDetail.FName</p></td>
-                    </tr>
-                    <tr>
-                        <td class="nowrap bold">Telephone: </td>
-                        <td><p>@Model.BillingDetail.Tel</p></td>
-                    </tr>
-                    <tr>
-                        <td class="nowrap bold">Address 1: </td>
-                        <td><p>@Model.BillingDetail.Addr1</p></td>
-                    </tr>
-                    <tr>
-                        <td class="nowrap bold">Address 2:</td>
-                        <td><p>@Model.BillingDetail.Addr2</p></td>
-                    </tr>
-                    <tr>
-                        <td class="nowrap bold">City: </td>
-                        <td><p>@Model.BillingDetail.City</p></td>
-                    </tr>
-                    <tr>
-                        <td class="nowrap bold">State: </td>
-                        <td><p>@Model.BillingDetail.State</p></td>
-                    </tr>
-                    <tr>
-                        <td class="nowrap bold">Country: </td>
-                        <td><p>@Model.BillingDetail.Country</p></td>
-                    </tr>
-                    <tr>
-                        <td class="nowrap bold">Zip Code: </td>
-                        <td><p>@Model.BillingDetail.Zip</p></td>
-                    </tr>
-                    <tr>
-                        <td class="nowrap bold">Date: </td>
-                        <td><p>@Model.BillingDetail.DateCreated.ToString("F")</p></td>
-                    </tr>
-                </table>
-            </details>
+<section class="breadcrumb__section breadcrumb__bg">
+    <div class="container">
+        <div class="row row-cols-1">
+            <div class="col">
+                <div class="breadcrumb__content text-center">
+                    <h1 class="breadcrumb__content--title text-white mb-25">@Model.Order.Ref</h1>
+                    <ul class="breadcrumb__content--menu d-flex justify-content-center">
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="index" asp-controller="home">Home</a></li>
+                        <li class="breadcrumb__content--menu__items"><a class="text-white" asp-action="orders" asp-controller="manager">Orders</a></li>
+                        <li class="breadcrumb__content--menu__items"><span class="text-white">@Model.Order.Ref</span></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-      
-            <div class="col-md-6 p-30 bg-light mb-3">
+    </div>
+</section>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <h3>Order @Model.Order.Ref</h3>
+        <p>Tel: <a href="tel:@Model.Order.Tel">@Model.Order.Tel</a></p>
+        <p>Email: <a href="mailto:@Model.Order.Email">@Model.Order.Email</a></p>
+        <p>
+           Status: @if (Model.Order.IsFinished)
+            {
+                <span>Completed</span>
+            }
+            else if (Model.Order.IsPaid)
+            {
+                <span>Paid</span>
+            }
+            else
+            {
+                <span>Not Paid</span>
+            }
+        </p>
+        <p>Date: @Model.Order.DateCreated.ToString("F")</p>
+    </div>
+    <hr />
+    <div class="row px-xl-5">
+             
+            <div class="col-12 p-30 mt-4 mb-3">
             <details>
                 <summary>
                     <h6 class="text-info">View Shipping Details ></h6>
                 </summary>
                 <hr />
                 <h2>Shipping Details</h2>
-                 @if (Model.ShippingDetail != null && Model.ShippingDetail.ID != default)
-                {
-                    <table class="table">
-                        <tr>
-                            <td class="nowrap bold">Name: </td>
-                            <td><p>@Model.ShippingDetail.LName @Model.ShippingDetail.FName</p></td>
-                        </tr>
-                        <tr>
-                            <td class="nowrap bold">Telephone: </td>
-                            <td><p>@Model.ShippingDetail.Tel</p></td>
-                        </tr>
-                        <tr>
-                            <td class="nowrap bold">Address 1: </td>
-                            <td><p>@Model.ShippingDetail.Addr1</p></td>
-                        </tr>
-                        <tr>
-                            <td class="nowrap bold">Address 2:</td>
-                            <td><p>@Model.ShippingDetail.Addr2</p></td>
-                        </tr>
-                        <tr>
-                            <td class="nowrap bold">City: </td>
-                            <td><p>@Model.ShippingDetail.City</p></td>
-                        </tr>
-                        <tr>
-                            <td class="nowrap bold">State: </td>
-                            <td><p>@Model.ShippingDetail.State</p></td>
-                        </tr>
-                        <tr>
-                            <td class="nowrap bold">Country: </td>
-                            <td><p>@Model.ShippingDetail.Country</p></td>
-                        </tr>
-                        <tr>
-                            <td class="nowrap bold">Zip Code: </td>
-                            <td><p>@Model.ShippingDetail.Zip</p></td>
-                        </tr>
-                        <tr>
-                            <td class="nowrap bold">Date: </td>
-                            <td><p>@Model.ShippingDetail.DateCreated.ToString("F")</p></td>
-                        </tr>
-                    </table>
-                }
-                else
-                {
-                    <hr />
-                    <div>Same with billing details</div>
-                }
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <td class="nowrap bold">Name: </td>
+                        <td><p>@Model.ShippingDetail.LName @Model.ShippingDetail.FName</p></td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap bold">Telephone: </td>
+                        <td><p>@Model.ShippingDetail.Tel</p></td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap bold">Address 1: </td>
+                        <td><p>@Model.ShippingDetail.Addr1</p></td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap bold">Address 2:</td>
+                        <td><p>@Model.ShippingDetail.Addr2</p></td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap bold">City: </td>
+                        <td><p>@Model.ShippingDetail.City</p></td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap bold">State: </td>
+                        <td><p>@Model.ShippingDetail.State</p></td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap bold">Country: </td>
+                        <td><p>@Model.ShippingDetail.Country</p></td>
+                    </tr>
+                    <tr>
+                        <td class="nowrap bold">Zip Code: </td>
+                        <td><p>@Model.ShippingDetail.Zip</p></td>
+                    </tr>
+                </table>
                 
             </details>          
             </div>
       
     </div>
+    <hr />
     <div class="row px-xl-5">
         <div class="table-responsive">
             <table class="table">
@@ -123,26 +103,35 @@
                     <th>Qty</th>
                     <th>Cost</th>
                 </tr>
-                @foreach (var orderItem in Model.OrderItems)
+                <tr>
+                    <td colspan="4">
+                        <a class="text-info" asp-action="tracking" asp-controller="manager" asp-route-orderRef="@Model.Order.Ref"><i class="fa fa-link"></i> Track this order</a>
+                    </td>
+                </tr>
+                @foreach (var orderItem in Model.OrderVMs)
                 {
                     count++;
                     var totalLabel = @orderItem.ID + "TotalLabel";
                     var total = orderItem.Qty * orderItem.Price;
                     subTotal += total;
                     symbol = orderItem.CurrenySymbol;
-
+                  
                     <tr>
-                        <td class="align-middle"><img src="@orderItem.Image" alt="" style="width: 50px;"> <a asp-action="item" asp-controller="shop" class="text-dark" asp-route-t="@orderItem.Tag">@orderItem.ItemName</a></td>
+                        <td class="align-middle">
+                            <img src="@orderItem.Image" alt="" style="width: 50px;">
+                            <a asp-action="item" asp-controller="shop" class="text-dark" asp-route-t="@orderItem.Tag">@orderItem.ItemName</a>
+                            
+                        </td>
                         <td class="align-middle">@orderItem.CurrenySymbol@orderItem.Price</td>
                         <td class="align-middle">@orderItem.Qty</td>
                         <td class="align-middle">@orderItem.CurrenySymbol<span id="@totalLabel">@total</span></td>
                     </tr>
                 }
-                @if (Model.OrderItems.Count() > 0)
+                @if (Model.OrderVMs.Count() > 0)
                 {
                     <tr>
                         <td class="bold" colspan="3">Total</td>
-                        <td class="bold">@Model.OrderItems.First().CurrenySymbol@subTotal</td>
+                        <td class="bold">@Model.OrderVMs.First().CurrenySymbol@subTotal</td>
                     </tr>
                 }
                

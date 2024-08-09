@@ -355,8 +355,15 @@ namespace Store.Data.Migrations
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsVideo")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Resource")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("StoreID")
                         .HasColumnType("uniqueidentifier");
@@ -531,6 +538,10 @@ namespace Store.Data.Migrations
 
                     b.Property<Guid>("FeatureID")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FeatureName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FeatureOption")
                         .IsRequired()
@@ -827,14 +838,28 @@ namespace Store.Data.Migrations
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsFinished")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PaymentLink")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Ref")
                         .IsRequired()
@@ -844,6 +869,13 @@ namespace Store.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("StoreID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Tel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TransactionID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
@@ -1058,6 +1090,9 @@ namespace Store.Data.Migrations
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Delivery")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -1074,6 +1109,9 @@ namespace Store.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("State")
@@ -1237,6 +1275,10 @@ namespace Store.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -1246,6 +1288,10 @@ namespace Store.Data.Migrations
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -1253,6 +1299,9 @@ namespace Store.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("StoreID")

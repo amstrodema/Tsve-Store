@@ -20,5 +20,9 @@ namespace Store.Data.Repository
         {
             return await GetOneBy(o => o.ItemID == itemID && o.UserID == userID);
         }
+        public async Task<IEnumerable<Favourite>> GetByUserID(Guid userID)
+        {
+            return await GetBy(o =>o.UserID == userID);
+        }
     }
 }

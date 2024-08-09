@@ -16,5 +16,10 @@ namespace Store.Data.Repository
         {
 
         }
+
+        public async Task<ShippingDetail> GetByOrder(Guid orderID)
+        {
+            return await GetOneBy(o => o.OrderID == orderID);
+        }
     }
 }

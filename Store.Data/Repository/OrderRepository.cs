@@ -16,13 +16,9 @@ namespace Store.Data.Repository
         {
 
         }
-        public async Task<IEnumerable<Order>> GetByStoreID(Guid storeID)
+        public async Task<Order> GetByOrderRef(string orderRef)
         {
-            return await GetBy(o => o.StoreID == storeID);
-        }
-        public async Task<Order> GetByOrderRef(Guid storeID, string orderRef)
-        {
-            return await GetOneBy(o => o.StoreID == storeID && o.Ref == orderRef);
+            return await GetOneBy(o => o.Ref == orderRef);
         }
     }
 }
