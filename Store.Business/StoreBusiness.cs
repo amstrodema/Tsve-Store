@@ -915,7 +915,7 @@ namespace Store.Business
 
             return mainVM;
         }
-        public async Task<MainVM> GetVMForShop(string c = "")
+        public async Task<MainVM> GetVMForShop(string c = "", int? pageNumber = 1)
         {
             MainVM mainVM = new MainVM();
             mainVM.CategoryHybrids = await _categoryBusiness.GetHybrids();
@@ -928,6 +928,7 @@ namespace Store.Business
                 {
                     stocks = stocks.Where(o => o.CatID == cat.ID).ToList();
                     mainVM.Category = cat;
+                    mainVM.CTag = cat.Tag;
                 }
                 
             }
@@ -954,7 +955,15 @@ namespace Store.Business
                                   Image1 = string.IsNullOrWhiteSpace(item.Image1) ? "" : ImageService.GetLargeImagePath(item.Image1, "ItemImage"),
                                   Brief = item.Brief
                               }).OrderByDescending(o=> o.DateCreated);
-            mainVM.Features = await _unitOfWork.Features.GetAll();
+            // mainVM.Features = await _unitOfWork.Features.GetAll();
+            mainVM.ItemCount = mainVM.Stocks.Count();
+            var val = PaginatedList<Item>.Create(mainVM.Stocks.ToList(), pageNumber ?? 1, 20);
+            mainVM.Stocks = val.Items;
+            mainVM.TotalPages = val.TotalPages;
+
+
+            mainVM.PageIndex = pageNumber ?? 1;
+            
 
             return mainVM;
         }

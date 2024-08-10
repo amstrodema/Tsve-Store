@@ -1,4 +1,5 @@
-﻿<!-- Start offcanvas filter sidebar -->
+﻿@model IEnumerable<Store.Model.Hybrid.CategoryHybrid>
+<!-- Start offcanvas filter sidebar -->
 <div class="offcanvas__filter--sidebar widget__area">
     <button type="button" class="offcanvas__filter--close" data-offcanvas>
         <svg class="minicart__close--icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"></path></svg> <span class="offcanvas__filter--close__text">Close</span>
@@ -6,223 +7,28 @@
     <div class="offcanvas__filter--sidebar__inner">
         <div class="single__widget widget__bg">
             <h2 class="widget__title h3">Categories</h2>
-            <ul class="widget__categories--menu">
-                <li class="widget__categories--menu__list">
-                    <label class="widget__categories--menu__label d-flex align-items-center">
-                        <img class="widget__categories--menu__img" src="../assets/img/product/categories11.png" alt="categories-img">
-                        <span class="widget__categories--menu__text">Fresh Vegetables</span>
-                        <svg class="widget__categories--menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12.355" height="8.394">
-                            <path d="M15.138,8.59l-3.961,3.952L7.217,8.59,6,9.807l5.178,5.178,5.178-5.178Z" transform="translate(-6 -8.59)" fill="currentColor"></path>
-                        </svg>
-                    </label>
-                    <ul class="widget__categories--sub__menu">
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories12.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">Discount Weekly</span>
-                            </a>
-                        </li>
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories15.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">Green dhaniya</span>
-                            </a>
-                        </li>
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories14.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">resh Nuts</span>
-                            </a>
-                        </li>
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories13.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">Millk Cream</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="widget__categories--menu__list">
-                    <label class="widget__categories--menu__label d-flex align-items-center">
-                        <img class="widget__categories--menu__img" src="../assets/img/product/categories12.png" alt="categories-img">
-                        <span class="widget__categories--menu__text">Fresh mushroom</span>
-                        <svg class="widget__categories--menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12.355" height="8.394">
-                            <path d="M15.138,8.59l-3.961,3.952L7.217,8.59,6,9.807l5.178,5.178,5.178-5.178Z" transform="translate(-6 -8.59)" fill="currentColor"></path>
-                        </svg>
-                    </label>
-                    <ul class="widget__categories--sub__menu">
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories12.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">Discount Weekly</span>
-                            </a>
-                        </li>
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories15.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">Green dhaniya</span>
-                            </a>
-                        </li>
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories14.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">resh Nuts</span>
-                            </a>
-                        </li>
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories13.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">Millk Cream</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="widget__categories--menu__list">
-                    <label class="widget__categories--menu__label d-flex align-items-center">
-                        <img class="widget__categories--menu__img" src="../assets/img/product/categories13.png" alt="categories-img">
-                        <span class="widget__categories--menu__text">Dairy & chesse</span>
-                        <svg class="widget__categories--menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12.355" height="8.394">
-                            <path d="M15.138,8.59l-3.961,3.952L7.217,8.59,6,9.807l5.178,5.178,5.178-5.178Z" transform="translate(-6 -8.59)" fill="currentColor"></path>
-                        </svg>
-                    </label>
-                    <ul class="widget__categories--sub__menu">
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories16.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">Discount Weekly</span>
-                            </a>
-                        </li>
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories15.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">Green dhaniya</span>
-                            </a>
-                        </li>
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories14.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">resh Nuts</span>
-                            </a>
-                        </li>
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories13.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">Millk Cream</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="widget__categories--menu__list">
-                    <label class="widget__categories--menu__label d-flex align-items-center">
-                        <img class="widget__categories--menu__img" src="../assets/img/product/categories14.png" alt="categories-img">
-                        <span class="widget__categories--menu__text">Green dhaniya</span>
-                        <svg class="widget__categories--menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12.355" height="8.394">
-                            <path d="M15.138,8.59l-3.961,3.952L7.217,8.59,6,9.807l5.178,5.178,5.178-5.178Z" transform="translate(-6 -8.59)" fill="currentColor"></path>
-                        </svg>
-                    </label>
-                    <ul class="widget__categories--sub__menu">
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories12.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">Discount Weekly</span>
-                            </a>
-                        </li>
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories15.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">Green dhaniya</span>
-                            </a>
-                        </li>
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories14.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">resh Nuts</span>
-                            </a>
-                        </li>
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories13.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">Millk Cream</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="widget__categories--menu__list">
-                    <label class="widget__categories--menu__label d-flex align-items-center">
-                        <img class="widget__categories--menu__img" src="../assets/img/product/categories15.png" alt="categories-img">
-                        <span class="widget__categories--menu__text">Orange Juice</span>
-                        <svg class="widget__categories--menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12.355" height="8.394">
-                            <path d="M15.138,8.59l-3.961,3.952L7.217,8.59,6,9.807l5.178,5.178,5.178-5.178Z" transform="translate(-6 -8.59)" fill="currentColor"></path>
-                        </svg>
-                    </label>
-                    <ul class="widget__categories--sub__menu">
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories12.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">Discount Weekly</span>
-                            </a>
-                        </li>
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories15.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">Green dhaniya</span>
-                            </a>
-                        </li>
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories14.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">resh Nuts</span>
-                            </a>
-                        </li>
-                        <li class="widget__categories--sub__menu--list">
-                            <a class="widget__categories--sub__menu--link d-flex align-items-center" href="shop.html">
-                                <img class="widget__categories--sub__menu--img" src="../assets/img/product/categories13.png" alt="categories-img">
-                                <span class="widget__categories--sub__menu--text">Millk Cream</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div class="single__widget widget__bg">
-            <h2 class="widget__title h3">Dietary Needs</h2>
             <ul class="widget__form--check">
-                <li class="widget__form--check__list">
-                    <label class="widget__form--check__label" for="check6">Organic Food</label>
-                    <input class="widget__form--check__input" id="check6" type="checkbox">
-                    <span class="widget__form--checkmark"></span>
-                </li>
-                <li class="widget__form--check__list">
-                    <label class="widget__form--check__label" for="check7">Breakfast Item</label>
-                    <input class="widget__form--check__input" id="check7" type="checkbox">
-                    <span class="widget__form--checkmark"></span>
-                </li>
-                <li class="widget__form--check__list">
-                    <label class="widget__form--check__label" for="check8">Green Vegetables</label>
-                    <input class="widget__form--check__input" id="check8" type="checkbox">
-                    <span class="widget__form--checkmark"></span>
-                </li>
-                <li class="widget__form--check__list">
-                    <label class="widget__form--check__label" for="check9">Grocery Items</label>
-                    <input class="widget__form--check__input" id="check9" type="checkbox">
-                    <span class="widget__form--checkmark"></span>
-                </li>
-                <li class="widget__form--check__list">
-                    <label class="widget__form--check__label" for="check10">Baking material</label>
-                    <input class="widget__form--check__input" id="check10" type="checkbox">
-                    <span class="widget__form--checkmark"></span>
-                </li>
+                @foreach(var cat in Model)
+                {
+                    <li class="widget__form--check__list">
+                        <label class="widget__form--check__label" for="check6">@cat.Name</label>
+                        <input class="widget__form--check__input" id="check6" value="@cat.Tag" type="checkbox">
+                        <span class="widget__form--checkmark"></span>
+                    </li>
+                }
+                
             </ul>
         </div>
         <div class="single__widget price__filter widget__bg">
             <h2 class="widget__title h3">Filter By Price</h2>
-            <form class="price__filter--form" action="#">
+            <form class="price__filter--form" method="get" asp-action="index" asp-controller="shop">
                 <div class="price__filter--form__inner mb-15 d-flex align-items-center">
                     <div class="price__filter--group">
+                        <input class="hidden" name="fl" />
                         <label class="price__filter--label" for="Filter-Price-GTE">From</label>
                         <div class="price__filter--input">
-                            <span class="price__filter--currency">$</span>
-                            <input class="price__filter--input__field border-0" name="filter.v.price.gte" id="Filter-Price-GTE" type="number" placeholder="0" min="0" max="250.00">
+                            <span class="price__filter--currency">₦</span>
+                            <input class="price__filter--input__field border-0" name="lPrice" id="Filter-Price-GTE" type="number" placeholder="0" min="0" max="250.00">
                         </div>
                     </div>
                     <div class="price__divider">
@@ -231,196 +37,13 @@
                     <div class="price__filter--group">
                         <label class="price__filter--label" for="Filter-Price-LTE">To</label>
                         <div class="price__filter--input">
-                            <span class="price__filter--currency">$</span>
-                            <input class="price__filter--input__field border-0" name="filter.v.price.lte" id="Filter-Price-LTE" type="number" min="0" placeholder="250.00" max="250.00">
+                            <span class="price__filter--currency">₦</span>
+                            <input class="price__filter--input__field border-0" name="hPrice" id="Filter-Price-LTE" type="number" min="0" placeholder="250.00" max="250.00">
                         </div>
                     </div>
                 </div>
                 <button class="btn price__filter--btn" type="submit">Filter</button>
             </form>
-        </div>
-        <div class="single__widget widget__bg">
-            <h2 class="widget__title h3">Top Rated Product</h2>
-            <div class="product__grid--inner">
-                <div class="product__grid--items d-flex align-items-center">
-                    <div class="product__grid--items--thumbnail">
-                        <a class="product__items--link" href="product-details.html">
-                            <img class="product__grid--items__img product__primary--img" src="../assets/img/product/small-product2.png" alt="product-img">
-                            <img class="product__grid--items__img product__secondary--img" src="../assets/img/product/small-product3.png" alt="product-img">
-                        </a>
-                    </div>
-                    <div class="product__grid--items--content">
-                        <h3 class="product__grid--items--content__title h4"><a href="product-details.html">Green-surface</a></h3>
-                        <div class="product__items--price">
-                            <span class="current__price">$42.00</span>
-                            <span class="old__price">$48.00</span>
-                        </div>
-                        <div class="product__items--rating d-flex align-items-center">
-                            <ul class="d-flex">
-                                <li class="product__items--rating__list">
-                                    <span class="product__items--rating__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10.105" height="9.732" viewBox="0 0 10.105 9.732">
-                                            <path data-name="star - Copy" d="M9.837,3.5,6.73,3.039,5.338.179a.335.335,0,0,0-.571,0L3.375,3.039.268,3.5a.3.3,0,0,0-.178.514L2.347,6.242,1.813,9.4a.314.314,0,0,0,.464.316L5.052,8.232,7.827,9.712A.314.314,0,0,0,8.292,9.4L7.758,6.242l2.257-2.231A.3.3,0,0,0,9.837,3.5Z" transform="translate(0 -0.018)" fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li class="product__items--rating__list">
-                                    <span class="product__items--rating__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10.105" height="9.732" viewBox="0 0 10.105 9.732">
-                                            <path data-name="star - Copy" d="M9.837,3.5,6.73,3.039,5.338.179a.335.335,0,0,0-.571,0L3.375,3.039.268,3.5a.3.3,0,0,0-.178.514L2.347,6.242,1.813,9.4a.314.314,0,0,0,.464.316L5.052,8.232,7.827,9.712A.314.314,0,0,0,8.292,9.4L7.758,6.242l2.257-2.231A.3.3,0,0,0,9.837,3.5Z" transform="translate(0 -0.018)" fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li class="product__items--rating__list">
-                                    <span class="product__items--rating__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10.105" height="9.732" viewBox="0 0 10.105 9.732">
-                                            <path data-name="star - Copy" d="M9.837,3.5,6.73,3.039,5.338.179a.335.335,0,0,0-.571,0L3.375,3.039.268,3.5a.3.3,0,0,0-.178.514L2.347,6.242,1.813,9.4a.314.314,0,0,0,.464.316L5.052,8.232,7.827,9.712A.314.314,0,0,0,8.292,9.4L7.758,6.242l2.257-2.231A.3.3,0,0,0,9.837,3.5Z" transform="translate(0 -0.018)" fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li class="product__items--rating__list">
-                                    <span class="product__items--rating__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10.105" height="9.732" viewBox="0 0 10.105 9.732">
-                                            <path data-name="star - Copy" d="M9.837,3.5,6.73,3.039,5.338.179a.335.335,0,0,0-.571,0L3.375,3.039.268,3.5a.3.3,0,0,0-.178.514L2.347,6.242,1.813,9.4a.314.314,0,0,0,.464.316L5.052,8.232,7.827,9.712A.314.314,0,0,0,8.292,9.4L7.758,6.242l2.257-2.231A.3.3,0,0,0,9.837,3.5Z" transform="translate(0 -0.018)" fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li class="product__items--rating__list">
-                                    <span class="product__items--rating__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10.105" height="9.732" viewBox="0 0 10.105 9.732">
-                                            <path data-name="star - Copy" d="M9.837,3.5,6.73,3.039,5.338.179a.335.335,0,0,0-.571,0L3.375,3.039.268,3.5a.3.3,0,0,0-.178.514L2.347,6.242,1.813,9.4a.314.314,0,0,0,.464.316L5.052,8.232,7.827,9.712A.314.314,0,0,0,8.292,9.4L7.758,6.242l2.257-2.231A.3.3,0,0,0,9.837,3.5Z" transform="translate(0 -0.018)" fill="#c7c5c2" />
-                                        </svg>
-                                    </span>
-                                </li>
-                            </ul>
-                            <span class="product__items--rating__count--number">(24)</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="product__grid--items d-flex align-items-center">
-                    <div class="product__grid--items--thumbnail">
-                        <a class="product__items--link" href="product-details.html">
-                            <img class="product__grid--items__img product__primary--img" src="../assets/img/product/small-product7.png" alt="product-img">
-                            <img class="product__grid--items__img product__secondary--img" src="../assets/img/product/small-product6.png" alt="product-img">
-                        </a>
-                    </div>
-                    <div class="product__grid--items--content">
-                        <h3 class="product__grid--items--content__title h4"><a href="product-details.html">Fresh-whole</a></h3>
-                        <div class="product__items--price">
-                            <span class="current__price">$48.00</span>
-                            <span class="old__price">$52.00</span>
-                        </div>
-                        <div class="product__items--rating d-flex align-items-center">
-                            <ul class="d-flex">
-                                <li class="product__items--rating__list">
-                                    <span class="product__items--rating__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10.105" height="9.732" viewBox="0 0 10.105 9.732">
-                                            <path data-name="star - Copy" d="M9.837,3.5,6.73,3.039,5.338.179a.335.335,0,0,0-.571,0L3.375,3.039.268,3.5a.3.3,0,0,0-.178.514L2.347,6.242,1.813,9.4a.314.314,0,0,0,.464.316L5.052,8.232,7.827,9.712A.314.314,0,0,0,8.292,9.4L7.758,6.242l2.257-2.231A.3.3,0,0,0,9.837,3.5Z" transform="translate(0 -0.018)" fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li class="product__items--rating__list">
-                                    <span class="product__items--rating__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10.105" height="9.732" viewBox="0 0 10.105 9.732">
-                                            <path data-name="star - Copy" d="M9.837,3.5,6.73,3.039,5.338.179a.335.335,0,0,0-.571,0L3.375,3.039.268,3.5a.3.3,0,0,0-.178.514L2.347,6.242,1.813,9.4a.314.314,0,0,0,.464.316L5.052,8.232,7.827,9.712A.314.314,0,0,0,8.292,9.4L7.758,6.242l2.257-2.231A.3.3,0,0,0,9.837,3.5Z" transform="translate(0 -0.018)" fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li class="product__items--rating__list">
-                                    <span class="product__items--rating__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10.105" height="9.732" viewBox="0 0 10.105 9.732">
-                                            <path data-name="star - Copy" d="M9.837,3.5,6.73,3.039,5.338.179a.335.335,0,0,0-.571,0L3.375,3.039.268,3.5a.3.3,0,0,0-.178.514L2.347,6.242,1.813,9.4a.314.314,0,0,0,.464.316L5.052,8.232,7.827,9.712A.314.314,0,0,0,8.292,9.4L7.758,6.242l2.257-2.231A.3.3,0,0,0,9.837,3.5Z" transform="translate(0 -0.018)" fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li class="product__items--rating__list">
-                                    <span class="product__items--rating__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10.105" height="9.732" viewBox="0 0 10.105 9.732">
-                                            <path data-name="star - Copy" d="M9.837,3.5,6.73,3.039,5.338.179a.335.335,0,0,0-.571,0L3.375,3.039.268,3.5a.3.3,0,0,0-.178.514L2.347,6.242,1.813,9.4a.314.314,0,0,0,.464.316L5.052,8.232,7.827,9.712A.314.314,0,0,0,8.292,9.4L7.758,6.242l2.257-2.231A.3.3,0,0,0,9.837,3.5Z" transform="translate(0 -0.018)" fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li class="product__items--rating__list">
-                                    <span class="product__items--rating__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10.105" height="9.732" viewBox="0 0 10.105 9.732">
-                                            <path data-name="star - Copy" d="M9.837,3.5,6.73,3.039,5.338.179a.335.335,0,0,0-.571,0L3.375,3.039.268,3.5a.3.3,0,0,0-.178.514L2.347,6.242,1.813,9.4a.314.314,0,0,0,.464.316L5.052,8.232,7.827,9.712A.314.314,0,0,0,8.292,9.4L7.758,6.242l2.257-2.231A.3.3,0,0,0,9.837,3.5Z" transform="translate(0 -0.018)" fill="#c7c5c2" />
-                                        </svg>
-                                    </span>
-                                </li>
-                            </ul>
-                            <span class="product__items--rating__count--number">(24)</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="product__grid--items d-flex align-items-center">
-                    <div class="product__grid--items--thumbnail">
-                        <a class="product__items--link" href="product-details.html">
-                            <img class="product__grid--items__img product__primary--img" src="../assets/img/product/small-product5.png" alt="product-img">
-                            <img class="product__grid--items__img product__secondary--img" src="../assets/img/product/small-product4.png" alt="product-img">
-                        </a>
-                    </div>
-                    <div class="product__grid--items--content">
-                        <h3 class="product__grid--items--content__title h4"><a href="product-details.html">Raw-onions</a></h3>
-                        <div class="product__items--price">
-                            <span class="current__price">$42.00</span>
-                            <span class="old__price">$48.00</span>
-                        </div>
-                        <div class="product__items--rating d-flex align-items-center">
-                            <ul class="d-flex">
-                                <li class="product__items--rating__list">
-                                    <span class="product__items--rating__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10.105" height="9.732" viewBox="0 0 10.105 9.732">
-                                            <path data-name="star - Copy" d="M9.837,3.5,6.73,3.039,5.338.179a.335.335,0,0,0-.571,0L3.375,3.039.268,3.5a.3.3,0,0,0-.178.514L2.347,6.242,1.813,9.4a.314.314,0,0,0,.464.316L5.052,8.232,7.827,9.712A.314.314,0,0,0,8.292,9.4L7.758,6.242l2.257-2.231A.3.3,0,0,0,9.837,3.5Z" transform="translate(0 -0.018)" fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li class="product__items--rating__list">
-                                    <span class="product__items--rating__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10.105" height="9.732" viewBox="0 0 10.105 9.732">
-                                            <path data-name="star - Copy" d="M9.837,3.5,6.73,3.039,5.338.179a.335.335,0,0,0-.571,0L3.375,3.039.268,3.5a.3.3,0,0,0-.178.514L2.347,6.242,1.813,9.4a.314.314,0,0,0,.464.316L5.052,8.232,7.827,9.712A.314.314,0,0,0,8.292,9.4L7.758,6.242l2.257-2.231A.3.3,0,0,0,9.837,3.5Z" transform="translate(0 -0.018)" fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li class="product__items--rating__list">
-                                    <span class="product__items--rating__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10.105" height="9.732" viewBox="0 0 10.105 9.732">
-                                            <path data-name="star - Copy" d="M9.837,3.5,6.73,3.039,5.338.179a.335.335,0,0,0-.571,0L3.375,3.039.268,3.5a.3.3,0,0,0-.178.514L2.347,6.242,1.813,9.4a.314.314,0,0,0,.464.316L5.052,8.232,7.827,9.712A.314.314,0,0,0,8.292,9.4L7.758,6.242l2.257-2.231A.3.3,0,0,0,9.837,3.5Z" transform="translate(0 -0.018)" fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li class="product__items--rating__list">
-                                    <span class="product__items--rating__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10.105" height="9.732" viewBox="0 0 10.105 9.732">
-                                            <path data-name="star - Copy" d="M9.837,3.5,6.73,3.039,5.338.179a.335.335,0,0,0-.571,0L3.375,3.039.268,3.5a.3.3,0,0,0-.178.514L2.347,6.242,1.813,9.4a.314.314,0,0,0,.464.316L5.052,8.232,7.827,9.712A.314.314,0,0,0,8.292,9.4L7.758,6.242l2.257-2.231A.3.3,0,0,0,9.837,3.5Z" transform="translate(0 -0.018)" fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li class="product__items--rating__list">
-                                    <span class="product__items--rating__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10.105" height="9.732" viewBox="0 0 10.105 9.732">
-                                            <path data-name="star - Copy" d="M9.837,3.5,6.73,3.039,5.338.179a.335.335,0,0,0-.571,0L3.375,3.039.268,3.5a.3.3,0,0,0-.178.514L2.347,6.242,1.813,9.4a.314.314,0,0,0,.464.316L5.052,8.232,7.827,9.712A.314.314,0,0,0,8.292,9.4L7.758,6.242l2.257-2.231A.3.3,0,0,0,9.837,3.5Z" transform="translate(0 -0.018)" fill="#c7c5c2" />
-                                        </svg>
-                                    </span>
-                                </li>
-                            </ul>
-                            <span class="product__items--rating__count--number">(24)</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="single__widget widget__bg">
-            <h2 class="widget__title h3">Brands</h2>
-            <ul class="widget__tagcloud">
-                <li class="widget__tagcloud--list"><a class="widget__tagcloud--link" href="#">Organic</a></li>
-                <li class="widget__tagcloud--list"><a class="widget__tagcloud--link" href="#">Vegetable</a></li>
-                <li class="widget__tagcloud--list"><a class="widget__tagcloud--link" href="#">Giant</a></li>
-                <li class="widget__tagcloud--list"><a class="widget__tagcloud--link" href="#">Grocery</a></li>
-                <li class="widget__tagcloud--list"><a class="widget__tagcloud--link" href="#">Foods</a></li>
-                <li class="widget__tagcloud--list"><a class="widget__tagcloud--link" href="#">Bakery</a></li>
-                <li class="widget__tagcloud--list"><a class="widget__tagcloud--link" href="#">Dairies</a></li>
-                <li class="widget__tagcloud--list"><a class="widget__tagcloud--link" href="#">Nature </a></li>
-            </ul>
         </div>
     </div>
 </div>

@@ -34,7 +34,11 @@ namespace Store.Model.ViewModel
         public Offer? Offer { get; set; }
         //public Offer? Offer3 { get; set; }
         //public Offer? Offer4 { get; set; }
+        public string CTag { get; set; }
+        public int ItemCount { get; set; }
         public int FaveCount { get; set; }
+        public int TotalPages { get; set; }
+        public int PageIndex { get; set; }
         public int Ratings { get; set; }
         public DateTime Date { get; set; } = DateTime.UtcNow.AddHours(1).AddDays(1);
         public BillingDetail BillingDetail { get; set; }

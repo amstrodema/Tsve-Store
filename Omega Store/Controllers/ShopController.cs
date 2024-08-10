@@ -29,7 +29,7 @@ namespace Omega_Store.Controllers
             _trackingBusiness = trackingBusiness;
         }
         [Route("Shop")]
-        public async Task<IActionResult> Index(string c, string orderID)
+        public async Task<IActionResult> Index(string c, string fl, int page, decimal lPrice, decimal hPrice )
         {
             await _loggerBusiness.Traffic("Shop", _loginValidator.GetUserID());
             //if (!string.IsNullOrEmpty(orderID))
@@ -38,11 +38,11 @@ namespace Omega_Store.Controllers
             //}
             if (!string.IsNullOrEmpty(c))
             {
-                var rez = await _storeBusiness.GetVMForShop();
+                var rez = await _storeBusiness.GetVMForShop(c, page);
                 return View(rez);
             }
           
-            var res = await _storeBusiness.GetVMForShop();
+            var res = await _storeBusiness.GetVMForShop("", page);
             return View(res);
         }
         public async Task<IActionResult> Category(string t)
